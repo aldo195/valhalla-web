@@ -3,12 +3,15 @@ import './Register.css';
 import '../../index.css';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import {Button, Form, Icon, Input} from "antd";
+import * as _ from "lodash";
+import {Button, Form, Icon, Input, Select, Spin} from "antd";
 import valhallaLogo from "../../assets/valhalla-logo-big.png";
 import {registerIfNeeded} from "../../actions/auth";
 import {getAuthStatus} from "../../reducers/auth";
 import {withRouter} from "react-router-dom";
 import { PulseLoader } from 'react-spinners';
+import {loadOrganizationsIfNeeded} from "../../actions/organizations";
+import {getOrganizations} from "../../reducers/organizations";
 
 class RegisterForm extends React.Component {
   constructor(props) {
@@ -19,11 +22,16 @@ class RegisterForm extends React.Component {
     };
   }
 
+  componentDidMount() {
+    this.props.loadOrganizationsIfNeeded(this.props.token, this.props.history);
+  }
+
   register = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        this.props.registerIfNeeded(values.name, values.email, values.password, this.props.history);
+        this.props.registerIfNeeded(values.name, values.email, values.organization, values.password,
+          this.props.history);
       } else {
         this.setState({
           errorMessage: err
@@ -64,7 +72,9 @@ class RegisterForm extends React.Component {
   };
 
   render() {
+    const organizations = this.props.organizations.organizations;
     const { getFieldDecorator } = this.props.form;
+
     return (
       <div id={"register-page"}>
         <img id={"valhalla-logo"} src={valhallaLogo} alt={"Welcome to Valhalla!"}/>
@@ -112,6 +122,28 @@ class RegisterForm extends React.Component {
                      onBlur={this.handlePasswordCopyBlur} />
             )}
           </Form.Item>
+          <Form.Item hasFeedback>
+            {getFieldDecorator('organizations', {
+              rules: [{
+                required: true, message: 'Please select your organization!'
+              }]
+            })(
+              <div>
+                <Select
+                  className={"organization-select"}
+                  placeholder={"Organization"}
+                  notFoundContent={this.props.organizations.isFetching ? <Spin size="small" /> : null}
+                >
+                  {!_.isEmpty(organizations) && organizations.map((organization) =>
+                    <Select.Option value={organization.organization_id}>{organization.title}</Select.Option>
+                  )}
+                </Select>
+                {this.props.organizations.errorMessage && <div className={"error-message-area"}>
+                  <p>{this.props.organizations.errorMessage}</p>
+                </div>}
+              </div>
+            )}
+          </Form.Item>
           {this.props.errorMessage && <div className={"error-message-area"}>
             <p>{this.props.errorMessage}</p>
           </div>}
@@ -128,11 +160,15 @@ class RegisterForm extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-  return getAuthStatus(state);
+  return {
+    ...getAuthStatus(state),
+    organizations: getOrganizations(state)
+  };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
+    loadOrganizationsIfNeeded,
     registerIfNeeded
   }, dispatch);
 };

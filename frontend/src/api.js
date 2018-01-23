@@ -46,3 +46,6 @@ export const register = (name, email, password) =>
     email,
     password
   }).then(handleResponse).catch(handleError);
+
+export const loadOrganizations = (token) =>
+  axios.get(BACKEND_URL + "organization/get", tokenConfig(token)).then(handleResponse).catch(handleError);

@@ -1,8 +1,11 @@
+import datetime as dt
+
 from flask import Blueprint, request, jsonify, g
 from sqlalchemy.exc import IntegrityError
 import logbook
 
-from ...core.models import db, User
+from ...common import db
+from ...orm.user import User
 from ...utils.auth import generate_token, verify_token, requires_auth
 
 logger = logbook.Logger(__name__)
@@ -10,7 +13,7 @@ logger = logbook.Logger(__name__)
 user_api = Blueprint('user', __name__)
 
 
-@user_api.route('/get', methods=['GET'])
+@user_api.route('/', methods=['GET'])
 @requires_auth
 def get_user():
     return jsonify(result=g.current_user)
@@ -19,13 +22,11 @@ def get_user():
 @user_api.route('/register', methods=['POST'])
 def register():
     incoming = request.get_json()
-
-    # Find server & token.
     email = incoming['email']
-    password = incoming['password']
 
     # Add the user.
-    user = User(name=incoming['name'], email=email, password=password)
+    user = User(name=incoming['name'], email=email, password=incoming['password'],
+                organization_id=incoming['organization_id'], creation_time=dt.datetime.utcnow())
     db.session.add(user)
 
     try:
@@ -38,10 +39,9 @@ def register():
             }
         }), 409
 
-    new_user = User.query.filter_by(email=email).first()
-    logger.info(f'Created new user: {email}')
+    logger.info(f'Created a new user: {email}')
 
-    return jsonify(token=generate_token(new_user, remember=False))
+    return jsonify(token=generate_token(user, remember=False))
 
 
 @user_api.route('/login', methods=['POST'])
@@ -53,6 +53,7 @@ def login():
         logger.debug(f'User {email} logged in')
         return jsonify(token=generate_token(user, remember=incoming['remember']))
 
+    logger.debug(f'Failed login attempt for user: {email}')
     return jsonify({
         'error': {
             'title': 'Authentication Error',

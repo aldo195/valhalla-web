@@ -4,7 +4,7 @@ from flask import request, jsonify
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer, SignatureExpired, BadSignature
 
 from .. import config
-from ..core.models import User
+from ..orm.user import User
 
 
 def generate_token(user, remember=False):

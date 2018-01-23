@@ -45,13 +45,10 @@ coverage.xml
 docs/_build/
 
 # dependencies
-node_modules
+node_modules/
 
 # testing
 /coverage
-
-# production
-/build
 
 npm-debug.log*
 yarn-debug.log*
@@ -64,6 +61,8 @@ yarn-error.log*
 .env.development.local
 .env.test.local
 .env.production.local
+
+migrations/
 
 # Tests DB
 valhallaweb.db

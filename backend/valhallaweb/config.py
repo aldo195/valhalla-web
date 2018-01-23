@@ -4,8 +4,6 @@ from pathlib import Path
 DEBUG = (os.getenv('VALHALLAWEB_DEBUG') or '1') == '1'
 REDIRECT_TO_NODE_DEV_SERVER = DEBUG
 
-DB_URL = os.getenv('DB_URL') or 'sqlite:///valhallaweb.db'
-
 PROJECT_FOLDER = Path(__file__).parent.parent.parent
 FRONTEND_FOLDER = PROJECT_FOLDER.joinpath('frontend')
 BUILD_FOLDER = FRONTEND_FOLDER.joinpath('build')
@@ -21,5 +19,5 @@ LOG_FILE_PATH = os.getenv('VALHALLAWEB_LOG_FILE_PATH') or 'valhallaweb.log'
 # Flask settings.
 class FlaskConfig(object):
     SECRET_KEY = APP_SECRET_KEY
-    SQLALCHEMY_DATABASE_URI = DB_URL
+    SQLALCHEMY_DATABASE_URI = os.getenv('DB_URL') or 'sqlite:///valhallaweb.db'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
