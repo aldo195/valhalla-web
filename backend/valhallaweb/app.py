@@ -7,6 +7,8 @@ import logbook
 from valhallaweb import config
 from valhallaweb.gunicorn_conf import host, port
 from valhallaweb.api.v1.user import user_api
+from valhallaweb.api.v1.organization import organization_api
+from valhallaweb.api.v1.rule import rule_api
 from valhallaweb.views import app_views
 from valhallaweb.redirect_views import redirect_views
 from valhallaweb.common import db, bcrypt
@@ -25,6 +27,8 @@ else:
     app.register_blueprint(app_views)
 
 app.register_blueprint(user_api, url_prefix='/api/v1/user')
+app.register_blueprint(organization_api, url_prefix='/api/v1/organization')
+app.register_blueprint(rule_api, url_prefix='/api/v1/rule')
 
 with app.app_context():
     db.create_all()

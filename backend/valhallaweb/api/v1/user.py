@@ -26,7 +26,7 @@ def register():
 
     # Add the user.
     user = User(name=incoming['name'], email=email, password=incoming['password'],
-                organization_id=incoming['organization_id'], creation_time=dt.datetime.utcnow())
+                organization_id=incoming['organizationId'], creation_time=dt.datetime.utcnow())
     db.session.add(user)
 
     try:

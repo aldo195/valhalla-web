@@ -40,12 +40,16 @@ export const validateToken = (token) =>
     token
   }).then(handleResponse).catch(handleError);
 
-export const register = (name, email, password) =>
+export const register = (name, email, organizationId, password) =>
   axios.post(BACKEND_URL + "user/register", {
     name,
     email,
+    organizationId,
     password
   }).then(handleResponse).catch(handleError);
 
 export const loadOrganizations = (token) =>
   axios.get(BACKEND_URL + "organization/get", tokenConfig(token)).then(handleResponse).catch(handleError);
+
+export const loadRules = (token) =>
+  axios.get(BACKEND_URL + "rule/get", tokenConfig(token)).then(handleResponse).catch(handleError);

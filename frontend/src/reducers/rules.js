@@ -1,27 +1,27 @@
 import * as actionTypes from "../constants/actionTypes";
 import * as _ from "lodash";
 
-export const organizations = (state = {
-  organizations: {},
+export const rules = (state = {
+  rules: {},
   isFetching: false,
   errorMessage: null
 }, action) => {
   switch (action.type) {
-    case actionTypes.LOAD_ORGANIZATIONS_REQUEST:
+    case actionTypes.LOAD_RULES_REQUEST:
       return {
         ...state,
         isFetching: true,
         errorMessage: null
       };
-    case actionTypes.LOAD_ORGANIZATIONS_SUCCESS:
+    case actionTypes.LOAD_RULES_SUCCESS:
       return {
-        organizations: _.mapValues(action.response.organizations, (organization) => organization.organization_id),
+        rules: _.mapValues(action.response.rules, (rule) => rule.rule_id),
         isFetching: false,
         errorMessage: null
       };
-    case actionTypes.LOAD_ORGANIZATIONS_FAILURE:
+    case actionTypes.LOAD_RULES_FAILURE:
       return {
-        organizations: {},
+        rules: {},
         isFetching: false,
         errorMessage: action.errorMessage
       };
@@ -30,6 +30,6 @@ export const organizations = (state = {
   }
 };
 
-export const getOrganizations = (state) => {
-  return state.organizations;
+export const getRules = (state) => {
+  return state.rules;
 };

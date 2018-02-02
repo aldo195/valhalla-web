@@ -69,12 +69,12 @@ const shouldRegister = (state) => {
   return !auth.isFetching;
 };
 
-export const registerIfNeeded = (name, email, password, history) => (dispatch, getState) => {
+export const registerIfNeeded = (name, email, organizationId, password, history) => (dispatch, getState) => {
   const state = getState();
   if (shouldRegister(state)) {
     dispatch(registerRequest());
 
-    api.register(name, email, password).then(
+    api.register(name, email, organizationId, password).then(
       response => {
         // Handle local storage here and not in the reducer, to keep reducer clean of side-effects.
         localStorage.setItem('token', response.token);

@@ -4,7 +4,7 @@ from ..common import db, bcrypt
 
 
 class User(db.Model):
-    user_id = db.Column(db.Integer(), primary_key=True)
+    user_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255))
     email = db.Column(db.String(255), unique=True)
     _password = db.Column('password', db.String(255))

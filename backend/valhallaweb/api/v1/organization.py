@@ -14,10 +14,9 @@ organization_api = Blueprint('organization', __name__)
 
 
 @organization_api.route('/get', methods=['GET'])
-@requires_auth
-def get_organizations(current_user):
+def get_organizations():
     logger.info('Fetching organizations...')
-    return jsonify(organizations=Organization.query.all())
+    return jsonify(organizations=[o.to_dict() for o in Organization.query.all()])
 
 
 @organization_api.route('/register', methods=['POST'])
