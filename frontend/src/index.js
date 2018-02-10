@@ -12,6 +12,7 @@ import {Register} from './components/Register/Register';
 import {LocaleProvider} from 'antd';
 import enUS from 'antd/lib/locale-provider/en_US';
 import {requireAuthentication} from './components/AuthenticatedComponent';
+import {ErrorPage} from './components/Exception';
 
 let render = () =>
   ReactDOM.render(
@@ -25,7 +26,7 @@ let render = () =>
             {/*Single rule for all inner routes*/}
             {[].map(path => <Route key={path} path={path} component={requireAuthentication(ValhallaApp)} />)}
             {/*Default rule*/}
-            <Route component={Login} />
+            <Route component={ErrorPage(404)} />
           </Switch>
         </BrowserRouter>
       </LocaleProvider>
