@@ -12,7 +12,7 @@ import {Register} from './components/Register/Register';
 import {LocaleProvider} from 'antd';
 import enUS from 'antd/lib/locale-provider/en_US';
 import {requireAuthentication} from './components/AuthenticatedComponent';
-import {ErrorPage} from './components/Exception';
+import {ErrorPage} from './components/Exception/exception';
 
 let render = () =>
   ReactDOM.render(

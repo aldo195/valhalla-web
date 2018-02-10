@@ -13,10 +13,6 @@ class Home extends React.Component {
     this.fetchData();
   }
 
-  componentDidUpdate() {
-    this.fetchData();
-  }
-
   render() {
     return (
       <div id={'home-page'}>
