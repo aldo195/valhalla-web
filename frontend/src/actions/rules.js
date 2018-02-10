@@ -1,23 +1,23 @@
-import * as api from '../api'
-import * as actionTypes from '../constants/actionTypes'
-import * as _ from "lodash";
-import {logoutAndRedirect} from "./auth";
+import * as api from '../api';
+import * as actionTypes from '../constants/actionTypes';
+import * as _ from 'lodash';
+import {logoutAndRedirect} from './auth';
 
 export const loadRulesRequest = () => ({
-  type: actionTypes.LOAD_RULES_REQUEST
+  type: actionTypes.LOAD_RULES_REQUEST,
 });
 
-export const loadRulesSuccess = (response) => ({
+export const loadRulesSuccess = response => ({
   type: actionTypes.LOAD_RULES_SUCCESS,
-  response
+  response,
 });
 
-export const loadRulesFailure = (errorMessage) => ({
+export const loadRulesFailure = errorMessage => ({
   type: actionTypes.LOAD_RULES_FAILURE,
-  errorMessage
+  errorMessage,
 });
 
-const shouldLoadRules = (state) => {
+const shouldLoadRules = state => {
   const rules = state.rules;
 
   if (rules.isFetching) {
@@ -33,14 +33,13 @@ export const loadRulesIfNeeded = (token, history) => (dispatch, getState) => {
     dispatch(loadRulesRequest());
 
     api.loadRules(token).then(
-      response =>
-        dispatch(loadRulesSuccess(response)),
+      response => dispatch(loadRulesSuccess(response)),
       error => {
         dispatch(loadRulesFailure(error.message));
         if (error.status === 401) {
           dispatch(logoutAndRedirect(history));
         }
-      }
+      },
     );
   }
 };

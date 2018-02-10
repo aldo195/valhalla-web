@@ -1,45 +1,41 @@
 import './Home.css';
 import React from 'react';
-import { bindActionCreators } from 'redux';
-import {connect} from "react-redux";
-import {Col, Row} from "antd";
-import {withRouter} from "react-router-dom";
-import {getAuthDetails} from "../reducers/auth";
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
+import {Col, Row} from 'antd';
+import {withRouter} from 'react-router-dom';
+import {getAuthDetails} from '../reducers/auth';
 
 class Home extends React.Component {
-  fetchData() {
-  }
+  fetchData() {}
 
   componentDidMount() {
-    this.fetchData()
+    this.fetchData();
   }
 
   componentDidUpdate() {
-    this.fetchData()
+    this.fetchData();
   }
 
   render() {
     return (
-      <div id={"home-page"}>
+      <div id={'home-page'}>
         <Col>
-          <Row>
-
-          </Row>
+          <Row />
         </Col>
       </div>
     );
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
-    ...getAuthDetails(state)
-  }
+    ...getAuthDetails(state),
+  };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators({
-  }, dispatch);
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators({}, dispatch);
 };
 
 Home = withRouter(connect(mapStateToProps, mapDispatchToProps)(Home));

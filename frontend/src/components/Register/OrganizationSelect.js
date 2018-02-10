@@ -1,10 +1,10 @@
 import React from 'react';
 import './OrganizationSelect.css';
-import * as api from '../../api'
-import * as _ from "lodash";
-import {getAuthDetails} from "../../reducers/auth";
-import connect from "react-redux/es/connect/connect";
-import {Spin, Select} from "antd";
+import * as api from '../../api';
+import * as _ from 'lodash';
+import {getAuthDetails} from '../../reducers/auth';
+import connect from 'react-redux/es/connect/connect';
+import {Spin, Select} from 'antd';
 
 class OrganizationSelect extends React.Component {
   constructor(props) {
@@ -14,7 +14,7 @@ class OrganizationSelect extends React.Component {
       organizationId: null,
       organizationsList: [],
       isFetching: true,
-      errorMessage: null
+      errorMessage: null,
     };
   }
 
@@ -24,21 +24,21 @@ class OrganizationSelect extends React.Component {
         this.setState({
           organizationsList: response.organizations,
           isFetching: false,
-          errorMessage: null
+          errorMessage: null,
         });
       },
       error => {
         this.setState({
           organizationsList: [],
           isFetching: false,
-          errorMessage: error.message
+          errorMessage: error.message,
         });
-      }
+      },
     );
   }
 
-  triggerChange = (organizationId) => {
-    this.setState({ organizationId });
+  triggerChange = organizationId => {
+    this.setState({organizationId});
 
     const onChange = this.props.onChange;
     if (onChange) {
@@ -51,27 +51,32 @@ class OrganizationSelect extends React.Component {
       <div>
         <Select
           showSearch
-          className={"organization-select"}
-          placeholder={"Organization"}
+          className={'organization-select'}
+          placeholder={'Organization'}
           notFoundContent={this.state.isFetching ? <Spin size="small" /> : null}
           onChange={this.triggerChange}
         >
-          {!_.isEmpty(this.state.organizationsList) && this.state.organizationsList.map((organization) =>
-            <Select.Option key={organization.organization_id} value={organization.organization_id}>{organization.title}</Select.Option>
-          )}
+          {!_.isEmpty(this.state.organizationsList) &&
+            this.state.organizationsList.map(organization => (
+              <Select.Option key={organization.organization_id} value={organization.organization_id}>
+                {organization.title}
+              </Select.Option>
+            ))}
         </Select>
-        {this.state.errorMessage && <div className={"error-message-area"}>
-          <p>{this.state.errorMessage}</p>
-        </div>}
+        {this.state.errorMessage && (
+          <div className={'error-message-area'}>
+            <p>{this.state.errorMessage}</p>
+          </div>
+        )}
       </div>
     );
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
-    ...getAuthDetails(state)
-  }
+    ...getAuthDetails(state),
+  };
 };
 
 OrganizationSelect = connect(mapStateToProps)(OrganizationSelect);

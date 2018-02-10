@@ -1,14 +1,17 @@
 import jwtDecode from 'jwt-decode';
-import * as actionTypes from "../constants/actionTypes";
-import * as _ from "lodash";
+import * as actionTypes from '../constants/actionTypes';
+import * as _ from 'lodash';
 
-export const auth = (state = {
-  isAuthenticated: !(_.isNil(localStorage.getItem('token'))),
-  token: localStorage.getItem('token'),
-  email: localStorage.getItem('token') ? jwtDecode(localStorage.getItem('token')).email : null,
-  isFetching: false,
-  errorMessage: null,
-}, action) => {
+export const auth = (
+  state = {
+    isAuthenticated: !_.isNil(localStorage.getItem('token')),
+    token: localStorage.getItem('token'),
+    email: localStorage.getItem('token') ? jwtDecode(localStorage.getItem('token')).email : null,
+    isFetching: false,
+    errorMessage: null,
+  },
+  action,
+) => {
   switch (action.type) {
     case actionTypes.REGISTER_REQUEST:
     case actionTypes.LOGIN_REQUEST:
@@ -16,7 +19,7 @@ export const auth = (state = {
         ...state,
         isFetching: true,
         isAuthenticated: false,
-        errorMessage: null
+        errorMessage: null,
       };
     case actionTypes.REGISTER_SUCCESS:
     case actionTypes.LOGIN_SUCCESS:
@@ -25,7 +28,7 @@ export const auth = (state = {
         isAuthenticated: true,
         token: action.token,
         email: jwtDecode(action.token).email,
-        errorMessage: null
+        errorMessage: null,
       };
     case actionTypes.REGISTER_FAILURE:
     case actionTypes.LOGIN_FAILURE:
@@ -34,7 +37,7 @@ export const auth = (state = {
         isFetching: false,
         token: null,
         email: null,
-        errorMessage: action.errorMessage
+        errorMessage: action.errorMessage,
       };
     case actionTypes.LOGOUT:
       return {
@@ -42,24 +45,24 @@ export const auth = (state = {
         isFetching: false,
         token: null,
         email: null,
-        errorMessage: null
+        errorMessage: null,
       };
     default:
       return state;
   }
 };
 
-export const getAuthDetails = (state) => {
+export const getAuthDetails = state => {
   return {
     token: state.auth.token,
     email: state.auth.email,
-    isAuthenticated: state.auth.isAuthenticated
+    isAuthenticated: state.auth.isAuthenticated,
   };
 };
 
-export const getAuthStatus = (state) => {
+export const getAuthStatus = state => {
   return {
     isFetching: state.auth.isFetching,
-    errorMessage: state.auth.errorMessage
+    errorMessage: state.auth.errorMessage,
   };
 };

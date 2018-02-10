@@ -1,12 +1,11 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { loginSuccess } from '../actions/auth';
-import * as routes from "../constants/routes";
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import {loginSuccess} from '../actions/auth';
+import * as routes from '../constants/routes';
 import * as api from '../api';
-import {getAuthDetails} from "../reducers/auth";
-import {withRouter} from "react-router-dom";
-
+import {getAuthDetails} from '../reducers/auth';
+import {withRouter} from 'react-router-dom';
 
 export function requireAuthentication(Component) {
   class AuthenticatedComponent extends React.Component {
@@ -30,21 +29,14 @@ export function requireAuthentication(Component) {
             },
             error => {
               this.props.history.push(routes.LOGIN);
-            }
+            },
           );
         }
       }
     }
 
     render() {
-      return (
-        <div>
-          {this.props.isAuthenticated
-            ? <Component {...this.props} />
-            : null
-          }
-        </div>
-      );
+      return <div>{this.props.isAuthenticated ? <Component {...this.props} /> : null}</div>;
     }
   }
 
@@ -53,9 +45,12 @@ export function requireAuthentication(Component) {
   }
 
   function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-      loginSuccess
-    }, dispatch);
+    return bindActionCreators(
+      {
+        loginSuccess,
+      },
+      dispatch,
+    );
   }
 
   return withRouter(connect(mapStateToProps, mapDispatchToProps)(AuthenticatedComponent));

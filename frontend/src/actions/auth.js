@@ -1,22 +1,22 @@
 import * as api from '../api';
 import * as actionTypes from '../constants/actionTypes';
-import * as routes from "../constants/routes";
+import * as routes from '../constants/routes';
 
 export const loginRequest = () => ({
-  type: actionTypes.LOGIN_REQUEST
+  type: actionTypes.LOGIN_REQUEST,
 });
 
-export const loginSuccess = (token) => ({
+export const loginSuccess = token => ({
   type: actionTypes.LOGIN_SUCCESS,
-  token
+  token,
 });
 
-export const loginFailure = (errorMessage) => ({
+export const loginFailure = errorMessage => ({
   type: actionTypes.LOGIN_FAILURE,
-  errorMessage
+  errorMessage,
 });
 
-const shouldLogin = (state) => {
+const shouldLogin = state => {
   const auth = state.auth;
   return !auth.isFetching;
 };
@@ -35,36 +35,36 @@ export const loginIfNeeded = (email, password, remember, history) => (dispatch, 
       },
       error => {
         dispatch(loginFailure(error.message));
-      }
+      },
     );
   }
 };
 
 export const logout = () => ({
-  type: actionTypes.LOGOUT
+  type: actionTypes.LOGOUT,
 });
 
-export const logoutAndRedirect = (history) => (dispatch) => {
+export const logoutAndRedirect = history => dispatch => {
   localStorage.removeItem('token');
   dispatch(logout());
   history.push(routes.LOGIN);
 };
 
 export const registerRequest = () => ({
-  type: actionTypes.REGISTER_REQUEST
+  type: actionTypes.REGISTER_REQUEST,
 });
 
-export const registerSuccess = (token) => ({
+export const registerSuccess = token => ({
   type: actionTypes.REGISTER_SUCCESS,
-  token
+  token,
 });
 
-export const registerFailure = (errorMessage) => ({
+export const registerFailure = errorMessage => ({
   type: actionTypes.REGISTER_FAILURE,
-  errorMessage
+  errorMessage,
 });
 
-const shouldRegister = (state) => {
+const shouldRegister = state => {
   const auth = state.auth;
   return !auth.isFetching;
 };
@@ -83,7 +83,7 @@ export const registerIfNeeded = (name, email, organizationId, password, history)
       },
       error => {
         dispatch(registerFailure(error.message));
-      }
+      },
     );
   }
 };
