@@ -5,7 +5,7 @@ import './index.css';
 import {Provider} from "react-redux";
 import {store} from "./store";
 import {ValhallaApp} from "./App";
-import {BrowserRouter, Route} from 'react-router-dom';
+import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import * as routes from "./constants/routes";
 import {Login} from "./components/Login/Login";
 import {Register} from "./components/Register/Register";
@@ -18,14 +18,16 @@ let render = () => (
     <Provider store={store}>
       <LocaleProvider locale={enUS}>
         <BrowserRouter basename={routes.HOME}>
-          <div>
+          <Switch>
             <Route path={routes.LOGIN} component={Login} />
             <Route path={routes.REGISTER} component={Register} />
             <Route exact path={routes.HOME} component={requireAuthentication(ValhallaApp)} />
             {/*Single rule for all inner routes*/}
             {[].map(path =>
               <Route key={path} path={path} component={requireAuthentication(ValhallaApp)} />)}
-          </div>
+            {/*Default rule*/}
+            <Route component={Login} />
+          </Switch>
         </BrowserRouter>
       </LocaleProvider>
     </Provider>

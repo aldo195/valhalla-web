@@ -10,7 +10,7 @@ class Rule(db.Model):
     csf = db.Column(db.String(512))
     creation_time = db.Column(db.DateTime)
 
-    owner_id = db.Column(db.Integer(), db.ForeignKey('user.user_id'), nullable=False)
+    owner_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
     owner = db.relationship('User', backref='rules', lazy=True)
 
 

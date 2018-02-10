@@ -13,13 +13,13 @@ logger = logbook.Logger(__name__)
 user_api = Blueprint('user', __name__)
 
 
-@user_api.route('/', methods=['GET'])
+@user_api.route('', methods=['GET'])
 @requires_auth
 def get_user():
     return jsonify(result=g.current_user)
 
 
-@user_api.route('/register', methods=['POST'])
+@user_api.route('', methods=['POST'])
 def register():
     incoming = request.get_json()
     email = incoming['email']

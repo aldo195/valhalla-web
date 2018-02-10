@@ -1,6 +1,6 @@
 import sys
 
-from flask import Flask
+from flask import Flask, request
 from flask_cors import CORS
 import logbook
 
@@ -12,6 +12,8 @@ from valhallaweb.api.v1.rule import rule_api
 from valhallaweb.views import app_views
 from valhallaweb.redirect_views import redirect_views
 from valhallaweb.common import db, bcrypt
+
+logger = logbook.Logger(__name__)
 
 app = Flask(__name__.split('.')[0], static_folder=None)
 app.config.from_object(config.FlaskConfig)
@@ -34,6 +36,17 @@ with app.app_context():
     db.create_all()
 
 
-if __name__ == '__main__':
+@app.errorhandler(Exception)
+def error_handler(ex):
+    logger.exception('An error has occurred! ({} {} {} {})'.format(
+        request.remote_addr, request.method, request.scheme, request.full_path))
+    return 'Internal Server Error', 500
+
+
+def main():
     logbook.StreamHandler(sys.stdout).push_application()
     app.run(host, port)
+
+
+if __name__ == '__main__':
+    main()

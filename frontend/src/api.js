@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BACKEND_URL = 'http://localhost:8000/api/v1/';
+let BACKEND_URL = (process.env.NODE_ENV !== 'production' ? 'http://localhost:8000' : '/') + 'api/v1/';
 
 // Use our own custom error class.
 class ApiError extends Error {
@@ -41,7 +41,7 @@ export const validateToken = (token) =>
   }).then(handleResponse).catch(handleError);
 
 export const register = (name, email, organizationId, password) =>
-  axios.post(BACKEND_URL + "user/register", {
+  axios.post(BACKEND_URL + "user", {
     name,
     email,
     organizationId,

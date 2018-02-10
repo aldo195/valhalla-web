@@ -12,7 +12,7 @@ STATIC_FOLDER = str(BUILD_FOLDER)
 APP_SECRET_KEY = os.urandom(24)
 USER_EXPIRATION_SECONDS = 1209600  # 2 weeks.
 
-TEMP_FOLDER = '/tmp'
+TEMP_FOLDER = os.getenv('VALHALLAWEB_TEMP_DIR') or '/tmp'
 LOG_FILE_PATH = os.getenv('VALHALLAWEB_LOG_FILE_PATH') or 'valhallaweb.log'
 
 
