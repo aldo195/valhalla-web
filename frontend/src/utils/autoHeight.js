@@ -1,4 +1,3 @@
-/* eslint eqeqeq: 0 */
 import React from 'react';
 
 function computeHeight(node) {
@@ -28,7 +27,7 @@ function getAutoHeight(n) {
   return height;
 }
 
-const autoHeight = () => WrappedComponent => {
+const autoHeight = WrappedComponent => {
   return class extends React.Component {
     state = {
       computedHeight: 0,
@@ -38,20 +37,15 @@ const autoHeight = () => WrappedComponent => {
       const {height} = this.props;
       if (!height) {
         const h = getAutoHeight(this.root);
-        // eslint-disable-next-line
         this.setState({computedHeight: h});
       }
     }
-
-    handleRoot = node => {
-      this.root = node;
-    };
 
     render() {
       const {height} = this.props;
       const {computedHeight} = this.state;
       const h = height || computedHeight;
-      return <div ref={this.handleRoot}>{h > 0 && <WrappedComponent {...this.props} height={h} />}</div>;
+      return <div>{h > 0 && <WrappedComponent {...this.props} height={h} />}</div>;
     }
   };
 };

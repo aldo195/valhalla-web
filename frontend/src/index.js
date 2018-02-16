@@ -26,7 +26,7 @@ let render = () =>
             {/*Single rule for all inner routes*/}
             {[].map(path => <Route key={path} path={path} component={requireAuthentication(ValhallaApp)} />)}
             {/*Default rule*/}
-            <Route component={ErrorPage(404)} />
+            <Route component={ErrorPage} />
           </Switch>
         </BrowserRouter>
       </LocaleProvider>

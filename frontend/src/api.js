@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-let BACKEND_URL = (process.env.NODE_ENV !== 'production' ? 'http://localhost:8000' : '/') + 'api/v1/';
+let BACKEND_URL = (process.env.NODE_ENV !== 'production' ? 'http://localhost:8000/' : '/') + 'api/v1/';
 
 // Use our own custom error class.
 class ApiError extends Error {

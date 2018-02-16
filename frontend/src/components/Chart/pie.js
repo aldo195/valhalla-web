@@ -1,16 +1,14 @@
 import './pie.css';
 import React from 'react';
 import {Chart, Tooltip, Geom, Coord} from 'bizcharts';
-import {Divider, Tooltip} from 'antd';
+import {DataView} from '@antv/data-set';
+import {Divider} from 'antd';
 import classNames from 'classnames';
 import ReactFitText from 'react-fittext';
-import Debounce from 'lodash-decorators/debounce';
-import Bind from 'lodash-decorators/bind';
 import {autoHeight} from '../../utils/autoHeight';
+import * as _ from 'lodash';
 
-/* eslint react/no-danger:0 */
-@autoHeight()
-class Pie extends Component {
+class PieComponent extends React.Component {
   state = {
     legendData: [],
     legendBlock: false,
@@ -57,9 +55,7 @@ class Pie extends Component {
   };
 
   // For window resize auto responsive legend.
-  @Bind()
-  @Debounce(300)
-  resize() {
+  resize = _.debounce(() => {
     const {hasLegend} = this.props;
     if (!hasLegend || !this.root) {
       window.removeEventListener('resize', this.resize);
@@ -76,7 +72,7 @@ class Pie extends Component {
         legendBlock: false,
       });
     }
-  }
+  }, 300);
 
   handleLegendClick = (item, i) => {
     const newItem = item;
@@ -116,11 +112,12 @@ class Pie extends Component {
 
     const {legendData, legendBlock} = this.state;
     const pieClassName = classNames('pie', className, {
-      ['hasLegend']: hasLegend,
-      ['legendBlock']: legendBlock,
+      hasLegend: hasLegend,
+      legendBlock: legendBlock,
     });
 
     const defaultColors = colors;
+    let data = this.props.data || [];
     let selected = this.props.selected || true;
     let tooltip = this.props.tooltip || true;
     let formatColor;
@@ -139,12 +136,23 @@ class Pie extends Component {
       selected = false;
       tooltip = false;
       formatColor = value => {
-        if (value === '?') {
+        if (value === 'primary') {
           return color || 'rgba(24, 144, 255, 0.85)';
         } else {
           return '#F0F2F5';
         }
       };
+
+      data = [
+        {
+          x: 'primary',
+          y: percent,
+        },
+        {
+          x: 'rest',
+          y: 100 - percent,
+        },
+      ];
     }
 
     const tooltipFormat = [
@@ -156,6 +164,14 @@ class Pie extends Component {
     ];
 
     const padding = [12, 0, 12, 0];
+
+    const dv = new DataView();
+    dv.source(data).transform({
+      type: 'percent',
+      field: 'y',
+      dimension: 'x',
+      as: 'percent',
+    });
 
     return (
       <div className={pieClassName} style={style}>
@@ -215,4 +231,5 @@ class Pie extends Component {
   }
 }
 
+const Pie = autoHeight(PieComponent);
 export {Pie};
