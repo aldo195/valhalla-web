@@ -1,5 +1,5 @@
 import {track, setTheme} from 'bizcharts';
-import {Pie} from './pie';
+import {Pie} from './Pie';
 
 track(false);
 
@@ -14,6 +14,4 @@ const config = {
 
 setTheme(config);
 
-export {
-  Pie
-};
+export {Pie};

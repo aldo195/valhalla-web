@@ -1,4 +1,4 @@
-import './pie.css';
+import './Pie.css';
 import React from 'react';
 import {Chart, Tooltip, Geom, Coord} from 'bizcharts';
 import {DataView} from '@antv/data-set';

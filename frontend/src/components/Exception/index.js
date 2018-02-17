@@ -1,5 +1,5 @@
 import React from 'react';
-import './exception.css';
+import './index.css';
 import unauthorizedAccessError from '../../assets/unauthorized_access_error.svg';
 import notFoundError from '../../assets/not_found_error.svg';
 import internalServerError from '../../assets/internal_server_error.svg';
@@ -23,7 +23,7 @@ const config = {
   },
 };
 
-let ErrorPage = ({className, linkElement = 'a', type, title, desc, img, actions, ...rest}) => {
+let Exception = ({className, linkElement = 'a', type, title, desc, img, actions, ...rest}) => {
   const pageType = type in config ? type : '404';
   const classString = classNames('exception', className);
   return (
@@ -50,4 +50,4 @@ let ErrorPage = ({className, linkElement = 'a', type, title, desc, img, actions,
   );
 };
 
-export {ErrorPage};
+export {Exception};

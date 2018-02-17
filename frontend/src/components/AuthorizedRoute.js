@@ -1,6 +1,10 @@
 import React from 'react';
 import {Route, Redirect} from 'react-router-dom';
 import * as api from '../api';
+import {getAuthDetails} from '../reducers/auth';
+import {bindActionCreators} from 'redux';
+import {loginSuccess} from '../actions/auth';
+import {connect} from 'react-redux';
 
 class AuthorizedRoute extends React.Component {
   componentWillMount() {
@@ -31,4 +35,18 @@ class AuthorizedRoute extends React.Component {
   }
 }
 
+function mapStateToProps(state) {
+  return getAuthDetails(state);
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(
+    {
+      loginSuccess,
+    },
+    dispatch,
+  );
+}
+
+AuthorizedRoute = connect(mapStateToProps, mapDispatchToProps)(AuthorizedRoute);
 export {AuthorizedRoute};

@@ -1,11 +1,11 @@
-import './Home.css';
+import './Analysis.css';
 import React from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {Col, Row, Card, Tabs} from 'antd';
 import {withRouter} from 'react-router-dom';
 import {getAuthDetails} from '../reducers/auth';
-import {DetailsTab} from '../components/Home/DetailsTab';
+import {DetailsTab} from '../components/Dashboard/DetailsTab';
 
 const offlineData = [];
 offlineData.push({

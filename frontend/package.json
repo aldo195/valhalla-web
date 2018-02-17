@@ -20,6 +20,8 @@
     "react-router-dom": "^4.2.2",
     "react-scripts": "^1.0.17",
     "react-spinners": "^0.2.3",
+    "react-document-title": "^2.0.3",
+    "path-to-regex": "2.1.0",
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
     "stylus": "^0.54.5",
