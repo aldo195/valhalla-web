@@ -5,6 +5,7 @@ import pendulum
 import logbook
 
 from ...common import db
+from ...orm.user import UserRole
 from ...orm.rule import Rule, RuleStatus
 from ...utils.auth import requires_auth
 
@@ -13,8 +14,8 @@ logger = logbook.Logger(__name__)
 rule_api = Blueprint('rule', __name__)
 
 
-@rule_api.route('/get', methods=['GET'])
-@requires_auth
+@rule_api.route('', methods=['GET'])
+@requires_auth([UserRole.USER, UserRole.ADMIN])
 def get_rules(current_user):
     logger.info('Fetching rules...')
     rules = RuleStatus.query().\
@@ -24,8 +25,8 @@ def get_rules(current_user):
     return jsonify(rules=rules)
 
 
-@rule_api.route('/create', methods=['POST'])
-@requires_auth
+@rule_api.route('', methods=['POST'])
+@requires_auth([UserRole.ADMIN])
 def create(current_user):
     incoming = request.get_json()
     title = incoming['title']
@@ -43,7 +44,7 @@ def create(current_user):
 
 
 @rule_api.route('/status', methods=['POST'])
-@requires_auth
+@requires_auth([UserRole.USER, UserRole.ADMIN])
 def set_status(current_user):
     incoming = request.get_json()
 

@@ -5,6 +5,7 @@ from sqlalchemy.exc import IntegrityError
 import logbook
 
 from ...common import db
+from ...orm.user import UserRole
 from ...orm.organization import Organization
 from ...utils.auth import requires_auth
 
@@ -13,15 +14,15 @@ logger = logbook.Logger(__name__)
 organization_api = Blueprint('organization', __name__)
 
 
-@organization_api.route('/get', methods=['GET'])
+@organization_api.route('', methods=['GET'])
 def get_organizations():
     logger.info('Fetching organizations...')
     return jsonify(organizations=[o.to_dict() for o in Organization.query.all()])
 
 
-@organization_api.route('/register', methods=['POST'])
-@requires_auth
-def register(current_user):
+@organization_api.route('', methods=['POST'])
+@requires_auth([UserRole.ADMIN])
+def create_organization(current_user):
     incoming = request.get_json()
     title = incoming['title']
 
@@ -34,7 +35,7 @@ def register(current_user):
     except IntegrityError:
         return jsonify({
             'error': {
-                'title': 'Organization Registration Failed',
+                'title': 'Organization Creation Failed',
                 'details': 'An organization with that title already exists'
             }
         }), 409

@@ -2,11 +2,15 @@ import jwtDecode from 'jwt-decode';
 import * as actionTypes from '../constants/actionTypes';
 import * as _ from 'lodash';
 
+const token = localStorage.getItem('token');
+const decodedToken = token ? jwtDecode(token) : null;
+
 export const auth = (
   state = {
-    isAuthenticated: !_.isNil(localStorage.getItem('token')),
-    token: localStorage.getItem('token'),
-    email: localStorage.getItem('token') ? jwtDecode(localStorage.getItem('token')).email : null,
+    isAuthenticated: !_.isNil(token),
+    token: token,
+    email: decodedToken ? decodedToken.email : null,
+    role: decodedToken ? decodedToken.role : null,
     isFetching: false,
     errorMessage: null,
   },
@@ -23,11 +27,13 @@ export const auth = (
       };
     case actionTypes.REGISTER_SUCCESS:
     case actionTypes.LOGIN_SUCCESS:
+      const decodedToken = jwtDecode(action.token);
       return {
         isFetching: false,
         isAuthenticated: true,
         token: action.token,
-        email: jwtDecode(action.token).email,
+        email: decodedToken.email,
+        role: decodedToken.role,
         errorMessage: null,
       };
     case actionTypes.REGISTER_FAILURE:
@@ -37,6 +43,7 @@ export const auth = (
         isFetching: false,
         token: null,
         email: null,
+        role: null,
         errorMessage: action.errorMessage,
       };
     case actionTypes.LOGOUT:
@@ -45,6 +52,7 @@ export const auth = (
         isFetching: false,
         token: null,
         email: null,
+        role: null,
         errorMessage: null,
       };
     default:
@@ -56,6 +64,7 @@ export const getAuthDetails = state => {
   return {
     token: state.auth.token,
     email: state.auth.email,
+    role: state.auth.role,
     isAuthenticated: state.auth.isAuthenticated,
   };
 };

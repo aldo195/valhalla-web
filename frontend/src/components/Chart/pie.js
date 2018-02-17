@@ -5,7 +5,7 @@ import {DataView} from '@antv/data-set';
 import {Divider} from 'antd';
 import classNames from 'classnames';
 import ReactFitText from 'react-fittext';
-import {autoHeight} from '../../utils/autoHeight';
+import {autoHeight} from './autoHeight';
 import * as _ from 'lodash';
 
 class PieComponent extends React.Component {

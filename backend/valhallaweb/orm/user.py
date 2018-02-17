@@ -1,12 +1,23 @@
+from enum import Enum
+
 from sqlalchemy.ext.hybrid import hybrid_property
 
 from ..common import db, bcrypt
+
+
+class UserRole(Enum):
+    """
+    An Enum for all possible user roles.
+    """
+    USER = 'user'
+    ADMIN = 'admin'
 
 
 class User(db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255))
     email = db.Column(db.String(255), unique=True)
+    role = db.Column(db.Enum(UserRole))
     _password = db.Column('password', db.String(255))
     creation_time = db.Column(db.DateTime)
 

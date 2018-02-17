@@ -5,7 +5,7 @@ from sqlalchemy.exc import IntegrityError
 import logbook
 
 from ...common import db
-from ...orm.user import User
+from ...orm.user import User, UserRole
 from ...utils.auth import generate_token, verify_token, requires_auth
 
 logger = logbook.Logger(__name__)
@@ -14,7 +14,7 @@ user_api = Blueprint('user', __name__)
 
 
 @user_api.route('', methods=['GET'])
-@requires_auth
+@requires_auth([UserRole.USER, UserRole.ADMIN])
 def get_user():
     return jsonify(result=g.current_user)
 

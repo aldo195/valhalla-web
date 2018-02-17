@@ -59,12 +59,12 @@ export const register = (name, email, organizationId, password) =>
 
 export const loadOrganizations = token =>
   axios
-    .get(BACKEND_URL + 'organization/get', tokenConfig(token))
+    .get(BACKEND_URL + 'organization', tokenConfig(token))
     .then(handleResponse)
     .catch(handleError);
 
 export const loadRules = token =>
   axios
-    .get(BACKEND_URL + 'rule/get', tokenConfig(token))
+    .get(BACKEND_URL + 'rule', tokenConfig(token))
     .then(handleResponse)
     .catch(handleError);
