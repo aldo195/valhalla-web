@@ -1,12 +1,13 @@
 import {createElement} from 'react';
 import pathToRegexp from 'path-to-regexp';
 import {getMenuData} from './menu';
+import {loadDynamicComponent} from '../components/DynamicComponent';
 
 let routerDataCache;
 
 const dynamicWrapper = component => {
-  return {
-    // Add routerData prop.
+  return loadDynamicComponent({
+    // add routerData prop
     component: () => {
       if (!routerDataCache) {
         routerDataCache = getRouterData();
@@ -20,7 +21,7 @@ const dynamicWrapper = component => {
           });
       });
     },
-  };
+  });
 };
 
 function getFlatMenuData(menus) {
@@ -38,37 +39,26 @@ function getFlatMenuData(menus) {
 
 export const getRouterData = () => {
   const routerConfig = {
-    '/': {
-      component: dynamicWrapper(() => import('../layouts/BasicLayout')),
-    },
-    '/dashboard/analysis': {
-      component: dynamicWrapper(() => import('../routes/Dashboard/Analysis')),
-    },
-    '/exception/403': {
-      component: dynamicWrapper(() => import('../routes/Exception/403')),
-    },
-    '/exception/404': {
-      component: dynamicWrapper(() => import('../routes/Exception/404')),
-    },
-    '/exception/500': {
-      component: dynamicWrapper(() => import('../routes/Exception/500')),
-    },
-    '/exception/trigger': {
-      component: dynamicWrapper(() => import('../routes/Exception/triggerException')),
-    },
+    // '/': {
+    //   component: dynamicWrapper(() => import('../layouts/BasicLayout')),
+    // },
+    // '/dashboard/analysis': {
+    //   component: dynamicWrapper(() => import('../routes/Dashboard/Analysis')),
+    // },
     '/user': {
       component: dynamicWrapper(() => import('../layouts/UserLayout')),
     },
-    '/user/login': {
-      component: dynamicWrapper(() => import('../routes/User/Login')),
-    },
-    '/user/register': {
-      component: dynamicWrapper(() => import('../routes/User/Register')),
-    },
-    '/user/register-result': {
-      component: dynamicWrapper(() => import('../routes/User/RegisterResult')),
-    },
+    // '/user/login': {
+    //   component: dynamicWrapper(() => import('../routes/User/Login')),
+    // },
+    // '/user/register': {
+    //   component: dynamicWrapper(() => import('../routes/User/Register')),
+    // },
+    // '/user/register-result': {
+    //   component: dynamicWrapper(() => import('../routes/User/RegisterResult')),
+    // },
   };
+
   // Get name from ./menu.js or just set it in the router data.
   const menuData = getFlatMenuData(getMenuData());
 
@@ -90,7 +80,7 @@ export const getRouterData = () => {
     router = {
       ...router,
       name: router.name || menuItem.name,
-      authority: router.authority || menuItem.authority,
+      roles: router.roles || menuItem.roles,
     };
     routerData[path] = router;
   });

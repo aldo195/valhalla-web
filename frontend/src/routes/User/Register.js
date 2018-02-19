@@ -7,9 +7,8 @@ import {Button, Form, Icon, Input} from 'antd';
 import valhallaLogo from '../../assets/valhalla-logo-big.png';
 import {registerIfNeeded} from '../../actions/auth';
 import {getAuthStatus} from '../../reducers/auth';
-import {withRouter} from 'react-router-dom';
 import {PulseLoader} from 'react-spinners';
-import {OrganizationSelect} from './OrganizationSelect';
+import {OrganizationSelect} from '../../components/User/OrganizationSelect';
 
 class RegisterForm extends React.Component {
   constructor(props) {
@@ -24,13 +23,7 @@ class RegisterForm extends React.Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        this.props.registerIfNeeded(
-          values.name,
-          values.email,
-          values.organization.organizationId,
-          values.password,
-          this.props.history,
-        );
+        this.props.registerIfNeeded(values.name, values.email, values.organization.organizationId, values.password);
       } else {
         this.setState({
           errorMessage: err,
@@ -176,5 +169,5 @@ const mapDispatchToProps = dispatch => {
   );
 };
 
-const Register = withRouter(connect(mapStateToProps, mapDispatchToProps)(Form.create()(RegisterForm)));
+const Register = connect(mapStateToProps, mapDispatchToProps)(Form.create()(RegisterForm));
 export {Register};

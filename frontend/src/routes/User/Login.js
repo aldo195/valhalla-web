@@ -7,7 +7,6 @@ import {Button, Form, Icon, Input, Checkbox} from 'antd';
 import valhallaLogo from '../../assets/valhalla-logo-big.png';
 import * as routes from '../../constants/routes';
 import {getAuthStatus} from '../../reducers/auth';
-import {withRouter} from 'react-router-dom';
 import {PulseLoader} from 'react-spinners';
 
 class LoginForm extends React.Component {
@@ -22,7 +21,7 @@ class LoginForm extends React.Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        this.props.loginIfNeeded(values.email, values.password, values.remember, this.props.history);
+        this.props.loginIfNeeded(values.email, values.password, values.remember);
       } else {
         this.setState({
           errorMessage: err,
@@ -110,5 +109,5 @@ const mapDispatchToProps = dispatch => {
   );
 };
 
-const Login = withRouter(connect(mapStateToProps, mapDispatchToProps)(Form.create()(LoginForm)));
+const Login = connect(mapStateToProps, mapDispatchToProps)(Form.create()(LoginForm));
 export {Login};

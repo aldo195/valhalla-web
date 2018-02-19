@@ -2,10 +2,11 @@ import React from 'react';
 import './UserLayout.css';
 import DocumentTitle from 'react-document-title';
 import {Icon} from 'antd';
-import GlobalFooter from '../components/GlobalFooter';
+import {GlobalFooter} from '../components/GlobalFooter/GlobalFooter';
 import logo from '../assets/valhalla-logo-small.png';
 import {Link, Redirect, Route, Switch} from 'react-router-dom';
 import * as routes from '../constants/routes';
+import {getRoutes} from '../utils/routing';
 
 const links = [
   {
@@ -37,7 +38,7 @@ class UserLayout extends React.PureComponent {
     const {pathname} = location;
     let title = 'Valhalla.io';
     if (routerData[pathname] && routerData[pathname].name) {
-      title = `${routerData[pathname].name} - Valhalla.io`;
+      title = `${routerData[pathname].name} - ${title}`;
     }
     return title;
   }
@@ -57,7 +58,7 @@ class UserLayout extends React.PureComponent {
               <div className={'desc'}>Security Controls Validation Platform</div>
             </div>
             <Switch>
-              {routes.ROUTE_DATA[match.path].map(item => (
+              {getRoutes(match.path, routerData).map(item => (
                 <Route key={item.key} path={item.path} component={item.component} exact={item.exact} />
               ))}
               <Redirect exact from={routes.USER} to={routes.LOGIN} />
@@ -70,4 +71,4 @@ class UserLayout extends React.PureComponent {
   }
 }
 
-export {UserLayout};
+export default UserLayout;

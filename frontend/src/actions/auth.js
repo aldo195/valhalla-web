@@ -21,7 +21,7 @@ const shouldLogin = state => {
   return !auth.isFetching;
 };
 
-export const loginIfNeeded = (email, password, remember, history) => (dispatch, getState) => {
+export const loginIfNeeded = (email, password, remember) => (dispatch, getState) => {
   const state = getState();
   if (shouldLogin(state)) {
     dispatch(loginRequest());
@@ -31,7 +31,6 @@ export const loginIfNeeded = (email, password, remember, history) => (dispatch, 
         // Handle local storage here and not in the reducer, to keep reducer clean of side-effects.
         localStorage.setItem('token', response.token);
         dispatch(loginSuccess(response.token));
-        history.push(routes.HOME);
       },
       error => {
         dispatch(loginFailure(error.message));
@@ -69,7 +68,7 @@ const shouldRegister = state => {
   return !auth.isFetching;
 };
 
-export const registerIfNeeded = (name, email, organizationId, password, history) => (dispatch, getState) => {
+export const registerIfNeeded = (name, email, organizationId, password) => (dispatch, getState) => {
   const state = getState();
   if (shouldRegister(state)) {
     dispatch(registerRequest());
@@ -79,7 +78,6 @@ export const registerIfNeeded = (name, email, organizationId, password, history)
         // Handle local storage here and not in the reducer, to keep reducer clean of side-effects.
         localStorage.setItem('token', response.token);
         dispatch(registerSuccess(response.token));
-        history.push(routes.HOME);
       },
       error => {
         dispatch(registerFailure(error.message));

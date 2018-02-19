@@ -1,5 +1,5 @@
 import React from 'react';
-import './index.css';
+import './Exception.css';
 import unauthorizedAccessError from '../../assets/unauthorized_access_error.svg';
 import notFoundError from '../../assets/not_found_error.svg';
 import internalServerError from '../../assets/internal_server_error.svg';
