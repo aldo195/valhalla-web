@@ -32,6 +32,8 @@ function loadDynamicComponent(config) {
         const AsyncComponent = m.default || m;
         if (this.mounted) {
           this.setState({AsyncComponent});
+        } else {
+          this.state.AsyncComponent = AsyncComponent; // eslint-disable-line
         }
       });
     }
