@@ -23,7 +23,9 @@ const handleResponse = response => {
 const handleError = error => {
   if (error.response) {
     const actualError = error.response.data.error;
-    throw new ApiError(`${actualError.title} - ${actualError.details}`, error.response.status);
+    if (actualError) {
+      throw new ApiError(`${actualError.title} - ${actualError.details}`, error.response.status);
+    }
   }
   throw new ApiError(error.message, 500);
 };

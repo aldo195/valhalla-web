@@ -6,7 +6,7 @@ import {loginIfNeeded} from '../../actions/auth';
 import {Button, Form, Icon, Input, Checkbox, Alert} from 'antd';
 import * as routes from '../../constants/routes';
 import {getAuthStatus} from '../../reducers/auth';
-import {Link} from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
 
 class LoginForm extends React.Component {
   constructor(props) {
@@ -20,7 +20,7 @@ class LoginForm extends React.Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        this.props.loginIfNeeded(values.email, values.password, values.remember);
+        this.props.loginIfNeeded(values.email, values.password, values.remember, this.props.history);
       } else {
         this.setState({
           errorMessage: err,
@@ -112,5 +112,5 @@ const mapDispatchToProps = dispatch => {
   );
 };
 
-const Login = connect(mapStateToProps, mapDispatchToProps)(Form.create()(LoginForm));
+const Login = withRouter(connect(mapStateToProps, mapDispatchToProps)(Form.create()(LoginForm)));
 export default Login;

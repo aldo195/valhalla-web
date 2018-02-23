@@ -16,23 +16,42 @@ class OrganizationSelect extends React.Component {
       isFetching: true,
       errorMessage: null,
     };
+    this.load();
   }
 
   componentDidMount() {
+    this.mounted = true;
+  }
+
+  componentWillUnmount() {
+    this.mounted = false;
+  }
+
+  load() {
     api.loadOrganizations(this.props.token).then(
       response => {
-        this.setState({
-          organizationsList: response.organizations,
-          isFetching: false,
-          errorMessage: null,
-        });
+        if (this.mounted) {
+          this.setState({
+            organizationsList: response.organizations,
+            isFetching: false,
+            errorMessage: null,
+          });
+        } else {
+          this.state.isFetching = false;
+          this.state.organizationsList = response.organizations; // eslint-disable-line
+        }
       },
       error => {
-        this.setState({
-          organizationsList: [],
-          isFetching: false,
-          errorMessage: error.message,
-        });
+        if (this.mounted) {
+          this.setState({
+            organizationsList: [],
+            isFetching: false,
+            errorMessage: error.message,
+          });
+        } else {
+          this.state.isFetching = false;
+          this.state.errorMessage = error.message; // eslint-disable-line
+        }
       },
     );
   }

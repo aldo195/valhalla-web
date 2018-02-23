@@ -7,6 +7,7 @@ import {Alert, Button, Form, Icon, Input} from 'antd';
 import {registerIfNeeded} from '../../actions/auth';
 import {getAuthStatus} from '../../reducers/auth';
 import {OrganizationSelect} from '../../components/User/OrganizationSelect';
+import {withRouter} from 'react-router-dom';
 
 class RegisterForm extends React.Component {
   constructor(props) {
@@ -21,7 +22,13 @@ class RegisterForm extends React.Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        this.props.registerIfNeeded(values.name, values.email, values.organization.organizationId, values.password);
+        this.props.registerIfNeeded(
+          values.name,
+          values.email,
+          values.organization.organizationId,
+          values.password,
+          this.props.history,
+        );
       } else {
         this.setState({
           errorMessage: err,
@@ -167,5 +174,5 @@ const mapDispatchToProps = dispatch => {
   );
 };
 
-const Register = connect(mapStateToProps, mapDispatchToProps)(Form.create()(RegisterForm));
+const Register = withRouter(connect(mapStateToProps, mapDispatchToProps)(Form.create()(RegisterForm)));
 export default Register;
