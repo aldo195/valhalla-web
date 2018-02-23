@@ -48,12 +48,12 @@ export const getRouterData = () => {
     '/user': {
       component: dynamicWrapper(() => import('../layouts/UserLayout')),
     },
-    // '/user/login': {
-    //   component: dynamicWrapper(() => import('../routes/User/Login')),
-    // },
-    // '/user/register': {
-    //   component: dynamicWrapper(() => import('../routes/User/Register')),
-    // },
+    '/user/login': {
+      component: dynamicWrapper(() => import('../routes/User/Login')),
+    },
+    '/user/register': {
+      component: dynamicWrapper(() => import('../routes/User/Register')),
+    },
     // '/user/register-result': {
     //   component: dynamicWrapper(() => import('../routes/User/RegisterResult')),
     // },

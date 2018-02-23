@@ -9,21 +9,10 @@ const menuData = [
     roles: [roles.ADMIN, roles.USER],
   },
   {
-    name: 'Policy Builder',
-    icon: 'form',
-    path: 'dashboard/monitor',
-    roles: [roles.ADMIN],
-  },
-  {
-    name: 'Approved Items',
-    icon: 'check-square-o',
-    path: 'list/basic-list',
-    roles: [roles.ADMIN, roles.USER],
-  },
-  {
     name: 'User',
     icon: 'user',
     path: 'user',
+    hideInMenu: true,
     children: [
       {
         name: 'Login',

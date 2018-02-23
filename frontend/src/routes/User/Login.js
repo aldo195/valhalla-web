@@ -3,11 +3,10 @@ import './Login.css';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {loginIfNeeded} from '../../actions/auth';
-import {Button, Form, Icon, Input, Checkbox} from 'antd';
-import valhallaLogo from '../../assets/valhalla-logo-big.png';
+import {Button, Form, Icon, Input, Checkbox, Alert} from 'antd';
 import * as routes from '../../constants/routes';
 import {getAuthStatus} from '../../reducers/auth';
-import {PulseLoader} from 'react-spinners';
+import {Link} from 'react-router-dom';
 
 class LoginForm extends React.Component {
   constructor(props) {
@@ -41,9 +40,8 @@ class LoginForm extends React.Component {
   render() {
     const {getFieldDecorator} = this.props.form;
     return (
-      <div id={'login-page'}>
-        <img id={'valhalla-logo'} src={valhallaLogo} alt={'Welcome to Valhalla!'} />
-        <Form onSubmit={this.login} className={'login-form'}>
+      <div className={'main'}>
+        <Form className={'login'} onSubmit={this.login}>
           <Form.Item>
             {getFieldDecorator('email', {
               rules: [
@@ -56,7 +54,7 @@ class LoginForm extends React.Component {
                   message: 'Sorry, this is not a valid email',
                 },
               ],
-            })(<Input prefix={<Icon type={'mail'} />} placeholder={'Email'} />)}
+            })(<Input prefix={<Icon className={'prefixIcon'} type={'mail'} />} placeholder={'Email'} />)}
           </Form.Item>
           <Form.Item>
             {getFieldDecorator('password', {
@@ -69,28 +67,33 @@ class LoginForm extends React.Component {
                   validator: this.validatePassword,
                 },
               ],
-            })(<Input prefix={<Icon type={'lock'} />} type={'password'} placeholder={'Password'} />)}
+            })(
+              <Input
+                prefix={<Icon className={'prefixIcon'} type={'lock'} />}
+                type={'password'}
+                placeholder={'Password'}
+              />,
+            )}
           </Form.Item>
-          {this.props.errorMessage && (
-            <div className={'error-message-area'}>
-              <p>{this.props.errorMessage}</p>
-            </div>
-          )}
-          <Form.Item className={'submit-button-item'}>
+          {this.props.errorMessage && <Alert type={'error'} message={this.props.errorMessage} showIcon />}
+          <Form.Item style={{marginBottom: 0}}>
             {getFieldDecorator('remember', {
               valuePropName: 'checked',
               initialValue: true,
             })(<Checkbox>Remember me</Checkbox>)}
-            <a className="login-form-forgot" href="">
+            <a style={{float: 'right'}} href="">
               Forgot password
             </a>
-            <Button type={'primary'} htmlType={'submit'} className={'login-form-button'}>
+          </Form.Item>
+          <Form.Item style={{marginBottom: '12px'}}>
+            <Button type={'primary'} htmlType={'submit'} loading={this.props.isFetching} className={'formButton'}>
               Log in
             </Button>
-            Or &nbsp;<a href={routes.REGISTER}>register now!</a>
           </Form.Item>
+          <Button type={'default'} className={'formButton'}>
+            <Link to={routes.REGISTER}>Sign Up</Link>
+          </Button>
         </Form>
-        <PulseLoader color={'#1890ff'} loading={this.props.isFetching} />
       </div>
     );
   }
@@ -110,4 +113,4 @@ const mapDispatchToProps = dispatch => {
 };
 
 const Login = connect(mapStateToProps, mapDispatchToProps)(Form.create()(LoginForm));
-export {Login};
+export default Login;

@@ -1,29 +1,19 @@
 @import "../../constants/constants.styl"
 
-#login-page
-  display: flex
-  flex-direction: column
-  justify-content: center
-  align-items: center
+.main
+  width: 368px
+  margin: 0 auto
 
-  #valhalla-logo
-    width: 370px
-    height: 306px
-    margin: 50px 0 15px 0
+  .login
 
-  .login-form
-    width: 400px
+    :global
+      .ant-form-item
+        margin-bottom: 20px
 
-    .login-form-forgot
-      float: right
+    .prefixIcon {
+      font-size: $font-size-base;
+      color: $disabled-color;
+    }
 
-    .login-form-button
+    .formButton
       width: 100%
-
-    .submit-button-item
-      margin-bottom: 30px
-
-    .error-message-area
-      text-align: center
-      color: $error-color
-      padding-bottom: 10px

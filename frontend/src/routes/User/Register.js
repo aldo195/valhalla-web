@@ -3,11 +3,9 @@ import './Register.css';
 import '../../index.css';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {Button, Form, Icon, Input} from 'antd';
-import valhallaLogo from '../../assets/valhalla-logo-big.png';
+import {Alert, Button, Form, Icon, Input} from 'antd';
 import {registerIfNeeded} from '../../actions/auth';
 import {getAuthStatus} from '../../reducers/auth';
-import {PulseLoader} from 'react-spinners';
 import {OrganizationSelect} from '../../components/User/OrganizationSelect';
 
 class RegisterForm extends React.Component {
@@ -67,9 +65,8 @@ class RegisterForm extends React.Component {
     const {getFieldDecorator} = this.props.form;
 
     return (
-      <div id={'register-page'}>
-        <img id={'valhalla-logo'} src={valhallaLogo} alt={'Welcome to Valhalla!'} />
-        <Form onSubmit={this.register} className={'register-form'}>
+      <div className={'main'}>
+        <Form onSubmit={this.register} className={'register'}>
           <Form.Item hasFeedback>
             {getFieldDecorator('name', {
               rules: [
@@ -78,7 +75,7 @@ class RegisterForm extends React.Component {
                   message: 'Please enter your name!',
                 },
               ],
-            })(<Input prefix={<Icon type={'user'} />} placeholder={'Name'} />)}
+            })(<Input prefix={<Icon className={'prefixIcon'} type={'user'} />} placeholder={'Name'} />)}
           </Form.Item>
           <Form.Item hasFeedback>
             {getFieldDecorator('email', {
@@ -92,7 +89,7 @@ class RegisterForm extends React.Component {
                   message: 'Sorry, this is not a valid email',
                 },
               ],
-            })(<Input prefix={<Icon type={'mail'} />} placeholder={'Email'} />)}
+            })(<Input prefix={<Icon className={'prefixIcon'} type={'mail'} />} placeholder={'Email'} />)}
           </Form.Item>
           <Form.Item hasFeedback>
             {getFieldDecorator('password', {
@@ -105,7 +102,13 @@ class RegisterForm extends React.Component {
                   validator: this.validatePassword,
                 },
               ],
-            })(<Input prefix={<Icon type={'lock'} />} type={'password'} placeholder={'Password'} />)}
+            })(
+              <Input
+                prefix={<Icon className={'prefixIcon'} type={'lock'} />}
+                type={'password'}
+                placeholder={'Password'}
+              />,
+            )}
           </Form.Item>
           <Form.Item hasFeedback>
             {getFieldDecorator('passwordCopy', {
@@ -120,14 +123,14 @@ class RegisterForm extends React.Component {
               ],
             })(
               <Input
-                prefix={<Icon type={'lock'} />}
+                prefix={<Icon className={'prefixIcon'} type={'lock'} />}
                 type={'password'}
                 placeholder={'Confirm Password'}
                 onBlur={this.handlePasswordCopyBlur}
               />,
             )}
           </Form.Item>
-          <Form.Item hasFeedback>
+          <Form.Item>
             {getFieldDecorator('organization', {
               rules: [
                 {
@@ -137,18 +140,13 @@ class RegisterForm extends React.Component {
               ],
             })(<OrganizationSelect />)}
           </Form.Item>
-          {this.props.errorMessage && (
-            <div className={'error-message-area'}>
-              <p>{this.props.errorMessage}</p>
-            </div>
-          )}
-          <Form.Item className={'submit-button-item'}>
-            <Button type={'primary'} htmlType={'submit'} className={'register-form-button'}>
+          {this.props.errorMessage && <Alert type={'error'} message={this.props.errorMessage} showIcon />}
+          <Form.Item style={{marginBottom: '12px'}}>
+            <Button type={'primary'} htmlType={'submit'} className={'formButton'} loading={this.props.isFetching}>
               Register
             </Button>
           </Form.Item>
         </Form>
-        <PulseLoader color={'#1890ff'} loading={this.props.isFetching} />
       </div>
     );
   }
@@ -170,4 +168,4 @@ const mapDispatchToProps = dispatch => {
 };
 
 const Register = connect(mapStateToProps, mapDispatchToProps)(Form.create()(RegisterForm));
-export {Register};
+export default Register;

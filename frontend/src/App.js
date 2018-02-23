@@ -13,7 +13,7 @@ let ValhallaApp = () => {
   return (
     <BrowserRouter basename={routes.DEFAULT}>
       <Switch>
-        <Route path={routes.USER} render={props => <UserLayout {...props} />} />
+        <Route path={routes.USER} component={UserLayout} />} />
         {/*<AuthorizedRoute*/}
         {/*path={routes.DEFAULT}*/}
         {/*render={props => <BasicLayout {...props} />}*/}

@@ -4,7 +4,7 @@ import * as api from '../../api';
 import * as _ from 'lodash';
 import {getAuthDetails} from '../../reducers/auth';
 import connect from 'react-redux/es/connect/connect';
-import {Spin, Select} from 'antd';
+import {Spin, Select, Alert} from 'antd';
 
 class OrganizationSelect extends React.Component {
   constructor(props) {
@@ -63,11 +63,7 @@ class OrganizationSelect extends React.Component {
               </Select.Option>
             ))}
         </Select>
-        {this.state.errorMessage && (
-          <div className={'error-message-area'}>
-            <p>{this.state.errorMessage}</p>
-          </div>
-        )}
+        {this.state.errorMessage && <Alert type={'error'} message={this.state.errorMessage} showIcon />}
       </div>
     );
   }
