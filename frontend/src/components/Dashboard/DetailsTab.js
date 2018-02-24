@@ -4,7 +4,7 @@ import {Col, Row} from 'antd';
 import {NumberInfo} from './NumberInfo';
 import {Pie} from '../Chart';
 
-let DetailsTab = ({data, isSelected}) => (
+const DetailsTab = ({data, isSelected}) => (
   <Row gutter={8} style={{width: 138, margin: '8px 0'}}>
     <Col span={12}>
       <NumberInfo title={data.name} passing={data.passing} failing={data.failing} pending={data.pending} />
@@ -23,4 +23,4 @@ let DetailsTab = ({data, isSelected}) => (
   </Row>
 );
 
-export {DetailsTab};
+export default DetailsTab;

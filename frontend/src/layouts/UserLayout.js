@@ -2,7 +2,7 @@ import React from 'react';
 import './UserLayout.css';
 import DocumentTitle from 'react-document-title';
 import {Icon} from 'antd';
-import {GlobalFooter} from '../components/GlobalFooter/GlobalFooter';
+import {GlobalFooter} from '../components/GlobalFooter';
 import logo from '../assets/valhalla-logo-small.png';
 import {Link, Redirect, Route, Switch} from 'react-router-dom';
 import * as routes from '../constants/routes';
@@ -32,7 +32,7 @@ const copyright = (
   </div>
 );
 
-class UserLayout extends React.PureComponent {
+export class UserLayout extends React.PureComponent {
   getPageTitle() {
     const {routerData, location} = this.props;
     const {pathname} = location;

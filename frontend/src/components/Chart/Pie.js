@@ -231,5 +231,4 @@ class PieComponent extends React.Component {
   }
 }
 
-const Pie = autoHeight(PieComponent);
-export {Pie};
+export default autoHeight(PieComponent);

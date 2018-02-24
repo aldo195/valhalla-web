@@ -1,7 +1,7 @@
 import React from 'react';
 import './NumberInfo.css';
 
-let NumberInfo = ({title, subTitle, passing, failing, pending}) => (
+const NumberInfo = ({title, subTitle, passing, failing, pending}) => (
   <div className={'numberInfo'}>
     {title && <div className={'numberInfoTitle'}>{title}</div>}
     {subTitle && <div className={'numberInfoSubTitle'}>{subTitle}</div>}
@@ -11,4 +11,4 @@ let NumberInfo = ({title, subTitle, passing, failing, pending}) => (
   </div>
 );
 
-export {NumberInfo};
+export default NumberInfo;

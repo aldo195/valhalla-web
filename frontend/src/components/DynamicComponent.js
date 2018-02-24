@@ -6,17 +6,16 @@ let defaultLoadingComponent = () => {
   return <Spin size="large" className={'globalSpin'} />;
 };
 
-function loadDynamicComponent(config) {
+export default function loadDynamicComponent(config) {
   const {component: resolveComponent} = config;
 
-  return class DynamicComponent extends React.Component {
-    constructor(...args) {
-      super(...args);
+  return class DynamicComponent extends React.PureComponent {
+    constructor(props) {
+      super(props);
       this.LoadingComponent = config.LoadingComponent || defaultLoadingComponent;
       this.state = {
-        AsyncComponent: null,
+        Component: null,
       };
-      this.load();
     }
 
     componentDidMount() {
@@ -27,25 +26,20 @@ function loadDynamicComponent(config) {
       this.mounted = false;
     }
 
-    load() {
-      resolveComponent().then(m => {
-        const AsyncComponent = m.default || m;
+    componentWillMount() {
+      resolveComponent().then(Component => {
         if (this.mounted) {
-          this.setState({AsyncComponent});
-        } else {
-          this.state.AsyncComponent = AsyncComponent; // eslint-disable-line
+          this.setState({Component});
         }
       });
     }
 
     render() {
-      const {AsyncComponent} = this.state;
+      const {Component} = this.state;
       const {LoadingComponent} = this;
-      if (AsyncComponent) return <AsyncComponent {...this.props} />;
+      if (Component) return <Component {...this.props} />;
 
       return <LoadingComponent {...this.props} />;
     }
   };
 }
-
-export {loadDynamicComponent};

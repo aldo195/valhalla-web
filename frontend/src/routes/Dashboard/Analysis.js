@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 import {Col, Row, Card, Tabs} from 'antd';
 import {withRouter} from 'react-router-dom';
 import {getAuthDetails} from '../../reducers/auth';
-import {DetailsTab} from '../../components/Dashboard/DetailsTab';
+import {DetailsTab} from '../../components/Dashboard';
 
 const offlineData = [];
 offlineData.push({
@@ -44,7 +44,7 @@ offlineData.push({
   cvr: 0,
 });
 
-class Home extends React.Component {
+class Analysis extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -113,5 +113,5 @@ const mapDispatchToProps = dispatch => {
   return bindActionCreators({}, dispatch);
 };
 
-Home = withRouter(connect(mapStateToProps, mapDispatchToProps)(Home));
-export {Home};
+Analysis = withRouter(connect(mapStateToProps, mapDispatchToProps)(Analysis));
+export default Analysis;

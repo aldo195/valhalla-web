@@ -1,7 +1,7 @@
 import {createElement} from 'react';
 import pathToRegexp from 'path-to-regexp';
 import {getMenuData} from './menu';
-import {loadDynamicComponent} from '../components/DynamicComponent';
+import loadDynamicComponent from '../components/DynamicComponent';
 
 let routerDataCache;
 
@@ -13,7 +13,7 @@ const dynamicWrapper = component => {
         routerDataCache = getRouterData();
       }
       return component().then(raw => {
-        const Component = raw.default || raw;
+        const Component = raw.default;
         return props =>
           createElement(Component, {
             ...props,

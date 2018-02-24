@@ -6,7 +6,7 @@ import {connect} from 'react-redux';
 import {Alert, Button, Form, Icon, Input} from 'antd';
 import {registerIfNeeded} from '../../actions/auth';
 import {getAuthStatus} from '../../reducers/auth';
-import {OrganizationSelect} from '../../components/User/OrganizationSelect';
+import {OrganizationSelect} from '../../components/User';
 import {withRouter} from 'react-router-dom';
 
 class RegisterForm extends React.Component {

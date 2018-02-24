@@ -1,5 +1,5 @@
 import {track, setTheme} from 'bizcharts';
-import {Pie} from './Pie';
+import Pie from './Pie';
 
 track(false);
 

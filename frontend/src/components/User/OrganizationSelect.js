@@ -36,9 +36,6 @@ class OrganizationSelect extends React.Component {
             isFetching: false,
             errorMessage: null,
           });
-        } else {
-          this.state.isFetching = false;
-          this.state.organizationsList = response.organizations; // eslint-disable-line
         }
       },
       error => {
@@ -48,9 +45,6 @@ class OrganizationSelect extends React.Component {
             isFetching: false,
             errorMessage: error.message,
           });
-        } else {
-          this.state.isFetching = false;
-          this.state.errorMessage = error.message; // eslint-disable-line
         }
       },
     );
@@ -94,5 +88,4 @@ const mapStateToProps = state => {
   };
 };
 
-OrganizationSelect = connect(mapStateToProps)(OrganizationSelect);
-export {OrganizationSelect};
+export default connect(mapStateToProps)(OrganizationSelect);

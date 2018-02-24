@@ -20,4 +20,4 @@ const Result = ({className, type, title, description, extra, actions, ...restPro
   );
 };
 
-export {Result};
+export default Result;

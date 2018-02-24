@@ -23,7 +23,7 @@ const config = {
   },
 };
 
-let Exception = ({className, linkElement = 'a', type, title, desc, img, actions, ...rest}) => {
+const Exception = ({className, linkElement = 'a', type, title, desc, img, actions, ...rest}) => {
   const pageType = type in config ? type : '404';
   const classString = classNames('exception', className);
   return (
@@ -50,4 +50,4 @@ let Exception = ({className, linkElement = 'a', type, title, desc, img, actions,
   );
 };
 
-export {Exception};
+export default Exception;

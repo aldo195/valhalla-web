@@ -1,6 +1,6 @@
 import React from 'react';
 import {Button} from 'antd';
-import {Result} from '../../components/Result/Result';
+import {Result} from '../../components/Result';
 import * as routes from '../../constants/routes';
 import './RegisterResult.css';
 import {Link} from 'react-router-dom';

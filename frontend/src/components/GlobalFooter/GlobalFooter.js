@@ -2,7 +2,7 @@ import React from 'react';
 import './GlobalFooter.css';
 import classNames from 'classnames';
 
-let GlobalFooter = ({className, links, copyright}) => {
+const GlobalFooter = ({className, links, copyright}) => {
   const clsString = classNames('globalFooter', className);
   return (
     <div className={clsString}>
@@ -20,4 +20,4 @@ let GlobalFooter = ({className, links, copyright}) => {
   );
 };
 
-export {GlobalFooter};
+export default GlobalFooter;
