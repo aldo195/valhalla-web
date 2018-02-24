@@ -70,3 +70,15 @@ export const loadRules = token =>
     .get(BACKEND_URL + 'rule', tokenConfig(token))
     .then(handleResponse)
     .catch(handleError);
+
+export const loadNotifications = token =>
+  axios
+    .get(BACKEND_URL + 'notification', tokenConfig(token))
+    .then(handleResponse)
+    .catch(handleError);
+
+export const clearNotifications = token =>
+  axios
+    .delete(BACKEND_URL + 'notification', tokenConfig(token))
+    .then(handleResponse)
+    .catch(handleError);

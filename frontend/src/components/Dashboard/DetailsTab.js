@@ -1,7 +1,7 @@
 import React from 'react';
 import './DetailsTab.css';
 import {Col, Row} from 'antd';
-import {NumberInfo} from './NumberInfo';
+import NumberInfo from './NumberInfo';
 import {Pie} from '../Chart';
 
 const DetailsTab = ({data, isSelected}) => (

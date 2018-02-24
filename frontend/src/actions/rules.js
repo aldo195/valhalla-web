@@ -1,7 +1,6 @@
 import * as api from '../api';
 import * as actionTypes from '../constants/actionTypes';
 import * as _ from 'lodash';
-import {logoutAndRedirect} from './auth';
 
 export const loadRulesRequest = () => ({
   type: actionTypes.LOAD_RULES_REQUEST,
@@ -27,7 +26,7 @@ const shouldLoadRules = state => {
   return _.isEmpty(rules.rules);
 };
 
-export const loadRulesIfNeeded = (token, history) => (dispatch, getState) => {
+export const loadRulesIfNeeded = token => (dispatch, getState) => {
   const state = getState();
   if (shouldLoadRules(state)) {
     dispatch(loadRulesRequest());
@@ -36,9 +35,6 @@ export const loadRulesIfNeeded = (token, history) => (dispatch, getState) => {
       response => dispatch(loadRulesSuccess(response)),
       error => {
         dispatch(loadRulesFailure(error.message));
-        if (error.status === 401) {
-          dispatch(logoutAndRedirect(history));
-        }
       },
     );
   }

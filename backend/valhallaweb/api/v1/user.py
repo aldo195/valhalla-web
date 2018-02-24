@@ -25,7 +25,7 @@ def register():
     email = incoming['email']
 
     # Add the user.
-    user = User(name=incoming['name'], email=email, password=incoming['password'],
+    user = User(name=incoming['name'], email=email, password=incoming['password'], role=UserRole.USER,
                 organization_id=incoming['organizationId'], creation_time=dt.datetime.utcnow())
     db.session.add(user)
 
@@ -51,6 +51,11 @@ def login():
     user = User.get_user_with_email_and_password(email, incoming['password'])
     if user:
         logger.debug(f'User {email} logged in')
+
+        # Update login time for user.
+        user.last_login_time = dt.datetime.utcnow()
+        db.session.commit()
+
         return jsonify(token=generate_token(user, remember=incoming['remember']))
 
     logger.debug(f'Failed login attempt for user: {email}')

@@ -20,6 +20,7 @@ class User(db.Model):
     role = db.Column(db.Enum(UserRole))
     _password = db.Column('password', db.String(255))
     creation_time = db.Column(db.DateTime)
+    last_login_time = db.Column(db.DateTime)
 
     organization_id = db.Column(db.Integer, db.ForeignKey('organization.organization_id'), nullable=False)
     organization = db.relationship('Organization', backref='members', lazy=True)

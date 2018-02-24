@@ -8,18 +8,18 @@ import {getRouterData} from './common/router';
 let ValhallaApp = () => {
   const routerData = getRouterData();
   const UserLayout = routerData[routes.USER].component;
-  // const BasicLayout = routerData[routes.DEFAULT].component;
+  const BasicLayout = routerData[routes.DEFAULT].component;
 
   return (
     <BrowserRouter basename={routes.DEFAULT}>
       <Switch>
         <Route path={routes.USER} component={UserLayout} />} />
-        {/*<AuthorizedRoute*/}
-        {/*path={routes.DEFAULT}*/}
-        {/*render={props => <BasicLayout {...props} />}*/}
-        {/*roles={[roles.USER, roles.ADMIN]}*/}
-        {/*redirectPath={routes.LOGIN}*/}
-        {/*/>*/}
+        <AuthorizedRoute
+          path={routes.DEFAULT}
+          render={props => <BasicLayout {...props} />}
+          roles={[roles.USER, roles.ADMIN]}
+          redirectPath={routes.LOGIN}
+        />
       </Switch>
     </BrowserRouter>
   );

@@ -3,16 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@antv/data-set": "^0.8.5",
     "antd": "^3.0.0",
-    "axios": "^0.17.1",
+    "@antv/data-set": "^0.8.5",
     "bizcharts": "^3.1.2",
+    "rc-drawer-menu": "^0.5.5",
+    "axios": "^0.17.1",
     "classnames": "^2.2.5",
     "emotion": "^8.0.10",
     "history": "^4.7.2",
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.4",
-    "npm-run-all": "^4.1.2",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-fittext": "^1.0.0",
@@ -24,8 +24,8 @@
     "path-to-regexp": "2.1.0",
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
-    "stylus": "^0.54.5",
-    "stylus-chokidar": "^0.0.3"
+    "enquire.js": "^2.1.6",
+    "moment": "^2.20.1"
   },
   "scripts": {
     "build-css": "stylus-chokidar src/",
@@ -54,6 +54,9 @@
     "prettier": "^1.10.2",
     "react-app-rewire-less": "^2.1.0",
     "react-app-rewired": "^1.4.1",
-    "redux-devtools-extension": "^2.13.2"
+    "redux-devtools-extension": "^2.13.2",
+    "stylus": "^0.54.5",
+    "stylus-chokidar": "^0.0.3",
+    "npm-run-all": "^4.1.2"
   }
 }

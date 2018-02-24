@@ -1,5 +1,6 @@
 import React from 'react';
 import './Exception.css';
+import classNames from 'classnames';
 import unauthorizedAccessError from '../../assets/unauthorized_access_error.svg';
 import notFoundError from '../../assets/not_found_error.svg';
 import internalServerError from '../../assets/internal_server_error.svg';
@@ -36,7 +37,7 @@ const Exception = ({className, linkElement = 'a', type, title, desc, img, action
         <div className={'desc'}>{desc || config[pageType].desc}</div>
         <div className={'actions'}>
           {actions ||
-            createElement(
+            React.createElement(
               linkElement,
               {
                 to: '/',

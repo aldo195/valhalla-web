@@ -1,6 +1,12 @@
 # TODO
 
-- Organization select should be a separate component, and not use store for fetching.
+- Transition between basic and user layouts is buggy (both directions).
+
+- Add a logout and redirect layer to api (should be triggered by and 403 response).
+
+- Get rules from DB for analysis page (currently just mock data).
+
+- Add DB implementation for notifications (currently just a stub).
 
 - Implement forgot password mechanism ([like this](http://exploreflask.com/en/latest/users.html#forgot-your-password)).
 

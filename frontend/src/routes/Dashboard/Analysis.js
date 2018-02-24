@@ -1,10 +1,6 @@
 import './Analysis.css';
 import React from 'react';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
 import {Col, Row, Card, Tabs} from 'antd';
-import {withRouter} from 'react-router-dom';
-import {getAuthDetails} from '../../reducers/auth';
 import {DetailsTab} from '../../components/Dashboard';
 
 const offlineData = [];
@@ -103,15 +99,4 @@ class Analysis extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    ...getAuthDetails(state),
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({}, dispatch);
-};
-
-Analysis = withRouter(connect(mapStateToProps, mapDispatchToProps)(Analysis));
 export default Analysis;
