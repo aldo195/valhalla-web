@@ -72,6 +72,7 @@ export const getAuthDetails = state => {
 export const getAuthStatus = state => {
   return {
     isFetching: state.auth.isFetching,
+    isAuthenticated: state.auth.isAuthenticated,
     errorMessage: state.auth.errorMessage,
   };
 };

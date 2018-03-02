@@ -61,7 +61,7 @@ class Analysis extends React.Component {
   };
 
   render() {
-    const activeKey = this.state.currentTabKey || (offlineData[0] && offlineData[0].name);
+    const activeKey = this.state.currentTabKey || offlineData[0].name;
 
     const Info = ({title, value, bordered}) => (
       <div className={'headerInfo'}>
@@ -86,10 +86,10 @@ class Analysis extends React.Component {
             </Col>
           </Row>
           <Tabs activeKey={activeKey} onChange={this.handleTabChange}>
-            {offlineData.map(shop => (
+            {offlineData.map(category => (
               <Tabs.TabPane
-                tab={<DetailsTab data={shop} isSelected={this.state.currentTabKey === shop.name} />}
-                key={shop.name}
+                tab={<DetailsTab data={category} isSelected={activeKey === category.name} />}
+                key={category.name}
               />
             ))}
           </Tabs>

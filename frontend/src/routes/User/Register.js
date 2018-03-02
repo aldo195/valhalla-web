@@ -7,7 +7,8 @@ import {Alert, Button, Form, Icon, Input} from 'antd';
 import {registerIfNeeded} from '../../actions/auth';
 import {getAuthStatus} from '../../reducers/auth';
 import {OrganizationSelect} from '../../components/User';
-import {withRouter} from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
+import * as routes from '../../constants/routes';
 
 class RegisterForm extends React.Component {
   constructor(props) {
@@ -153,6 +154,9 @@ class RegisterForm extends React.Component {
               Register
             </Button>
           </Form.Item>
+          <Button type={'default'} className={'formButton'}>
+            <Link to={routes.LOGIN}>Back to Login Page</Link>
+          </Button>
         </Form>
       </div>
     );

@@ -2,7 +2,6 @@ import os
 from pathlib import Path
 
 DEBUG = (os.getenv('VALHALLAWEB_DEBUG') or '1') == '1'
-REDIRECT_TO_NODE_DEV_SERVER = DEBUG
 
 PROJECT_FOLDER = Path(__file__).parent.parent.parent
 FRONTEND_FOLDER = PROJECT_FOLDER.joinpath('frontend')

@@ -4,9 +4,11 @@ import DocumentTitle from 'react-document-title';
 import {Icon} from 'antd';
 import {GlobalFooter} from '../components/GlobalFooter';
 import logo from '../assets/valhalla-logo-small.png';
-import {Link, Redirect, Route, Switch} from 'react-router-dom';
+import {Link, Redirect, Route, Switch, withRouter} from 'react-router-dom';
 import * as routes from '../constants/routes';
 import {getRoutes} from '../utils/routing';
+import {getAuthStatus} from '../reducers/auth';
+import {connect} from 'react-redux';
 
 const links = [
   {
@@ -32,7 +34,7 @@ const copyright = (
   </div>
 );
 
-export class UserLayout extends React.PureComponent {
+class UserLayout extends React.PureComponent {
   getPageTitle() {
     const {routerData, location} = this.props;
     const {pathname} = location;
@@ -43,6 +45,13 @@ export class UserLayout extends React.PureComponent {
     return title;
   }
 
+  componentWillMount() {
+    // Redirect if user is already logged in.
+    if (this.props.isAuthenticated) {
+      this.props.history.push(routes.DEFAULT);
+    }
+  }
+
   render() {
     const {routerData, match} = this.props;
     return (
@@ -50,7 +59,7 @@ export class UserLayout extends React.PureComponent {
         <div className={'container'}>
           <div className={'content'}>
             <div className={'top'}>
-              <div className={'header'}>
+              <div className={'userHeader'}>
                 <Link to="/">
                   <img alt="logo" className={'logo'} src={logo} />
                   <span className={'title'}>Valhalla.io</span>
@@ -72,4 +81,9 @@ export class UserLayout extends React.PureComponent {
   }
 }
 
+const mapStateToProps = state => {
+  return getAuthStatus(state);
+};
+
+UserLayout = withRouter(connect(mapStateToProps)(UserLayout));
 export default UserLayout;

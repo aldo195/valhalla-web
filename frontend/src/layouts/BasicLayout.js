@@ -15,6 +15,7 @@ import {NotFoundError} from '../routes/Exception';
 
 const {Content} = Layout;
 
+// Set default redirect to first child, for every parent in the menu.
 const redirectData = [];
 const getRedirect = item => {
   if (item && item.children) {
@@ -63,21 +64,6 @@ export default class BasicLayout extends React.PureComponent {
     return title;
   }
 
-  getBashRedirect = () => {
-    // According to the URL parameter to redirect.
-    const urlParams = new URL(window.location.href);
-
-    const redirect = urlParams.searchParams.get('redirect');
-    // Remove the parameters in the URL.
-    if (redirect) {
-      urlParams.searchParams.delete('redirect');
-      window.history.replaceState(null, 'redirect', urlParams.href);
-    } else {
-      return routes.ANALYSIS;
-    }
-    return redirect;
-  };
-
   handleMenuCollapse = menuCollapsed => {
     this.setState({
       menuCollapsed,
@@ -86,7 +72,6 @@ export default class BasicLayout extends React.PureComponent {
 
   render() {
     const {routerData, match} = this.props;
-    const bashRedirect = this.getBashRedirect();
     const layout = (
       <Layout>
         <DrawerSiderMenu
@@ -116,7 +101,7 @@ export default class BasicLayout extends React.PureComponent {
                   redirectPath={routes.NOT_FOUND_ERROR}
                 />
               ))}
-              <Redirect exact from="/" to={bashRedirect} />
+              <Redirect exact from="/" to={routes.ANALYSIS} />
               <Route render={NotFoundError} />
             </Switch>
           </Content>

@@ -1,12 +1,20 @@
 # TODO
 
-- Transition between basic and user layouts is buggy (both directions).
-
-- Add a logout and redirect layer to api (should be triggered by and 403 response).
-
 - Get rules from DB for analysis page (currently just mock data).
 
+- Refactor code to use default state, and async.
+
+- Add flow.
+
+- Change all CSS to kebab-case.
+
 - Add DB implementation for notifications (currently just a stub).
+
+- Implement captcha after more than 3 failed login attempts.
+
+- Add a storybook for Pie chart.
+
+- Change all actions to use redux-observables.
 
 - Implement forgot password mechanism ([like this](http://exploreflask.com/en/latest/users.html#forgot-your-password)).
 

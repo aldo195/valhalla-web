@@ -1,7 +1,8 @@
 import React from 'react';
+import history from './history';
 import * as routes from './constants/routes';
 import * as roles from './constants/roles';
-import {BrowserRouter, Route, Switch} from 'react-router-dom';
+import {Router, Route, Switch} from 'react-router-dom';
 import {AuthorizedRoute} from './components/AuthorizedRoute';
 import {getRouterData} from './common/router';
 
@@ -11,7 +12,7 @@ let ValhallaApp = () => {
   const BasicLayout = routerData[routes.DEFAULT].component;
 
   return (
-    <BrowserRouter basename={routes.DEFAULT}>
+    <Router history={history}>
       <Switch>
         <Route path={routes.USER} component={UserLayout} />} />
         <AuthorizedRoute
@@ -21,7 +22,7 @@ let ValhallaApp = () => {
           redirectPath={routes.LOGIN}
         />
       </Switch>
-    </BrowserRouter>
+    </Router>
   );
 };
 

@@ -7,7 +7,7 @@ let routerDataCache;
 
 const dynamicWrapper = component => {
   return loadDynamicComponent({
-    // add routerData prop
+    // Add routerData prop.
     component: () => {
       if (!routerDataCache) {
         routerDataCache = getRouterData();

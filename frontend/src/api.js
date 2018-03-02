@@ -1,6 +1,9 @@
 import axios from 'axios';
+import {store} from './store';
+import history from './history';
+import {logoutAndRedirect} from './actions/auth';
 
-let BACKEND_URL = (process.env.NODE_ENV !== 'production' ? 'http://localhost:8000/' : '/') + 'api/v1/';
+let BACKEND_URL = '/api/v1/';
 
 // Use our own custom error class.
 class ApiError extends Error {
@@ -22,9 +25,15 @@ const handleResponse = response => {
 
 const handleError = error => {
   if (error.response) {
+    const status = error.response.status;
+
+    if (status === 401) {
+      store.dispatch(logoutAndRedirect(history));
+    }
+
     const actualError = error.response.data.error;
     if (actualError) {
-      throw new ApiError(`${actualError.title} - ${actualError.details}`, error.response.status);
+      throw new ApiError(`${actualError.title} - ${actualError.details}`, status);
     }
   }
   throw new ApiError(error.message, 500);

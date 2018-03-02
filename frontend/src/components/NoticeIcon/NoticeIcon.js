@@ -7,7 +7,7 @@ import noNotifications from '../../assets/no_notifications.svg';
 const NoticeList = ({data, onClick, onClear, title, emptyText, clearText}) => {
   if (data.length === 0) {
     return (
-      <div className={'notFound'}>
+      <div className={'notice-not-found'}>
         <img src={noNotifications} alt="not found" />
         <div>{emptyText}</div>
       </div>
@@ -15,7 +15,7 @@ const NoticeList = ({data, onClick, onClear, title, emptyText, clearText}) => {
   }
   return (
     <div>
-      <List className={'list'}>
+      <List className={'notice-list'}>
         {data.map((item, i) => {
           const itemCls = classNames('item', {
             read: item.read,
@@ -42,7 +42,7 @@ const NoticeList = ({data, onClick, onClear, title, emptyText, clearText}) => {
           );
         })}
       </List>
-      <div className={'clear'} onClick={onClear}>
+      <div className={'notice-clear'} onClick={onClear}>
         {clearText}
         {title}
       </div>
@@ -73,12 +73,12 @@ export default class NoticeIcon extends React.PureComponent {
   }
   render() {
     const {className, count, popupAlign, onPopupVisibleChange} = this.props;
-    const noticeButtonClass = classNames(className, 'noticeButton');
+    const noticeButtonClass = classNames(className, 'notice-button');
     const notificationBox = this.getNotificationBox();
     const trigger = (
       <span className={noticeButtonClass}>
-        <Badge count={count} className={'badge'}>
-          <Icon type="bell" className={'icon'} />
+        <Badge count={count}>
+          <Icon type="bell" className={'notice-icon'} />
         </Badge>
       </span>
     );
@@ -93,7 +93,7 @@ export default class NoticeIcon extends React.PureComponent {
       <Popover
         placement="bottomRight"
         content={notificationBox}
-        popupClassName={'popover'}
+        popupClassName={'notice-popover'}
         trigger="click"
         arrowPointAtCenter
         popupAlign={popupAlign}
