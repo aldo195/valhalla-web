@@ -23,4 +23,6 @@ In the `frontend` directory, run:
 
 #### Frontend
 
+You can setup PyCharm and Flow integration [like this](https://blog.jetbrains.com/webstorm/2016/11/using-flow-in-webstorm).
+
 To check types, run `yarn flow`. 
