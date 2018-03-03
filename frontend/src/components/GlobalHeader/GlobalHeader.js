@@ -162,7 +162,7 @@ class GlobalHeader extends React.PureComponent<Props> {
             emptyText={'No notifications'}
             clearText={'Clear'}
           />
-          {this.props.email ? (
+          {auth.email ? (
             <Dropdown overlay={menu}>
               <span className={'action account'}>
                 <Avatar size="small" className={'avatar'} src={auth.avatar} />

@@ -40,7 +40,7 @@ class AuthorizedRoute extends React.Component<Props> {
   render() {
     const {auth, component: Component, render, roles, redirectPath, ...rest} = this.props;
     if (auth.isAuthenticated && roles.indexOf(auth.role) !== -1) {
-      return <Route {...rest} render={props => (Component ? <React.Component {...props} /> : render(props))} />;
+      return <Route {...rest} render={props => (Component ? <Component {...props} /> : render(props))} />;
     }
     return <Route {...rest} render={() => <Redirect to={{pathname: redirectPath}} />} />;
   }
