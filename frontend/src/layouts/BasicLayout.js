@@ -38,13 +38,10 @@ enquireScreen(result => {
 }, 'only screen and (max-width: 767.99px)');
 
 export default class BasicLayout extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isMobile,
-      menuCollapsed: false,
-    };
-  }
+  state = {
+    isMobile,
+    menuCollapsed: false,
+  };
 
   componentDidMount() {
     enquireScreen(mobile => {

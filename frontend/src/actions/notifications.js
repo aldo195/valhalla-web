@@ -20,17 +20,17 @@ const shouldLoadNotifications = state => {
   return !notifications.isFetching;
 };
 
-export const loadNotificationsIfNeeded = token => (dispatch, getState) => {
+export const loadNotificationsIfNeeded = token => async (dispatch, getState) => {
   const state = getState();
   if (shouldLoadNotifications(state)) {
     dispatch(loadNotificationsRequest());
 
-    api.loadNotifications(token).then(
-      response => dispatch(loadNotificationsSuccess(response)),
-      error => {
-        dispatch(loadNotificationsFailure(error.message));
-      },
-    );
+    try {
+      const response = await api.loadNotifications(token);
+      dispatch(loadNotificationsSuccess(response));
+    } catch (error) {
+      dispatch(loadNotificationsFailure(error.message));
+    }
   }
 };
 
@@ -53,16 +53,16 @@ const shouldClearNotifications = state => {
   return notifications.notifications.length > 0;
 };
 
-export const clearNotificationsIfNeeded = token => (dispatch, getState) => {
+export const clearNotificationsIfNeeded = token => async (dispatch, getState) => {
   const state = getState();
   if (shouldClearNotifications(state)) {
     dispatch(clearNotificationsRequest());
 
-    api.clearNotifications(token).then(
-      response => dispatch(clearNotificationsSuccess(response)),
-      error => {
-        dispatch(clearNotificationsFailure(error.message));
-      },
-    );
+    try {
+      const response = await api.clearNotifications(token);
+      dispatch(clearNotificationsSuccess(response));
+    } catch (error) {
+      dispatch(clearNotificationsFailure(error.message));
+    }
   }
 };

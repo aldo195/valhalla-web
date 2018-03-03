@@ -8,47 +8,41 @@ import connect from 'react-redux/es/connect/connect';
 import {Spin, Select, Alert} from 'antd';
 
 class OrganizationSelect extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      organizationId: null,
-      organizationsList: [],
-      isFetching: true,
-      errorMessage: null,
-    };
-    this.load();
-  }
+  state = {
+    organizationId: null,
+    organizationsList: [],
+    isFetching: true,
+    errorMessage: null,
+  };
 
   componentDidMount() {
     this.mounted = true;
+    this.fetchData();
   }
 
   componentWillUnmount() {
     this.mounted = false;
   }
 
-  load() {
-    api.loadOrganizations(this.props.token).then(
-      response => {
-        if (this.mounted) {
-          this.setState({
-            organizationsList: response.organizations,
-            isFetching: false,
-            errorMessage: null,
-          });
-        }
-      },
-      error => {
-        if (this.mounted) {
-          this.setState({
-            organizationsList: [],
-            isFetching: false,
-            errorMessage: error.message,
-          });
-        }
-      },
-    );
+  async fetchData() {
+    try {
+      const response = await api.loadOrganizations(this.props.token);
+      if (this.mounted) {
+        this.setState({
+          organizationsList: response.organizations,
+          isFetching: false,
+          errorMessage: null,
+        });
+      }
+    } catch (error) {
+      if (this.mounted) {
+        this.setState({
+          organizationsList: [],
+          isFetching: false,
+          errorMessage: error.message,
+        });
+      }
+    }
   }
 
   triggerChange = organizationId => {

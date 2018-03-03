@@ -21,22 +21,20 @@ const shouldLogin = state => {
   return !auth.isFetching;
 };
 
-export const loginIfNeeded = (email, password, remember, history) => (dispatch, getState) => {
+export const loginIfNeeded = (email, password, remember, history) => async (dispatch, getState) => {
   const state = getState();
   if (shouldLogin(state)) {
     dispatch(loginRequest());
 
-    api.login(email, password, remember).then(
-      response => {
-        // Handle local storage here and not in the reducer, to keep reducer clean of side-effects.
-        localStorage.setItem('token', response.token);
-        dispatch(loginSuccess(response.token));
-        history.push(routes.DEFAULT);
-      },
-      error => {
-        dispatch(loginFailure(error.message));
-      },
-    );
+    try {
+      const response = await api.login(email, password, remember);
+      // Handle local storage here and not in the reducer, to keep reducer clean of side-effects.
+      localStorage.setItem('token', response.token);
+      dispatch(loginSuccess(response.token));
+      history.push(routes.DEFAULT);
+    } catch (error) {
+      dispatch(loginFailure(error.message));
+    }
   }
 };
 
@@ -69,21 +67,19 @@ const shouldRegister = state => {
   return !auth.isFetching;
 };
 
-export const registerIfNeeded = (name, email, organizationId, password, history) => (dispatch, getState) => {
+export const registerIfNeeded = (name, email, organizationId, password, history) => async (dispatch, getState) => {
   const state = getState();
   if (shouldRegister(state)) {
     dispatch(registerRequest());
 
-    api.register(name, email, organizationId, password).then(
-      response => {
-        // Handle local storage here and not in the reducer, to keep reducer clean of side-effects.
-        localStorage.setItem('token', response.token);
-        dispatch(registerSuccess(response.token));
-        history.push(routes.REGISTER_RESULT);
-      },
-      error => {
-        dispatch(registerFailure(error.message));
-      },
-    );
+    try {
+      const response = await api.register(name, email, organizationId, password);
+      // Handle local storage here and not in the reducer, to keep reducer clean of side-effects.
+      localStorage.setItem('token', response.token);
+      dispatch(registerSuccess(response.token));
+      history.push(routes.REGISTER_RESULT);
+    } catch (error) {
+      dispatch(registerFailure(error.message));
+    }
   }
 };

@@ -26,16 +26,16 @@ const shouldLoadRules = state => {
   return _.isEmpty(rules.rules);
 };
 
-export const loadRulesIfNeeded = token => (dispatch, getState) => {
+export const loadRulesIfNeeded = token => async (dispatch, getState) => {
   const state = getState();
   if (shouldLoadRules(state)) {
     dispatch(loadRulesRequest());
 
-    api.loadRules(token).then(
-      response => dispatch(loadRulesSuccess(response)),
-      error => {
-        dispatch(loadRulesFailure(error.message));
-      },
-    );
+    try {
+      const response = await api.loadRules(token);
+      dispatch(loadRulesSuccess(response));
+    } catch (error) {
+      dispatch(loadRulesFailure(error.message));
+    }
   }
 };

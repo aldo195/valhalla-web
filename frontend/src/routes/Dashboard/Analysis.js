@@ -14,12 +14,9 @@ import {getRuleStats} from '../../reducers/rules';
 import Exception from '../../components/Exception/Exception';
 
 class Analysis extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      currentTabKey: '',
-    };
-  }
+  state = {
+    currentTabKey: '',
+  };
 
   fetchData() {
     this.props.getOrganizationIfNeeded(this.props.organizationId, this.props.token);

@@ -4,13 +4,10 @@ import classNames from 'classnames';
 import './HeaderSearch.css';
 
 export default class HeaderSearch extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      searchMode: false,
-      value: '',
-    };
-  }
+  state = {
+    searchMode: false,
+    value: '',
+  };
 
   componentWillUnmount() {
     clearTimeout(this.timeout);

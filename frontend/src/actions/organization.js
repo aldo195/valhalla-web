@@ -26,16 +26,16 @@ const shouldGetOrganization = state => {
   return _.isEmpty(organization.details);
 };
 
-export const getOrganizationIfNeeded = (organizationId, token) => (dispatch, getState) => {
+export const getOrganizationIfNeeded = (organizationId, token) => async (dispatch, getState) => {
   const state = getState();
   if (shouldGetOrganization(state)) {
     dispatch(getOrganizationRequest());
 
-    api.getOrganization(organizationId, token).then(
-      response => dispatch(getOrganizationSuccess(response)),
-      error => {
-        dispatch(getOrganizationFailure(error.message));
-      },
-    );
+    try {
+      const response = await api.getOrganization(organizationId, token);
+      dispatch(getOrganizationSuccess(response));
+    } catch (error) {
+      dispatch(getOrganizationFailure(error.message));
+    }
   }
 };

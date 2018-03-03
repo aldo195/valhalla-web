@@ -1,7 +1,5 @@
 # TODO
 
-- Refactor code to use default state, and async.
-
 - Add flow.
 
 - Change all CSS to kebab-case.
