@@ -11,6 +11,7 @@ export const auth = (
     token: token,
     email: decodedToken ? decodedToken.email : null,
     role: decodedToken ? decodedToken.role : null,
+    organizationId: decodedToken ? decodedToken.organization_id : null,
     isFetching: false,
     errorMessage: null,
   },
@@ -34,6 +35,7 @@ export const auth = (
         token: action.token,
         email: decodedToken.email,
         role: decodedToken.role,
+        organizationId: decodedToken.organization_id,
         errorMessage: null,
       };
     case actionTypes.REGISTER_FAILURE:
@@ -44,6 +46,7 @@ export const auth = (
         token: null,
         email: null,
         role: null,
+        organizationId: null,
         errorMessage: action.errorMessage,
       };
     case actionTypes.LOGOUT:
@@ -53,6 +56,7 @@ export const auth = (
         token: null,
         email: null,
         role: null,
+        organizationId: null,
         errorMessage: null,
       };
     default:
@@ -61,11 +65,13 @@ export const auth = (
 };
 
 export const getAuthDetails = state => {
+  const {auth} = state;
   return {
-    token: state.auth.token,
-    email: state.auth.email,
-    role: state.auth.role,
-    isAuthenticated: state.auth.isAuthenticated,
+    token: auth.token,
+    email: auth.email,
+    role: auth.role,
+    organizationId: auth.organizationId,
+    isAuthenticated: auth.isAuthenticated,
   };
 };
 

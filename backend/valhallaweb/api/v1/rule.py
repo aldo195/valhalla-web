@@ -18,11 +18,11 @@ rule_api = Blueprint('rule', __name__)
 @requires_auth([UserRole.USER, UserRole.ADMIN])
 def get_rules(current_user):
     logger.info('Fetching rules...')
-    rules = RuleStatus.query().\
+    rules = db.session.query(RuleStatus).\
         join(RuleStatus.rule).\
         filter(RuleStatus.organization_id == current_user.organization_id).\
         all()
-    return jsonify(rules=rules)
+    return jsonify(rules=[r.to_dict() for r in rules])
 
 
 @rule_api.route('', methods=['POST'])

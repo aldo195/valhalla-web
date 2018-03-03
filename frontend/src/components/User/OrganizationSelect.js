@@ -1,5 +1,6 @@
 import React from 'react';
 import './OrganizationSelect.css';
+import '../../index.css';
 import * as api from '../../api';
 import * as _ from 'lodash';
 import {getAuthDetails} from '../../reducers/auth';
@@ -66,7 +67,7 @@ class OrganizationSelect extends React.Component {
           showSearch
           className={'organization-select'}
           placeholder={'Organization'}
-          notFoundContent={this.state.isFetching ? <Spin size="small" /> : null}
+          notFoundContent={this.state.isFetching ? <Spin size="small" className={'globalSpin'} /> : null}
           onChange={this.triggerChange}
         >
           {!_.isEmpty(this.state.organizationsList) &&

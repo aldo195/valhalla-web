@@ -16,8 +16,33 @@ organization_api = Blueprint('organization', __name__)
 
 @organization_api.route('', methods=['GET'])
 def get_organizations():
-    logger.info('Fetching organizations...')
+    logger.info('Fetching details for all organizations...')
     return jsonify(organizations=[o.to_dict() for o in Organization.query.all()])
+
+
+@organization_api.route('/<organization_id>', methods=['GET'])
+@requires_auth([UserRole.USER, UserRole.ADMIN])
+def get_organization(current_user, organization_id):
+    logger.info(f'Fetching details for organization {organization_id}...')
+    organization = db.session.query(Organization).filter(Organization.organization_id == organization_id).first()
+
+    if not organization:
+        return jsonify({
+            'error': {
+                'title': f'Organization {organization_id} Not Found',
+                'details': 'An organization with that ID wasn\'t found'
+            }
+        }), 404
+
+    if organization.organization_id != current_user.organization_id:
+        return jsonify({
+            'error': {
+                'title': f'Unauthorized Access',
+                'details': 'A user can only ask for details about his own organization'
+            }
+        }), 403
+
+    return jsonify(organization.to_dict())
 
 
 @organization_api.route('', methods=['POST'])

@@ -3,7 +3,7 @@ import {store} from './store';
 import history from './history';
 import {logoutAndRedirect} from './actions/auth';
 
-let BACKEND_URL = '/api/v1/';
+let BACKEND_URL = '/api/v1';
 
 // Use our own custom error class.
 class ApiError extends Error {
@@ -41,7 +41,7 @@ const handleError = error => {
 
 export const login = (email, password, remember) =>
   axios
-    .post(BACKEND_URL + 'user/login', {
+    .post(`${BACKEND_URL}/user/login`, {
       email,
       password,
       remember,
@@ -51,7 +51,7 @@ export const login = (email, password, remember) =>
 
 export const validateToken = token =>
   axios
-    .post(BACKEND_URL + 'user/validate', {
+    .post(`${BACKEND_URL}/user/validate`, {
       token,
     })
     .then(handleResponse)
@@ -59,7 +59,7 @@ export const validateToken = token =>
 
 export const register = (name, email, organizationId, password) =>
   axios
-    .post(BACKEND_URL + 'user', {
+    .post(`${BACKEND_URL}/user`, {
       name,
       email,
       organizationId,
@@ -70,24 +70,30 @@ export const register = (name, email, organizationId, password) =>
 
 export const loadOrganizations = token =>
   axios
-    .get(BACKEND_URL + 'organization', tokenConfig(token))
+    .get(`${BACKEND_URL}/organization`, tokenConfig(token))
+    .then(handleResponse)
+    .catch(handleError);
+
+export const getOrganization = (organizationId, token) =>
+  axios
+    .get(`${BACKEND_URL}/organization/${organizationId}`, tokenConfig(token))
     .then(handleResponse)
     .catch(handleError);
 
 export const loadRules = token =>
   axios
-    .get(BACKEND_URL + 'rule', tokenConfig(token))
+    .get(`${BACKEND_URL}/rule`, tokenConfig(token))
     .then(handleResponse)
     .catch(handleError);
 
 export const loadNotifications = token =>
   axios
-    .get(BACKEND_URL + 'notification', tokenConfig(token))
+    .get(`${BACKEND_URL}/notification`, tokenConfig(token))
     .then(handleResponse)
     .catch(handleError);
 
 export const clearNotifications = token =>
   axios
-    .delete(BACKEND_URL + 'notification', tokenConfig(token))
+    .delete(`${BACKEND_URL}/notification`, tokenConfig(token))
     .then(handleResponse)
     .catch(handleError);

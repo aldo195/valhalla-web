@@ -1,7 +1,5 @@
 # TODO
 
-- Get rules from DB for analysis page (currently just mock data).
-
 - Refactor code to use default state, and async.
 
 - Add flow.

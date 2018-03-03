@@ -1,46 +1,19 @@
-import './Analysis.css';
 import React from 'react';
-import {Col, Row, Card, Tabs} from 'antd';
+import './Analysis.css';
+import '../../index.css';
+import * as exceptionTypes from '../../constants/exceptionTypes';
+import {Col, Row, Card, Tabs, Spin, Alert} from 'antd';
 import {DetailsTab} from '../../components/Dashboard';
+import {connect} from 'react-redux';
+import {getAuthDetails} from '../../reducers/auth';
+import {bindActionCreators} from 'redux';
+import {loadRulesIfNeeded} from '../../actions/rules';
+import {getOrganizationIfNeeded} from '../../actions/organization';
+import {getOrganization} from '../../reducers/organization';
+import {getRuleStats} from '../../reducers/rules';
+import Exception from '../../components/Exception/Exception';
 
-const offlineData = [];
-offlineData.push({
-  name: 'IDENTIFY',
-  passing: 2,
-  failing: 0,
-  pending: 1,
-  cvr: 0,
-});
-offlineData.push({
-  name: 'PROTECT',
-  passing: 4,
-  failing: 1,
-  pending: 5,
-  cvr: 0,
-});
-offlineData.push({
-  name: 'DETECT',
-  passing: 2,
-  failing: 2,
-  pending: 1,
-  cvr: 0,
-});
-offlineData.push({
-  name: 'RESPOND',
-  passing: 0,
-  failing: 0,
-  pending: 0,
-  cvr: 0,
-});
-offlineData.push({
-  name: 'RECOVER',
-  passing: 0,
-  failing: 0,
-  pending: 0,
-  cvr: 0,
-});
-
-class Analysis extends React.Component {
+class Analysis extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -48,7 +21,10 @@ class Analysis extends React.Component {
     };
   }
 
-  fetchData() {}
+  fetchData() {
+    this.props.getOrganizationIfNeeded(this.props.organizationId, this.props.token);
+    this.props.loadRulesIfNeeded(this.props.token);
+  }
 
   componentDidMount() {
     this.fetchData();
@@ -61,7 +37,15 @@ class Analysis extends React.Component {
   };
 
   render() {
-    const activeKey = this.state.currentTabKey || offlineData[0].name;
+    const {organization} = this.props;
+    const {ruleStats} = this.props;
+
+    let activeKey = this.state.currentTabKey;
+    if (!activeKey && ruleStats.categories[0]) {
+      activeKey = ruleStats.categories[0].name;
+    }
+
+    const validationPercentage = `${Math.floor(ruleStats.validation * 100)}%`;
 
     const Info = ({title, value, bordered}) => (
       <div className={'headerInfo'}>
@@ -71,32 +55,75 @@ class Analysis extends React.Component {
       </div>
     );
 
+    // Make sure organization is loaded first.
+    if (organization.errorMessage) {
+      return (
+        <Exception
+          type={exceptionTypes.NOT_FOUND_ERROR}
+          desc={organization.errorMessage}
+          style={{minHeight: 500, height: '80%'}}
+        />
+      );
+    }
+
     return (
       <div>
-        <Card title="Sigma Security Policy" className={'card'} bordered={true}>
-          <Row>
-            <Col sm={8} xs={24}>
-              <Info title="Validation Rate" value="44%" bordered />
-            </Col>
-            <Col sm={8} xs={24}>
-              <Info title="Rules Added This Week" value="7" bordered />
-            </Col>
-            <Col sm={8} xs={24}>
-              <Info title="Total Rules" value="18" />
-            </Col>
-          </Row>
-          <Tabs activeKey={activeKey} onChange={this.handleTabChange}>
-            {offlineData.map(category => (
-              <Tabs.TabPane
-                tab={<DetailsTab data={category} isSelected={activeKey === category.name} />}
-                key={category.name}
-              />
-            ))}
-          </Tabs>
-        </Card>
+        {organization.isFetching ? (
+          <Spin size="large" className={'globalSpin'} />
+        ) : (
+          <Card title={`${organization.details.title} Security Policy`} className={'card'} bordered={true}>
+            <div>
+              {ruleStats.errorMessage && <Alert type={'error'} message={ruleStats.errorMessage} />}
+              {ruleStats.isFetching ? (
+                <Spin size="small" className={'globalSpin'} />
+              ) : (
+                <div>
+                  <Row>
+                    <Col sm={8} xs={24}>
+                      <Info title={'Validation Rate'} value={validationPercentage} bordered />
+                    </Col>
+                    <Col sm={8} xs={24}>
+                      <Info title={'Rules Added This Week'} value={ruleStats.lastWeek} bordered />
+                    </Col>
+                    <Col sm={8} xs={24}>
+                      <Info title={'Total Rules'} value={ruleStats.total} />
+                    </Col>
+                  </Row>
+                  <Tabs activeKey={activeKey} onChange={this.handleTabChange}>
+                    {ruleStats.categories.map(category => (
+                      <Tabs.TabPane
+                        tab={<DetailsTab data={category} isSelected={activeKey === category.name} />}
+                        key={category.name}
+                      />
+                    ))}
+                  </Tabs>
+                </div>
+              )}
+            </div>
+          </Card>
+        )}
       </div>
     );
   }
 }
 
+const mapStateToProps = state => {
+  return {
+    ...getAuthDetails(state),
+    organization: getOrganization(state),
+    ruleStats: getRuleStats(state),
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators(
+    {
+      getOrganizationIfNeeded,
+      loadRulesIfNeeded,
+    },
+    dispatch,
+  );
+};
+
+Analysis = connect(mapStateToProps, mapDispatchToProps)(Analysis);
 export default Analysis;
