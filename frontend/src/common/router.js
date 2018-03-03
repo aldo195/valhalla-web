@@ -1,6 +1,7 @@
 import {createElement} from 'react';
 import pathToRegexp from 'path-to-regexp';
 import {getMenuData} from './menu';
+import * as routes from '../constants/routes';
 import loadDynamicComponent from '../components/DynamicComponent';
 
 let routerDataCache;
@@ -39,22 +40,22 @@ function getFlatMenuData(menus) {
 
 export const getRouterData = () => {
   const routerConfig = {
-    '/': {
+    [routes.DEFAULT]: {
       component: dynamicWrapper(() => import('../layouts/BasicLayout')),
     },
-    '/dashboard/analysis': {
+    [routes.ANALYSIS]: {
       component: dynamicWrapper(() => import('../routes/Dashboard/Analysis')),
     },
-    '/user': {
+    [routes.USER]: {
       component: dynamicWrapper(() => import('../layouts/UserLayout')),
     },
-    '/user/login': {
+    [routes.LOGIN]: {
       component: dynamicWrapper(() => import('../routes/User/Login')),
     },
-    '/user/register': {
+    [routes.REGISTER]: {
       component: dynamicWrapper(() => import('../routes/User/Register')),
     },
-    '/user/register-result': {
+    [routes.REGISTER_RESULT]: {
       component: dynamicWrapper(() => import('../routes/User/RegisterResult')),
     },
   };

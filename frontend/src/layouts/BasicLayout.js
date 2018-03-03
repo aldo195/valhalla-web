@@ -45,6 +45,8 @@ type Props = {
   },
   match: {
     path: string,
+    url: string,
+    isExact: boolean,
   },
   routerData: types.RouterData,
 };
