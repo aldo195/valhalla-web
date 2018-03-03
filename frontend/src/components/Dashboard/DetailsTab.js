@@ -1,10 +1,23 @@
+// @flow
 import React from 'react';
 import './DetailsTab.css';
 import {Col, Row} from 'antd';
 import NumberInfo from './NumberInfo';
 import {Pie} from '../Chart';
 
-const DetailsTab = ({data, isSelected}) => {
+type Props = {
+  data: {
+    name: string,
+    passing?: number,
+    failing?: number,
+    pending?: number,
+  },
+  isSelected: boolean,
+};
+
+const DetailsTab = (props: Props) => {
+  const {data, isSelected} = props;
+
   const passing = data.passing || 0;
   const failing = data.failing || 0;
   const pending = data.pending || 0;

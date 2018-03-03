@@ -41,6 +41,7 @@ function formatter(data, parentPath = '', parentRoles) {
       ...item,
       path,
       roles: item.roles || parentRoles,
+      children: [],
     };
     if (item.children) {
       result.children = formatter(item.children, `${parentPath}${item.path}/`, item.roles);

@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import './UserLayout.css';
 import DocumentTitle from 'react-document-title';
@@ -5,10 +6,12 @@ import {Icon} from 'antd';
 import {GlobalFooter} from '../components/GlobalFooter';
 import logo from '../assets/valhalla-logo-small.png';
 import {Link, Redirect, Route, Switch, withRouter} from 'react-router-dom';
+import type {RouterHistory} from 'react-router-dom';
 import * as routes from '../constants/routes';
 import {getRoutes} from '../utils/routing';
 import {getAuthStatus} from '../reducers/auth';
 import {connect} from 'react-redux';
+import * as types from '../types';
 
 const links = [
   {
@@ -34,10 +37,21 @@ const copyright = (
   </div>
 );
 
-class UserLayout extends React.PureComponent {
+type Props = {
+  ...types.AuthStatus,
+  routerData: types.RouterData,
+  history: RouterHistory,
+  match: {
+    path: string,
+  },
+};
+
+type State = {};
+
+class UserLayout extends React.PureComponent<Props, State> {
   getPageTitle() {
-    const {routerData, location} = this.props;
-    const {pathname} = location;
+    const {routerData, history} = this.props;
+    const {pathname} = history.location;
     let title = 'Valhalla.io';
     if (routerData[pathname] && routerData[pathname].name) {
       title = `${routerData[pathname].name} - ${title}`;
@@ -81,9 +95,9 @@ class UserLayout extends React.PureComponent {
   }
 }
 
-const mapStateToProps = state => {
+function mapStateToProps(state): types.AuthStatus {
   return getAuthStatus(state);
-};
+}
 
 UserLayout = withRouter(connect(mapStateToProps)(UserLayout));
 export default UserLayout;

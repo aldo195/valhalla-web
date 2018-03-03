@@ -1,8 +1,21 @@
+// @flow
 import React from 'react';
 import './GlobalFooter.css';
 import classNames from 'classnames';
 
-const GlobalFooter = ({className, links, copyright}) => {
+type Props = {
+  className: string,
+  links: Array<{
+    key: string,
+    href: string,
+    title: string,
+  }>,
+  copyright: string,
+};
+
+const GlobalFooter = (props: Props) => {
+  const {className, links, copyright} = props;
+
   const clsString = classNames('globalFooter', className);
   return (
     <div className={clsString}>

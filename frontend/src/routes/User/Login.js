@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import './Login.css';
 import {bindActionCreators} from 'redux';
@@ -7,8 +8,22 @@ import {Button, Form, Icon, Input, Checkbox, Alert} from 'antd';
 import * as routes from '../../constants/routes';
 import {getAuthStatus} from '../../reducers/auth';
 import {Link, withRouter} from 'react-router-dom';
+import type {RouterHistory} from 'react-router-dom';
+import * as types from '../../types';
 
-class LoginForm extends React.Component {
+type Props = {
+  errorMessage: string,
+  isFetching: boolean,
+  history: RouterHistory,
+  form: Object,
+  loginIfNeeded: (string, string, boolean, RouterHistory) => types.ThunkAction,
+};
+
+type State = {
+  errorMessage: string,
+};
+
+class LoginForm extends React.Component<Props, State> {
   constructor(props) {
     super(props);
     this.state = {

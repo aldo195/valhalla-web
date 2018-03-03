@@ -1,12 +1,23 @@
+// @flow
 import React from 'react';
 import {Route, Redirect} from 'react-router-dom';
 import * as api from '../api';
+import * as types from '../types';
 import {getAuthDetails} from '../reducers/auth';
 import {bindActionCreators} from 'redux';
 import {loginSuccess} from '../actions/auth';
 import {connect} from 'react-redux';
 
-class AuthorizedRoute extends React.Component {
+type Props = {
+  component: () => void,
+  render: ({}) => void,
+  roles: Array<string>,
+  redirectPath: string,
+  auth: types.AuthDetails,
+  loginSuccess: string => types.ThunkAction,
+};
+
+class AuthorizedRoute extends React.Component<Props> {
   componentWillMount() {
     this.checkAuth();
   }
@@ -16,7 +27,7 @@ class AuthorizedRoute extends React.Component {
   }
 
   checkAuth(props = this.props) {
-    if (!props.isAuthenticated) {
+    if (!props.auth.isAuthenticated) {
       const token = localStorage.getItem('token');
       if (token) {
         api.validateToken(token).then(() => {
@@ -27,16 +38,18 @@ class AuthorizedRoute extends React.Component {
   }
 
   render() {
-    const {component: Component, render, roles, redirectPath, ...rest} = this.props;
-    if (this.props.isAuthenticated && roles.indexOf(this.props.role) !== -1) {
-      return <Route {...rest} render={props => (Component ? <Component {...props} /> : render(props))} />;
+    const {auth, component: Component, render, roles, redirectPath, ...rest} = this.props;
+    if (auth.isAuthenticated && roles.indexOf(auth.role) !== -1) {
+      return <Route {...rest} render={props => (Component ? <React.Component {...props} /> : render(props))} />;
     }
     return <Route {...rest} render={() => <Redirect to={{pathname: redirectPath}} />} />;
   }
 }
 
 function mapStateToProps(state) {
-  return getAuthDetails(state);
+  return {
+    auth: getAuthDetails(state),
+  };
 }
 
 function mapDispatchToProps(dispatch) {

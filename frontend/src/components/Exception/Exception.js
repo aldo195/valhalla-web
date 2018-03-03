@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import './Exception.css';
 import * as routes from '../../constants/routes';
@@ -27,11 +28,22 @@ const config = {
   },
 };
 
-const Exception = ({className, type, title, desc, img, actions, ...rest}) => {
-  const pageType = type in config ? type : '404';
+type Props = {
+  className?: string,
+  type: number,
+  title?: string,
+  desc?: string,
+  img?: string,
+  actions?: Array<any>,
+};
+
+const Exception = (props: Props) => {
+  const {className, type, title, desc, img, actions} = props;
+
+  const pageType: number = type in config ? type : exceptionTypes.NOT_FOUND_ERROR;
   const classString = classNames('exception', className);
   return (
-    <div className={classString} {...rest}>
+    <div className={classString}>
       <div className={'imgBlock'}>
         <div className={'imgEle'} style={{backgroundImage: `url(${img || config[pageType].img})`}} />
       </div>

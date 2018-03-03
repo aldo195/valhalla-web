@@ -1,3 +1,4 @@
+// @flow
 import './Pie.css';
 import React from 'react';
 import {Chart, Tooltip, Geom, Coord} from 'bizcharts';
@@ -8,22 +9,47 @@ import ReactFitText from 'react-fittext';
 import {autoHeight} from './autoHeight';
 import * as _ from 'lodash';
 
-class PieComponent extends React.Component {
+type Props = {
+  valueFormat?: string => string,
+  subTitle: string,
+  total: number,
+  hasLegend: boolean,
+  className: string,
+  style: string,
+  height: number,
+  forceFit: boolean,
+  percent: number,
+  color: string,
+  inner: number,
+  animate: boolean,
+  colors: Array<string>,
+  lineWidth: number,
+};
+
+type State = {
+  legendData: Array<{
+    checked: boolean,
+    color: string,
+    percent: number,
+    x: string,
+    y: string,
+  }>,
+  legendBlock: boolean,
+};
+
+class PieComponent extends React.Component<Props, State> {
   state = {
     legendData: [],
     legendBlock: false,
   };
 
+  chart: any;
+  root: any;
+
   componentDidMount() {
     this.getLegendData();
     this.resize();
     window.addEventListener('resize', this.resize);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.props.data !== nextProps.data) {
-      this.getLegendData();
-    }
   }
 
   componentWillUnmount() {

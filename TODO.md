@@ -1,14 +1,16 @@
 # TODO
 
-- Add flow.
-
 - Change all CSS to kebab-case.
+
+- Write a proper `README.md` file.
 
 - Add DB implementation for notifications (currently just a stub).
 
 - Implement captcha after more than 3 failed login attempts.
 
 - Add a storybook for Pie chart.
+
+- Add some tests.
 
 - Change all actions to use redux-observables.
 

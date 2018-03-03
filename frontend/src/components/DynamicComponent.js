@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import '../index.css';
 import {Spin} from 'antd';
@@ -6,17 +7,27 @@ let defaultLoadingComponent = () => {
   return <Spin size="large" className={'globalSpin'} />;
 };
 
-export default function loadDynamicComponent(config) {
-  const {component: resolveComponent} = config;
+type ConfigType = {
+  component: () => void,
+  LoadingComponent: () => any,
+};
 
-  return class DynamicComponent extends React.PureComponent {
-    constructor(props) {
-      super(props);
-      this.LoadingComponent = config.LoadingComponent || defaultLoadingComponent;
-      this.state = {
-        Component: null,
-      };
-    }
+type Props = {};
+
+type State = {
+  Component: null | (() => null),
+};
+
+export default function loadDynamicComponent(config: ConfigType) {
+  const {component: resolveComponent} = config;
+  const LoadingComponent = config.LoadingComponent || defaultLoadingComponent;
+
+  return class DynamicComponent extends React.PureComponent<Props, State> {
+    state = {
+      Component: null,
+    };
+
+    mounted: boolean;
 
     componentDidMount() {
       this.mounted = true;
@@ -26,17 +37,15 @@ export default function loadDynamicComponent(config) {
       this.mounted = false;
     }
 
-    componentWillMount() {
-      resolveComponent().then(Component => {
-        if (this.mounted) {
-          this.setState({Component});
-        }
-      });
+    async componentWillMount() {
+      const Component = await resolveComponent();
+      if (this.mounted) {
+        this.setState({Component});
+      }
     }
 
     render() {
       const {Component} = this.state;
-      const {LoadingComponent} = this;
       if (Component) return <Component {...this.props} />;
 
       return <LoadingComponent {...this.props} />;

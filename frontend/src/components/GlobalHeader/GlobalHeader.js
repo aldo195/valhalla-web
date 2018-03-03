@@ -1,4 +1,6 @@
+// @flow
 import React from 'react';
+import * as types from '../../types';
 import {Menu, Icon, Spin, Tag, Dropdown, Avatar, Divider, Tooltip, Layout} from 'antd';
 import moment from 'moment';
 import * as _ from 'lodash';
@@ -6,6 +8,7 @@ import {NoticeIcon} from '../NoticeIcon';
 import {HeaderSearch} from '../HeaderSearch';
 import './GlobalHeader.css';
 import {Link, withRouter} from 'react-router-dom';
+import type {RouterHistory} from 'react-router-dom';
 import {getAuthDetails} from '../../reducers/auth';
 import {connect} from 'react-redux';
 import {getNotifications} from '../../reducers/notifications';
@@ -15,9 +18,22 @@ import {clearNotificationsIfNeeded, loadNotificationsIfNeeded} from '../../actio
 
 const {Header} = Layout;
 
-class GlobalHeader extends React.PureComponent {
+type Props = {
+  auth: types.AuthDetails,
+  isMobile: boolean,
+  menuCollapsed: boolean,
+  onMenuCollapse: boolean => void,
+  logo: string,
+  notifications: types.Notifications,
+  history: RouterHistory,
+  loadNotificationsIfNeeded: string => types.ThunkAction,
+  clearNotificationsIfNeeded: string => types.ThunkAction,
+  logoutAndRedirect: RouterHistory => types.ThunkAction,
+};
+
+class GlobalHeader extends React.PureComponent<Props> {
   componentWillMount() {
-    this.props.loadNotificationsIfNeeded(this.props.token);
+    this.props.loadNotificationsIfNeeded(this.props.auth.token);
   }
 
   componentWillUnmount() {
@@ -38,9 +54,8 @@ class GlobalHeader extends React.PureComponent {
         newNotice.datetime = moment(notice.datetime).fromNow();
       }
       // Transform ID to item key.
-      if (newNotice.id) {
-        newNotice.key = newNotice.id;
-      }
+      newNotice.key = newNotice.id;
+
       if (newNotice.extra && newNotice.status) {
         const color = {
           todo: '',
@@ -73,12 +88,12 @@ class GlobalHeader extends React.PureComponent {
   }, 600);
 
   handleNoticeClear = () => {
-    this.props.clearNotificationsIfNeeded(this.props.token);
+    this.props.clearNotificationsIfNeeded(this.props.auth.token);
   };
 
   handleNoticeVisibleChange = visible => {
     if (visible) {
-      this.props.loadNotificationsIfNeeded(this.props.token);
+      this.props.loadNotificationsIfNeeded(this.props.auth.token);
     }
   };
 
@@ -89,7 +104,7 @@ class GlobalHeader extends React.PureComponent {
   };
 
   render() {
-    const {notifications, menuCollapsed, isMobile, logo} = this.props;
+    const {auth, notifications, menuCollapsed, isMobile, logo} = this.props;
     const menu = (
       <Menu className={'menu'} selectedKeys={[]} onClick={this.handleMenuClick}>
         <Menu.Item disabled>
@@ -150,8 +165,8 @@ class GlobalHeader extends React.PureComponent {
           {this.props.email ? (
             <Dropdown overlay={menu}>
               <span className={'action account'}>
-                <Avatar size="small" className={'avatar'} src={this.props.avatar} />
-                <span className={'name'}>{this.props.email}</span>
+                <Avatar size="small" className={'avatar'} src={auth.avatar} />
+                <span className={'name'}>{auth.email}</span>
               </span>
             </Dropdown>
           ) : (
@@ -165,7 +180,7 @@ class GlobalHeader extends React.PureComponent {
 
 const mapStateToProps = state => {
   return {
-    ...getAuthDetails(state),
+    auth: getAuthDetails(state),
     notifications: getNotifications(state),
   };
 };

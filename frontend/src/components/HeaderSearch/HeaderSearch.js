@@ -1,19 +1,37 @@
+// @flow
 import React from 'react';
 import {Input, Icon, AutoComplete} from 'antd';
 import classNames from 'classnames';
 import './HeaderSearch.css';
 
-export default class HeaderSearch extends React.PureComponent {
+type Props = {
+  className: string,
+  placeholder: string,
+  onPressEnter: string => void,
+  onChange: () => void,
+};
+
+type State = {
+  searchMode: boolean,
+  value: string,
+};
+
+export default class HeaderSearch extends React.PureComponent<Props, State> {
   state = {
     searchMode: false,
     value: '',
   };
 
+  input: ?Input;
+  timeout: ?TimeoutID;
+
   componentWillUnmount() {
-    clearTimeout(this.timeout);
+    if (this.timeout) {
+      clearTimeout(this.timeout);
+    }
   }
 
-  onKeyDown = e => {
+  onKeyDown = (e: SyntheticKeyboardEvent<Input>) => {
     if (e.key === 'Enter') {
       this.timeout = setTimeout(() => {
         // Fix duplicate onPressEnter.
@@ -22,7 +40,7 @@ export default class HeaderSearch extends React.PureComponent {
     }
   };
 
-  onChange = value => {
+  onChange = (value: string) => {
     this.setState({value});
     if (this.props.onChange) {
       this.props.onChange();
@@ -31,7 +49,7 @@ export default class HeaderSearch extends React.PureComponent {
 
   enterSearchMode = () => {
     this.setState({searchMode: true}, () => {
-      if (this.state.searchMode) {
+      if (this.state.searchMode && this.input) {
         this.input.focus();
       }
     });

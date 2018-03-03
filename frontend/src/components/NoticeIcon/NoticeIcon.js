@@ -1,10 +1,31 @@
+// @flow
 import React from 'react';
 import {Popover, Icon, Badge, Spin, Avatar, List} from 'antd';
 import classNames from 'classnames';
 import './NoticeIcon.css';
 import noNotifications from '../../assets/no_notifications.svg';
 
-const NoticeList = ({data, onClick, onClear, title, emptyText, clearText}) => {
+type NotificationsList = Array<{
+  title: string,
+  description?: string,
+  datetime: string,
+  extra?: string,
+  key?: string,
+  read: boolean,
+}>;
+
+type ListProps = {
+  data: NotificationsList,
+  title: string,
+  emptyText: string,
+  clearText: string,
+  onClick: string => void,
+  onClear: () => void,
+};
+
+const NoticeList = (props: ListProps) => {
+  const {data, onClick, onClear, title, emptyText, clearText} = props;
+
   if (data.length === 0) {
     return (
       <div className={'notice-not-found'}>
@@ -21,7 +42,7 @@ const NoticeList = ({data, onClick, onClear, title, emptyText, clearText}) => {
             read: item.read,
           });
           return (
-            <List.Item className={itemCls} key={item.key || i} onClick={() => onClick(item)}>
+            <List.Item className={itemCls} key={item.key || i} onClick={() => onClick(item.title)}>
               <List.Item.Meta
                 className={'meta'}
                 avatar={item.avatar ? <Avatar className={'avatar'} src={item.avatar} /> : null}
@@ -33,7 +54,7 @@ const NoticeList = ({data, onClick, onClear, title, emptyText, clearText}) => {
                 }
                 description={
                   <div>
-                    <div className={'description'}>{item.description || item}</div>
+                    <div className={'description'}>{item.description}</div>
                     <div className={'datetime'}>{item.datetime}</div>
                   </div>
                 }
@@ -50,8 +71,24 @@ const NoticeList = ({data, onClick, onClear, title, emptyText, clearText}) => {
   );
 };
 
-export default class NoticeIcon extends React.PureComponent {
-  onItemClick = item => {
+type Props = {
+  loading: boolean,
+  list: NotificationsList,
+  title: string,
+  emptyText: string,
+  clearText: string,
+  className: string,
+  count: number,
+  popupVisible: boolean,
+  popupAlign: {
+    offset?: Array<number>,
+  },
+  onPopupVisibleChange: boolean => void,
+  onClear: () => void,
+};
+
+export default class NoticeIcon extends React.PureComponent<Props> {
+  onItemClick = (item: string) => {
     console.log(item); // eslint-disable-line
   };
 
@@ -60,7 +97,6 @@ export default class NoticeIcon extends React.PureComponent {
     return (
       <Spin spinning={loading} delay={0}>
         <NoticeList
-          {...this.props}
           data={this.props.list}
           onClick={this.onItemClick}
           onClear={() => this.props.onClear()}

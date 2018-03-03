@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import './Analysis.css';
 import '../../index.css';
@@ -12,15 +13,35 @@ import {getOrganizationIfNeeded} from '../../actions/organization';
 import {getOrganization} from '../../reducers/organization';
 import {getRuleStats} from '../../reducers/rules';
 import Exception from '../../components/Exception/Exception';
+import * as types from '../../types';
 
-class Analysis extends React.PureComponent {
+type Props = {
+  auth: types.AuthDetails,
+  organization: types.Organization,
+  ruleStats: types.RuleStats,
+  getOrganizationIfNeeded: (number, string) => types.ThunkAction,
+  loadRulesIfNeeded: string => types.ThunkAction,
+};
+
+type State = {
+  currentTabKey: string,
+};
+
+type InfoProps = {
+  title: string,
+  value: string,
+  bordered?: boolean,
+};
+
+class Analysis extends React.PureComponent<Props, State> {
   state = {
     currentTabKey: '',
   };
 
   fetchData() {
-    this.props.getOrganizationIfNeeded(this.props.organizationId, this.props.token);
-    this.props.loadRulesIfNeeded(this.props.token);
+    const {auth} = this.props;
+    this.props.getOrganizationIfNeeded(auth.organizationId, auth.token);
+    this.props.loadRulesIfNeeded(auth.token);
   }
 
   componentDidMount() {
@@ -44,13 +65,16 @@ class Analysis extends React.PureComponent {
 
     const validationPercentage = `${Math.floor(ruleStats.validation * 100)}%`;
 
-    const Info = ({title, value, bordered}) => (
-      <div className={'headerInfo'}>
-        <span>{title}</span>
-        <p>{value}</p>
-        {bordered && <em />}
-      </div>
-    );
+    const Info = (props: InfoProps) => {
+      const {title, value, bordered} = props;
+      return (
+        <div className={'headerInfo'}>
+          <span>{title}</span>
+          <p>{value}</p>
+          {bordered && <em />}
+        </div>
+      );
+    };
 
     // Make sure organization is loaded first.
     if (organization.errorMessage) {
@@ -80,10 +104,10 @@ class Analysis extends React.PureComponent {
                       <Info title={'Validation Rate'} value={validationPercentage} bordered />
                     </Col>
                     <Col sm={8} xs={24}>
-                      <Info title={'Rules Added This Week'} value={ruleStats.lastWeek} bordered />
+                      <Info title={'Rules Added This Week'} value={String(ruleStats.lastWeek)} bordered />
                     </Col>
                     <Col sm={8} xs={24}>
-                      <Info title={'Total Rules'} value={ruleStats.total} />
+                      <Info title={'Total Rules'} value={String(ruleStats.total)} />
                     </Col>
                   </Row>
                   <Tabs activeKey={activeKey} onChange={this.handleTabChange}>
@@ -106,7 +130,7 @@ class Analysis extends React.PureComponent {
 
 const mapStateToProps = state => {
   return {
-    ...getAuthDetails(state),
+    auth: getAuthDetails(state),
     organization: getOrganization(state),
     ruleStats: getRuleStats(state),
   };

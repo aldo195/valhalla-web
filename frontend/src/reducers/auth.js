@@ -12,6 +12,7 @@ export const auth = (
     email: decodedToken ? decodedToken.email : null,
     role: decodedToken ? decodedToken.role : null,
     organizationId: decodedToken ? decodedToken.organization_id : null,
+    avatar: null,
     isFetching: false,
     errorMessage: null,
   },
@@ -71,6 +72,7 @@ export const getAuthDetails = state => {
     email: auth.email,
     role: auth.role,
     organizationId: auth.organizationId,
+    avatar: auth.avatar,
     isAuthenticated: auth.isAuthenticated,
   };
 };

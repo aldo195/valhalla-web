@@ -1,4 +1,6 @@
+// @flow
 import React from 'react';
+import * as types from '../types';
 import {Layout, Icon} from 'antd';
 import DocumentTitle from 'react-document-title';
 import {Route, Redirect, Switch} from 'react-router-dom';
@@ -37,7 +39,22 @@ enquireScreen(result => {
   isMobile = result;
 }, 'only screen and (max-width: 767.99px)');
 
-export default class BasicLayout extends React.PureComponent {
+type Props = {
+  location: {
+    pathname: string,
+  },
+  match: {
+    path: string,
+  },
+  routerData: types.RouterData,
+};
+
+type State = {
+  isMobile: boolean,
+  menuCollapsed: boolean,
+};
+
+export default class BasicLayout extends React.PureComponent<Props, State> {
   state = {
     isMobile,
     menuCollapsed: false,
@@ -61,7 +78,7 @@ export default class BasicLayout extends React.PureComponent {
     return title;
   }
 
-  handleMenuCollapse = menuCollapsed => {
+  handleMenuCollapse = (menuCollapsed: boolean) => {
     this.setState({
       menuCollapsed,
     });

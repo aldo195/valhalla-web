@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import './Register.css';
 import '../../index.css';
@@ -8,9 +9,24 @@ import {registerIfNeeded} from '../../actions/auth';
 import {getAuthStatus} from '../../reducers/auth';
 import {OrganizationSelect} from '../../components/User';
 import {Link, withRouter} from 'react-router-dom';
+import type {RouterHistory} from 'react-router-dom';
 import * as routes from '../../constants/routes';
+import * as types from '../../types';
 
-class RegisterForm extends React.Component {
+type Props = {
+  errorMessage: string,
+  isFetching: boolean,
+  history: RouterHistory,
+  form: Object,
+  registerIfNeeded: (string, string, number, string, RouterHistory) => types.ThunkAction,
+};
+
+type State = {
+  errorMessage: string,
+  passwordCopyDirty: boolean,
+};
+
+class RegisterForm extends React.Component<Props, State> {
   constructor(props) {
     super(props);
     this.state = {

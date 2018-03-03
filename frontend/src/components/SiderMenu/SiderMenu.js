@@ -1,10 +1,11 @@
+// @flow
 import React from 'react';
+import './SiderMenu.css';
+import * as types from '../../types';
 import {Layout, Menu, Icon} from 'antd';
 import pathToRegexp from 'path-to-regexp';
-import './SiderMenu.css';
-import {Link, withRouter} from 'react-router-dom';
-import {getAuthDetails} from '../../reducers/auth';
-import {connect} from 'react-redux';
+import {Link} from 'react-router-dom';
+import type {RouterHistory} from 'react-router-dom';
 
 const {Sider} = Layout;
 const {SubMenu} = Menu;
@@ -23,15 +24,28 @@ const getIcon = icon => {
   return icon;
 };
 
-class SiderMenu extends React.PureComponent {
-  constructor(props) {
+type Props = {
+  isMobile: boolean,
+  logo: string,
+  menuData: types.MenuData,
+  collapsed: boolean,
+  onCollapse: boolean => void,
+  history: RouterHistory,
+  auth: types.AuthDetails,
+};
+
+type State = {
+  openKeys: Array<string>,
+};
+
+class SiderMenu extends React.PureComponent<Props, State> {
+  constructor(props: Props) {
     super(props);
-    this.menus = props.menuData;
     this.state = {
       openKeys: this.getDefaultCollapsedSubMenus(props.history.location.pathname),
     };
   }
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: Props) {
     const nextPathname = nextProps.history.location.pathname;
     if (nextPathname !== this.props.history.location.pathname) {
       this.setState({
@@ -43,7 +57,7 @@ class SiderMenu extends React.PureComponent {
    * Convert pathname to openKeys
    * /list/search/articles = > ['list','/list/search']
    */
-  getDefaultCollapsedSubMenus(pathname) {
+  getDefaultCollapsedSubMenus(pathname: string) {
     // eg. /list/search/articles = > ['','list','search','articles']
     let snippets = pathname.split('/');
     // Delete the end
@@ -74,24 +88,25 @@ class SiderMenu extends React.PureComponent {
    * [{path:string},{path:string}] => {path,path2}
    * @param  menus
    */
-  getFlatMenuKeys(menus) {
+  getFlatMenuKeys(menus: types.MenuData) {
     let keys = [];
-    menus.forEach(item => {
-      if (item.children) {
-        keys.push(item.path);
-        keys = keys.concat(this.getFlatMenuKeys(item.children));
-      } else {
-        keys.push(item.path);
-      }
-    });
+    menus &&
+      menus.forEach(item => {
+        if (item.children) {
+          keys.push(item.path);
+          keys = keys.concat(this.getFlatMenuKeys(item.children));
+        } else {
+          keys.push(item.path);
+        }
+      });
     return keys;
   }
   /**
    * Get selected child nodes
    * /user/chen => /user/:id
    */
-  getSelectedMenuKeys = path => {
-    const flatMenuKeys = this.getFlatMenuKeys(this.menus);
+  getSelectedMenuKeys = (path: string) => {
+    const flatMenuKeys = this.getFlatMenuKeys(this.props.menuData);
     return flatMenuKeys.filter(item => {
       return pathToRegexp(`/${item}`).test(path);
     });
@@ -99,7 +114,7 @@ class SiderMenu extends React.PureComponent {
   /**
    * Judge whether it is http link.return a or Link
    */
-  getMenuItemPath = item => {
+  getMenuItemPath = (item: types.MenuItem) => {
     const itemPath = this.conversionPath(item.path);
     const icon = getIcon(item.icon);
     const {target, name} = item;
@@ -133,7 +148,7 @@ class SiderMenu extends React.PureComponent {
   /**
    * get SubMenu or Item
    */
-  getSubMenuOrItem = item => {
+  getSubMenuOrItem = (item: types.MenuItem) => {
     if (item.children && item.children.some(child => child.name)) {
       return (
         <SubMenu
@@ -157,7 +172,7 @@ class SiderMenu extends React.PureComponent {
     }
   };
 
-  getNavMenuItems = menusData => {
+  getNavMenuItems = (menusData: types.MenuData) => {
     if (!menusData) {
       return [];
     }
@@ -170,7 +185,7 @@ class SiderMenu extends React.PureComponent {
       .filter(item => !!item);
   };
 
-  conversionPath = path => {
+  conversionPath = (path: string) => {
     if (path && path.indexOf('http') === 0) {
       return path;
     } else {
@@ -178,23 +193,25 @@ class SiderMenu extends React.PureComponent {
     }
   };
 
-  checkPermissionItem = (roles, ItemDom) => {
-    if (this.props.isAuthenticated) {
-      return roles.indexOf(this.props.role) !== -1 ? ItemDom : null;
+  checkPermissionItem = (roles: Array<string>, ItemDom: any) => {
+    if (this.props.auth.isAuthenticated) {
+      return roles.indexOf(this.props.auth.role) !== -1 ? ItemDom : null;
     }
     return ItemDom;
   };
 
-  handleOpenChange = openKeys => {
+  handleOpenChange = (openKeys: Array<string>) => {
     const lastOpenKey = openKeys[openKeys.length - 1];
-    const isMainMenu = this.menus.some(item => lastOpenKey && (item.key === lastOpenKey || item.path === lastOpenKey));
+    const isMainMenu = this.props.menuData.some(
+      item => lastOpenKey && (item.key === lastOpenKey || item.path === lastOpenKey),
+    );
     this.setState({
       openKeys: isMainMenu ? [lastOpenKey] : [...openKeys],
     });
   };
 
   render() {
-    const {logo, collapsed, history, onCollapse} = this.props;
+    const {logo, collapsed, menuData, history, onCollapse} = this.props;
     const {openKeys} = this.state;
     // Don't show popup menu when it is been collapsed
     const menuProps = collapsed
@@ -232,16 +249,11 @@ class SiderMenu extends React.PureComponent {
           selectedKeys={selectedKeys}
           style={{padding: '16px 0', width: '100%'}}
         >
-          {this.getNavMenuItems(this.menus)}
+          {this.getNavMenuItems(menuData)}
         </Menu>
       </Sider>
     );
   }
 }
 
-function mapStateToProps(state) {
-  return getAuthDetails(state);
-}
-
-SiderMenu = withRouter(connect(mapStateToProps)(SiderMenu));
 export default SiderMenu;

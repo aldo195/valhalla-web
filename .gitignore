@@ -57,6 +57,9 @@ yarn-error.log*
 # CSS files (using stylus)
 *.css
 
+# Flow-typed stuff
+flow-typed
+
 .env.local
 .env.development.local
 .env.test.local

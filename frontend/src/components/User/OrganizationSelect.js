@@ -1,19 +1,38 @@
+// @flow
 import React from 'react';
 import './OrganizationSelect.css';
 import '../../index.css';
+import * as types from '../../types';
 import * as api from '../../api';
 import * as _ from 'lodash';
 import {getAuthDetails} from '../../reducers/auth';
 import connect from 'react-redux/es/connect/connect';
 import {Spin, Select, Alert} from 'antd';
 
-class OrganizationSelect extends React.Component {
+type State = {
+  organizationId: number | null,
+  organizationsList: Array<{
+    title: string,
+    organization_id: number,
+  }>,
+  isFetching: boolean,
+  errorMessage: string,
+};
+
+type Props = {
+  onChange: State => void,
+  auth: types.AuthDetails,
+};
+
+class OrganizationSelect extends React.Component<Props, State> {
   state = {
     organizationId: null,
     organizationsList: [],
     isFetching: true,
-    errorMessage: null,
+    errorMessage: '',
   };
+
+  mounted: boolean;
 
   componentDidMount() {
     this.mounted = true;
@@ -26,12 +45,12 @@ class OrganizationSelect extends React.Component {
 
   async fetchData() {
     try {
-      const response = await api.loadOrganizations(this.props.token);
+      const response = await api.loadOrganizations(this.props.auth.token);
       if (this.mounted) {
         this.setState({
           organizationsList: response.organizations,
           isFetching: false,
-          errorMessage: null,
+          errorMessage: '',
         });
       }
     } catch (error) {
@@ -50,7 +69,10 @@ class OrganizationSelect extends React.Component {
 
     const onChange = this.props.onChange;
     if (onChange) {
-      onChange(Object.assign({}, this.state, {organizationId}));
+      onChange({
+        ...this.state,
+        organizationId,
+      });
     }
   };
 
@@ -79,7 +101,7 @@ class OrganizationSelect extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    ...getAuthDetails(state),
+    auth: getAuthDetails(state),
   };
 };
 

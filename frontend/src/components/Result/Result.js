@@ -3,14 +3,25 @@ import classNames from 'classnames';
 import {Icon} from 'antd';
 import './Result.css';
 
-const Result = ({className, type, title, description, extra, actions, ...restProps}) => {
+type Props = {
+  className: string,
+  type: string,
+  title: string,
+  description: string,
+  extra: string,
+  actions: Array<div>,
+};
+
+const Result = (props: Props) => {
+  const {className, type, title, description, extra, actions} = props;
+
   const iconMap = {
     error: <Icon className={'error'} type="close-circle" />,
     success: <Icon className={'success'} type="check-circle" />,
   };
   const clsString = classNames('result', className);
   return (
-    <div className={clsString} {...restProps}>
+    <div className={clsString}>
       <div className={'icon'}>{iconMap[type]}</div>
       <div className={'title'}>{title}</div>
       {description && <div className={'description'}>{description}</div>}
