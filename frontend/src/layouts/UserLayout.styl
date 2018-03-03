@@ -6,39 +6,39 @@
   min-height: 100%
   background: #f0f2f5
 
-.content
-  padding: 32px 0
-  flex: 1
+  .content
+    padding: 32px 0
+    flex: 1
 
-.top
-  text-align: center
+    .top
+      text-align: center
 
-.userHeader
-  height: 44px
-  line-height: 44px
-  a
-    text-decoration: none
+      .user-header
+        height: 44px
+        line-height: 44px
+        a
+          text-decoration: none
 
+        .logo
+          height: 44px
+          vertical-align: top
+          margin-right: 16px
 
-.logo
-  height: 44px
-  vertical-align: top
-  margin-right: 16px
+        .title
+          font-size: 33px
+          color: $heading-color
+          font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif
+          font-weight: 600
+          position: relative
+          top: 2px
 
-.title
-  font-size: 33px
-  color: $heading-color
-  font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif
-  font-weight: 600
-  position: relative
-  top: 2px
-
-.desc
-  font-size: $font-size-base
-  color: $text-color-secondary
-  margin-top: 12px
-  margin-bottom: 40px
+      .desc
+        font-size: $font-size-base
+        color: $text-color-secondary
+        margin-top: 12px
+        margin-bottom: 40px
 
 @media (min-width: $screen-md)
-  .content
-    padding: 112px 0 24px 0
+  .container
+    .content
+      padding: 112px 0 24px 0

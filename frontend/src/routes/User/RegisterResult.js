@@ -20,7 +20,7 @@ type Props = {
 
 let RegisterResult = (props: Props) => (
   <Result
-    className={'registerResult'}
+    className={'register-result'}
     type="success"
     title={<div className={'title'}>Your account：{props.email} registered successfully</div>}
     description="It's time to log in!"

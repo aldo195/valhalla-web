@@ -234,7 +234,7 @@ class SiderMenu extends React.PureComponent<Props, State> {
         width={256}
         className={'sider'}
       >
-        <div className={'menuLogo'} key="logo">
+        <div className={'menu-logo'}>
           <Link to="/">
             <img src={logo} alt="logo" />
             <h1>Valhalla.io</h1>

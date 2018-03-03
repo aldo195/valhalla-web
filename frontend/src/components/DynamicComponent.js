@@ -4,7 +4,7 @@ import '../index.css';
 import {Spin} from 'antd';
 
 let defaultLoadingComponent = () => {
-  return <Spin size="large" className={'globalSpin'} />;
+  return <Spin size="large" className={'global-spin'} />;
 };
 
 type ConfigType = {

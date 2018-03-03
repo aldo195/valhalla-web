@@ -138,8 +138,8 @@ class PieComponent extends React.Component<Props, State> {
 
     const {legendData, legendBlock} = this.state;
     const pieClassName = classNames('pie', className, {
-      hasLegend: hasLegend,
-      legendBlock: legendBlock,
+      'has-legend': hasLegend,
+      'legend-block': legendBlock,
     });
 
     const defaultColors = colors;
@@ -239,7 +239,7 @@ class PieComponent extends React.Component<Props, State> {
             {legendData.map((item, i) => (
               <li key={item.x} onClick={() => this.handleLegendClick(item, i)}>
                 <span className={'dot'} style={{backgroundColor: !item.checked ? '#aaa' : item.color}} />
-                <span className={'legendTitle'}>{item.x}</span>
+                <span className={'legend-title'}>{item.x}</span>
                 <Divider type="vertical" />
                 <span className={'percent'}>{`${(isNaN(item.percent) ? 0 : item.percent * 100).toFixed(2)}%`}</span>
                 <span

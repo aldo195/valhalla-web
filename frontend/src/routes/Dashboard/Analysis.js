@@ -68,7 +68,7 @@ class Analysis extends React.PureComponent<Props, State> {
     const Info = (props: InfoProps) => {
       const {title, value, bordered} = props;
       return (
-        <div className={'headerInfo'}>
+        <div className={'header-info'}>
           <span>{title}</span>
           <p>{value}</p>
           {bordered && <em />}
@@ -90,13 +90,13 @@ class Analysis extends React.PureComponent<Props, State> {
     return (
       <div>
         {organization.isFetching ? (
-          <Spin size="large" className={'globalSpin'} />
+          <Spin size="large" className={'global-spin'} />
         ) : (
           <Card title={`${organization.details.title} Security Policy`} className={'card'} bordered={true}>
             <div>
               {ruleStats.errorMessage && <Alert type={'error'} message={ruleStats.errorMessage} />}
               {ruleStats.isFetching ? (
-                <Spin size="small" className={'globalSpin'} />
+                <Spin size="small" className={'global-spin'} />
               ) : (
                 <div>
                   <Row>

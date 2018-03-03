@@ -123,7 +123,7 @@ class GlobalHeader extends React.PureComponent<Props> {
     return (
       <Header className={'header'}>
         {isMobile && [
-          <Link to="/" className={'headerLogo'} key="logo">
+          <Link to="/" className={'header-logo'}>
             <img src={logo} alt="logo" width="32" />
           </Link>,
           <Divider type="vertical" key="line" />,

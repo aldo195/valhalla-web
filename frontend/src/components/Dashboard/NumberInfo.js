@@ -14,9 +14,9 @@ const NumberInfo = (props: Props) => {
   const {title, subTitle, passing, failing, pending} = props;
 
   return (
-    <div className={'numberInfo'}>
-      {title && <div className={'numberInfoTitle'}>{title}</div>}
-      {subTitle && <div className={'numberInfoSubTitle'}>{subTitle}</div>}
+    <div className={'number-info'}>
+      {title && <div className={'title'}>{title}</div>}
+      {subTitle && <div className={'subtitle'}>{subTitle}</div>}
       <p>Passing: {passing}</p>
       <p>Failing: {failing}</p>
       <p>Pending: {pending}</p>

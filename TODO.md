@@ -1,7 +1,5 @@
 # TODO
 
-- Change all CSS to kebab-case.
-
 - Write a proper `README.md` file.
 
 - Add DB implementation for notifications (currently just a stub).

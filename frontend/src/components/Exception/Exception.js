@@ -44,8 +44,8 @@ const Exception = (props: Props) => {
   const classString = classNames('exception', className);
   return (
     <div className={classString}>
-      <div className={'imgBlock'}>
-        <div className={'imgEle'} style={{backgroundImage: `url(${img || config[pageType].img})`}} />
+      <div className={'.image-block'}>
+        <div className={'.image-element'} style={{backgroundImage: `url(${img || config[pageType].img})`}} />
       </div>
       <div className={'content'}>
         <h1>{title || config[pageType].title}</h1>

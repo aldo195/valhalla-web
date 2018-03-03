@@ -83,7 +83,7 @@ class OrganizationSelect extends React.Component<Props, State> {
           showSearch
           className={'organization-select'}
           placeholder={'Organization'}
-          notFoundContent={this.state.isFetching ? <Spin size="small" className={'globalSpin'} /> : null}
+          notFoundContent={this.state.isFetching ? <Spin size="small" className={'global-spin'} /> : null}
           onChange={this.triggerChange}
         >
           {!_.isEmpty(this.state.organizationsList) &&

@@ -68,7 +68,7 @@ export default class HeaderSearch extends React.PureComponent<Props, State> {
       show: this.state.searchMode,
     });
     return (
-      <span className={classNames('headerSearch', className)} onClick={this.enterSearchMode}>
+      <span className={classNames('header-search', className)} onClick={this.enterSearchMode}>
         <Icon type="search" key="Icon" />
         <AutoComplete
           key="AutoComplete"

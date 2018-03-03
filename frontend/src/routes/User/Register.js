@@ -99,7 +99,7 @@ class RegisterForm extends React.Component<Props, State> {
                   message: 'Please enter your name!',
                 },
               ],
-            })(<Input prefix={<Icon className={'prefixIcon'} type={'user'} />} placeholder={'Name'} />)}
+            })(<Input prefix={<Icon className={'prefix-icon'} type={'user'} />} placeholder={'Name'} />)}
           </Form.Item>
           <Form.Item hasFeedback>
             {getFieldDecorator('email', {
@@ -113,7 +113,7 @@ class RegisterForm extends React.Component<Props, State> {
                   message: 'Sorry, this is not a valid email',
                 },
               ],
-            })(<Input prefix={<Icon className={'prefixIcon'} type={'mail'} />} placeholder={'Email'} />)}
+            })(<Input prefix={<Icon className={'prefix-icon'} type={'mail'} />} placeholder={'Email'} />)}
           </Form.Item>
           <Form.Item hasFeedback>
             {getFieldDecorator('password', {
@@ -128,7 +128,7 @@ class RegisterForm extends React.Component<Props, State> {
               ],
             })(
               <Input
-                prefix={<Icon className={'prefixIcon'} type={'lock'} />}
+                prefix={<Icon className={'prefix-icon'} type={'lock'} />}
                 type={'password'}
                 placeholder={'Password'}
               />,
@@ -147,7 +147,7 @@ class RegisterForm extends React.Component<Props, State> {
               ],
             })(
               <Input
-                prefix={<Icon className={'prefixIcon'} type={'lock'} />}
+                prefix={<Icon className={'prefix-icon'} type={'lock'} />}
                 type={'password'}
                 placeholder={'Confirm Password'}
                 onBlur={this.handlePasswordCopyBlur}
@@ -166,11 +166,11 @@ class RegisterForm extends React.Component<Props, State> {
           </Form.Item>
           {this.props.errorMessage && <Alert type={'error'} message={this.props.errorMessage} showIcon />}
           <Form.Item style={{marginBottom: '12px'}}>
-            <Button type={'primary'} htmlType={'submit'} className={'formButton'} loading={this.props.isFetching}>
+            <Button type={'primary'} htmlType={'submit'} className={'form-button'} loading={this.props.isFetching}>
               Register
             </Button>
           </Form.Item>
-          <Button type={'default'} className={'formButton'}>
+          <Button type={'default'} className={'form-button'}>
             <Link to={routes.LOGIN}>Back to Login Page</Link>
           </Button>
         </Form>

@@ -73,7 +73,7 @@ class UserLayout extends React.PureComponent<Props, State> {
         <div className={'container'}>
           <div className={'content'}>
             <div className={'top'}>
-              <div className={'userHeader'}>
+              <div className={'user-header'}>
                 <Link to="/">
                   <img alt="logo" className={'logo'} src={logo} />
                   <span className={'title'}>Valhalla.io</span>

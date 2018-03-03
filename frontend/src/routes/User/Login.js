@@ -69,7 +69,7 @@ class LoginForm extends React.Component<Props, State> {
                   message: 'Sorry, this is not a valid email',
                 },
               ],
-            })(<Input prefix={<Icon className={'prefixIcon'} type={'mail'} />} placeholder={'Email'} />)}
+            })(<Input prefix={<Icon className={'prefix-icon'} type={'mail'} />} placeholder={'Email'} />)}
           </Form.Item>
           <Form.Item>
             {getFieldDecorator('password', {
@@ -84,7 +84,7 @@ class LoginForm extends React.Component<Props, State> {
               ],
             })(
               <Input
-                prefix={<Icon className={'prefixIcon'} type={'lock'} />}
+                prefix={<Icon className={'prefix-icon'} type={'lock'} />}
                 type={'password'}
                 placeholder={'Password'}
               />,
@@ -101,11 +101,11 @@ class LoginForm extends React.Component<Props, State> {
             </a>
           </Form.Item>
           <Form.Item style={{marginBottom: '12px'}}>
-            <Button type={'primary'} htmlType={'submit'} loading={this.props.isFetching} className={'formButton'}>
+            <Button type={'primary'} htmlType={'submit'} loading={this.props.isFetching} className={'form-button'}>
               Log in
             </Button>
           </Form.Item>
-          <Button type={'default'} className={'formButton'}>
+          <Button type={'default'} className={'form-button'}>
             <Link to={routes.REGISTER}>Sign Up</Link>
           </Button>
         </Form>

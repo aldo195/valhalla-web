@@ -16,7 +16,7 @@ type Props = {
 const GlobalFooter = (props: Props) => {
   const {className, links, copyright} = props;
 
-  const clsString = classNames('globalFooter', className);
+  const clsString = classNames('global-footer', className);
   return (
     <div className={clsString}>
       {links && (
