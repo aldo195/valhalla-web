@@ -38,7 +38,7 @@ const copyright = (
 );
 
 type Props = {
-  ...types.AuthStatus,
+  auth: types.AuthStatus,
   routerData: types.RouterData,
   history: RouterHistory,
   match: {
@@ -61,7 +61,7 @@ class UserLayout extends React.PureComponent<Props, State> {
 
   componentWillMount() {
     // Redirect if user is already logged in.
-    if (this.props.isAuthenticated) {
+    if (this.props.auth.isAuthenticated) {
       this.props.history.push(routes.DEFAULT);
     }
   }
@@ -95,9 +95,11 @@ class UserLayout extends React.PureComponent<Props, State> {
   }
 }
 
-function mapStateToProps(state): types.AuthStatus {
-  return getAuthStatus(state);
-}
+const mapStateToProps = state => {
+  return {
+    auth: getAuthStatus(state),
+  };
+};
 
-UserLayout = withRouter(connect(mapStateToProps)(UserLayout));
+UserLayout = withRouter(connect(mapStateToProps, {})(UserLayout));
 export default UserLayout;

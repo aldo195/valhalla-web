@@ -36,11 +36,11 @@ let DrawerSiderMenu = (props: Props) =>
     <SiderMenu {...props} />
   );
 
-function mapStateToProps(state): {auth: types.AuthDetails} {
+const mapStateToProps = state => {
   return {
     auth: getAuthDetails(state),
   };
-}
+};
 
-DrawerSiderMenu = withRouter(connect(mapStateToProps)(DrawerSiderMenu));
+DrawerSiderMenu = withRouter(connect(mapStateToProps, {})(DrawerSiderMenu));
 export {DrawerSiderMenu};

@@ -46,20 +46,20 @@ class AuthorizedRoute extends React.Component<Props> {
   }
 }
 
-function mapStateToProps(state) {
+const mapStateToProps = state => {
   return {
     auth: getAuthDetails(state),
   };
-}
+};
 
-function mapDispatchToProps(dispatch) {
+const mapDispatchToProps = dispatch => {
   return bindActionCreators(
     {
       loginSuccess,
     },
     dispatch,
   );
-}
+};
 
 AuthorizedRoute = connect(mapStateToProps, mapDispatchToProps)(AuthorizedRoute);
 export {AuthorizedRoute};
