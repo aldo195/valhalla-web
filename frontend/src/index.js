@@ -23,7 +23,7 @@ render();
 registerServiceWorker();
 
 if (process.env.NODE_ENV !== 'production') {
-  // If webpacks HMR detects a change in the App, we reload it
+  // If webpack's HMR detects a change in the App, we reload it
   if (module.hot) {
     module.hot.accept('./App', () => {
       render();

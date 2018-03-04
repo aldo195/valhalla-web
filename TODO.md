@@ -2,6 +2,8 @@
 
 - Write a proper `README.md` file.
 
+- Add `Dockerfile` and `docker-compose.yml`.
+
 - Add DB implementation for notifications (currently just a stub).
 
 - Implement captcha after more than 3 failed login attempts.

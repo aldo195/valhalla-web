@@ -69,3 +69,4 @@ migrations/
 
 # Tests DB
 valhallaweb.db
+valhallaweb.db-journal

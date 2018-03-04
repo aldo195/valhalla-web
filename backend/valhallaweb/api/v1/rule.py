@@ -33,8 +33,8 @@ def create(current_user):
 
     # Add the rule.
     rule = Rule(title=title, description=incoming['description'], test_logic=incoming['testLogic'],
-                system=incoming['system'], csf=incoming['csf'], creation_time=dt.datetime.utcnow(),
-                owner_id=current_user.user_id)
+                system=incoming['system'], csf=incoming['csf'], category=incoming['category'],
+                creation_time=dt.datetime.utcnow(), owner_id=current_user.user_id)
     db.session.add(rule)
     db.session.commit()
 
