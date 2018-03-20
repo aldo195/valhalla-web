@@ -4,7 +4,7 @@ import moment from 'moment';
 
 export const rules = (
   state = {
-    rules: {},
+    rules: [],
     isFetching: false,
     errorMessage: null,
   },
@@ -25,7 +25,7 @@ export const rules = (
       };
     case actionTypes.LOAD_RULES_FAILURE:
       return {
-        rules: {},
+        rules: [],
         isFetching: false,
         errorMessage: action.errorMessage,
       };
@@ -36,6 +36,10 @@ export const rules = (
 
 export const getRules = state => {
   return state.rules;
+};
+
+export const getFullRules = state => {
+  return _.values(_.pick(state.ruleById, state.rules.rules));
 };
 
 export const getRuleStats = state => {

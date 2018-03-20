@@ -22,11 +22,11 @@ const Result = (props: Props) => {
   const clsString = classNames('result', className);
   return (
     <div className={clsString}>
-      <div className={'icon'}>{iconMap[type]}</div>
-      <div className={'title'}>{title}</div>
-      {description && <div className={'description'}>{description}</div>}
-      {extra && <div className={'extra'}>{extra}</div>}
-      {actions && <div className={'actions'}>{actions}</div>}
+      <div className={'result-icon'}>{iconMap[type]}</div>
+      <div className={'result-title'}>{title}</div>
+      {description && <div className={'result-description'}>{description}</div>}
+      {extra && <div className={'result-extra'}>{extra}</div>}
+      {actions && <div className={'result-actions'}>{actions}</div>}
     </div>
   );
 };

@@ -6,7 +6,6 @@ import {DataView} from '@antv/data-set';
 import {Divider} from 'antd';
 import classNames from 'classnames';
 import ReactFitText from 'react-fittext';
-import {autoHeight} from './autoHeight';
 import * as _ from 'lodash';
 
 type Props = {
@@ -37,7 +36,7 @@ type State = {
   legendBlock: boolean,
 };
 
-class PieComponent extends React.Component<Props, State> {
+export default class PieComponent extends React.Component<Props, State> {
   state = {
     legendData: [],
     legendBlock: false,
@@ -256,5 +255,3 @@ class PieComponent extends React.Component<Props, State> {
     );
   }
 }
-
-export default autoHeight(PieComponent);
