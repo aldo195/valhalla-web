@@ -57,6 +57,7 @@ export type MenuItem = {
   +target?: string,
   +icon?: string,
   +hideInMenu?: boolean,
+  +key?: string,
   +roles: Array<string>,
   +children: Array<MenuItem>,
 };

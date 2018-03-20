@@ -11,6 +11,7 @@ type NotificationsList = Array<{
   datetime: string,
   extra?: string,
   key?: string,
+  avatar?: string,
   read: boolean,
 }>;
 

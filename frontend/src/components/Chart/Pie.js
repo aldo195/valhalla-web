@@ -8,6 +8,14 @@ import classNames from 'classnames';
 import ReactFitText from 'react-fittext';
 import * as _ from 'lodash';
 
+type LegendItem = {
+  checked: boolean,
+  color: string,
+  percent: number,
+  x: string,
+  y: string,
+};
+
 type Props = {
   valueFormat?: string => string,
   subTitle: string,
@@ -23,16 +31,16 @@ type Props = {
   animate: boolean,
   colors: Array<string>,
   lineWidth: number,
+  selected: boolean,
+  tooltip: boolean,
+  data: Array<{
+    x: string,
+    y: number,
+  }>,
 };
 
 type State = {
-  legendData: Array<{
-    checked: boolean,
-    color: string,
-    percent: number,
-    x: string,
-    y: string,
-  }>,
+  legendData: Array<LegendItem>,
   legendBlock: boolean,
 };
 
@@ -43,7 +51,6 @@ export default class PieComponent extends React.Component<Props, State> {
   };
 
   chart: any;
-  root: any;
 
   componentDidMount() {
     this.getLegendData();
@@ -56,7 +63,7 @@ export default class PieComponent extends React.Component<Props, State> {
     this.resize.cancel();
   }
 
-  getG2Instance = chart => {
+  getG2Instance = (chart: any) => {
     this.chart = chart;
   };
 
@@ -82,24 +89,18 @@ export default class PieComponent extends React.Component<Props, State> {
   // For window resize auto responsive legend.
   resize = _.debounce(() => {
     const {hasLegend} = this.props;
-    if (!hasLegend || !this.root) {
+    if (!hasLegend) {
       window.removeEventListener('resize', this.resize);
       return;
     }
-    if (this.root.parentNode.clientWidth <= 380) {
-      if (!this.state.legendBlock) {
-        this.setState({
-          legendBlock: true,
-        });
-      }
-    } else if (this.state.legendBlock) {
+    if (this.state.legendBlock) {
       this.setState({
         legendBlock: false,
       });
     }
   }, 300);
 
-  handleLegendClick = (item, i) => {
+  handleLegendClick = (item: LegendItem, i: number) => {
     const newItem = item;
     newItem.checked = !newItem.checked;
 

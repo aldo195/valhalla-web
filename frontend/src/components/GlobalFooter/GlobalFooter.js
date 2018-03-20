@@ -9,6 +9,7 @@ type Props = {
     key: string,
     href: string,
     title: string,
+    blankTarget: boolean,
   }>,
   copyright: string,
 };
