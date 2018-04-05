@@ -1,14 +1,15 @@
-import {combineReducers} from 'redux';
+import {combineReducers, Reducer} from 'redux';
 import {auth} from './auth';
-import {rules} from './rules';
 import {notifications} from './notifications';
 import {organization} from './organization';
 import {ruleById} from './ruleById';
+import {rules} from './rules';
+import {State} from './types';
 
-export const rootReducer = combineReducers({
+export const rootReducer: Reducer<State> = combineReducers<State>({
   auth,
   notifications,
   organization,
-  rules,
   ruleById,
+  rules,
 });

@@ -1,27 +1,34 @@
+import {History} from 'history';
+import {ActionCreator} from 'redux';
 import * as api from '../api';
-import * as actionTypes from '../constants/actionTypes';
 import * as routes from '../constants/routes';
+import {State} from '../reducers/types';
+import {LoginFailureAction, LoginRequestAction, LoginSuccessAction} from './types';
 
-export const loginRequest = () => ({
-  type: actionTypes.LOGIN_REQUEST,
+export const loginRequest: ActionCreator<LoginRequestAction> = () => ({
+  type: 'LOGIN_REQUEST',
 });
 
-export const loginSuccess = token => ({
-  type: actionTypes.LOGIN_SUCCESS,
-  token,
+export const loginSuccess: ActionCreator<LoginSuccessAction> = (token: string) => ({
+  payload: {
+    token,
+  },
+  type: 'LOGIN_SUCCESS',
 });
 
-export const loginFailure = errorMessage => ({
-  type: actionTypes.LOGIN_FAILURE,
-  errorMessage,
+export const loginFailure: ActionCreator<LoginFailureAction> = (errorMessage: string) => ({
+  payload: {
+    errorMessage,
+  },
+  type: 'LOGIN_FAILURE',
 });
 
-const shouldLogin = state => {
+const shouldLogin = (state: State) => {
   const auth = state.auth;
   return !auth.isFetching;
 };
 
-export const loginIfNeeded = (email, password, remember, history) => async (dispatch, getState) => {
+export const loginIfNeeded = (email, password, remember: boolean, history: History) => async (dispatch, getState) => {
   const state = getState();
   if (shouldLogin(state)) {
     dispatch(loginRequest());
@@ -39,30 +46,34 @@ export const loginIfNeeded = (email, password, remember, history) => async (disp
 };
 
 export const logout = () => ({
-  type: actionTypes.LOGOUT,
+  type: 'LOGOUT',
 });
 
-export const logoutAndRedirect = history => dispatch => {
+export const logoutAndRedirect = (history: History) => dispatch => {
   localStorage.removeItem('token');
   dispatch(logout());
   history.push(routes.LOGIN);
 };
 
 export const registerRequest = () => ({
-  type: actionTypes.REGISTER_REQUEST,
+  type: 'REGISTER_REQUEST',
 });
 
-export const registerSuccess = token => ({
-  type: actionTypes.REGISTER_SUCCESS,
-  token,
+export const registerSuccess = (token: string) => ({
+  payload: {
+    token,
+  },
+  type: 'REGISTER_SUCCESS',
 });
 
-export const registerFailure = errorMessage => ({
-  type: actionTypes.REGISTER_FAILURE,
-  errorMessage,
+export const registerFailure = (errorMessage: string) => ({
+  payload: {
+    errorMessage,
+  },
+  type: 'REGISTER_FAILURE',
 });
 
-const shouldRegister = state => {
+const shouldRegister = (state: State) => {
   const auth = state.auth;
   return !auth.isFetching;
 };

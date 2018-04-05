@@ -1,50 +1,51 @@
-import * as actionTypes from '../constants/actionTypes';
 import * as _ from 'lodash';
-import moment from 'moment';
+import {DateTime} from 'luxon';
+import {Reducer} from 'redux';
+import * as actionTypes from '../constants/actionTypes';
+import {RulesState, State} from './types';
 
-export const rules = (
-  state = {
-    rules: [],
-    isFetching: false,
-    errorMessage: null,
-  },
-  action,
-) => {
+const initialState: RulesState = {
+  errorMessage: null,
+  isFetching: false,
+  rules: [],
+};
+
+export const rules: Reducer<RulesState> = (state: RulesState = initialState, action) => {
   switch (action.type) {
     case actionTypes.LOAD_RULES_REQUEST:
       return {
         ...state,
-        isFetching: true,
         errorMessage: null,
+        isFetching: true,
       };
     case actionTypes.LOAD_RULES_SUCCESS:
       return {
-        rules: _.map(action.response.rules, rule => rule.rule_id),
-        isFetching: false,
         errorMessage: null,
+        isFetching: false,
+        rules: _.map(action.response.rules, rule => rule.rule_id),
       };
     case actionTypes.LOAD_RULES_FAILURE:
       return {
-        rules: [],
-        isFetching: false,
         errorMessage: action.errorMessage,
+        isFetching: false,
+        rules: [],
       };
     default:
       return state;
   }
 };
 
-export const getRules = state => {
+export const getRules = (state: State) => {
   return state.rules;
 };
 
-export const getFullRules = state => {
-  return _.values(_.pick(state.ruleById, state.rules.rules));
+export const getFullRules = (state: State) => {
+  return _.values(_.pick(state.ruleById, state.rules.rules as _.Many<_.PropertyName>));
 };
 
-export const getRuleStats = state => {
+export const getRuleStats = (state: State) => {
   const rules = _.values(state.ruleById);
-  const lastWeekDate = moment().subtract(7, 'days');
+  const lastWeekDate = DateTime.utc().minus({days: 7});
   const total = rules.length || 0;
 
   let passing = 0;
@@ -68,7 +69,7 @@ export const getRuleStats = state => {
     }
 
     // Count rules created in the last week.
-    if (moment(r.first_test_time).isSameOrAfter(lastWeekDate)) {
+    if (DateTime.fromISO(r.first_test_time) >= lastWeekDate) {
       lastWeek++;
     }
   });
@@ -78,8 +79,8 @@ export const getRuleStats = state => {
 
   return {
     categories,
-    total,
     lastWeek,
+    total,
     validation: passing / total || 0,
   };
 };

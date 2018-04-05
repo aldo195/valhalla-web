@@ -1,49 +1,50 @@
+import {Reducer} from 'redux';
 import * as actionTypes from '../constants/actionTypes';
+import {NotificationsState, State} from './types';
 
-export const notifications = (
-  state = {
-    notifications: [],
-    isFetching: false,
-    errorMessage: null,
-  },
-  action,
-) => {
+const initialState: NotificationsState = {
+  errorMessage: null,
+  isFetching: false,
+  notifications: [],
+};
+
+export const notifications: Reducer<NotificationsState> = (state: NotificationsState = initialState, action) => {
   switch (action.type) {
     case actionTypes.LOAD_NOTIFICATIONS_REQUEST:
       return {
         ...state,
-        isFetching: true,
         errorMessage: null,
+        isFetching: true,
       };
     case actionTypes.LOAD_NOTIFICATIONS_SUCCESS:
       return {
-        notifications: action.response.notifications,
-        isFetching: false,
         errorMessage: null,
+        isFetching: false,
+        notifications: action.response.notifications,
       };
     case actionTypes.LOAD_NOTIFICATIONS_FAILURE:
       return {
-        notifications: [],
-        isFetching: false,
         errorMessage: action.errorMessage,
+        isFetching: false,
+        notifications: [],
       };
     case actionTypes.CLEAR_NOTIFICATIONS_REQUEST:
       return {
-        notifications: [],
-        isFetching: false,
         errorMessage: null,
+        isFetching: false,
+        notifications: [],
       };
     case actionTypes.CLEAR_NOTIFICATIONS_FAILURE:
       return {
         ...state,
-        isFetching: false,
         errorMessage: action.errorMessage,
+        isFetching: false,
       };
     default:
       return state;
   }
 };
 
-export const getNotifications = state => {
+export const getNotifications = (state: State) => {
   return state.notifications;
 };

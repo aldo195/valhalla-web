@@ -1,37 +1,38 @@
+import {Reducer} from 'redux';
 import * as actionTypes from '../constants/actionTypes';
+import {OrganizationState, State} from './types';
 
-export const organization = (
-  state = {
-    details: {},
-    isFetching: false,
-    errorMessage: null,
-  },
-  action,
-) => {
+const initialState: OrganizationState = {
+  details: null,
+  errorMessage: null,
+  isFetching: false,
+};
+
+export const organization: Reducer<OrganizationState> = (state: OrganizationState = initialState, action) => {
   switch (action.type) {
     case actionTypes.GET_ORGANIZATION_REQUEST:
       return {
         ...state,
-        isFetching: true,
         errorMessage: null,
+        isFetching: true,
       };
     case actionTypes.GET_ORGANIZATION_SUCCESS:
       return {
         details: action.response,
-        isFetching: false,
         errorMessage: null,
+        isFetching: false,
       };
     case actionTypes.GET_ORGANIZATION_FAILURE:
       return {
-        details: {},
-        isFetching: false,
+        details: null,
         errorMessage: action.errorMessage,
+        isFetching: false,
       };
     default:
       return state;
   }
 };
 
-export const getOrganization = state => {
+export const getOrganization = (state: State) => {
   return state.organization;
 };

@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import registerServiceWorker from './registerServiceWorker';
 import './index.css';
 import {Provider} from 'react-redux';
-import {store} from './store';
+import {store} from './store/index';
 import {LocaleProvider} from 'antd';
 import enUS from 'antd/lib/locale-provider/en_US';
 import {ValhallaApp} from './App';
