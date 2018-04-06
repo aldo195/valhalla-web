@@ -31,12 +31,14 @@ export interface NotificationsState {
   readonly notifications: ReadonlyArray<Notification>;
 }
 
+export interface Organization {
+  readonly title: string;
+}
+
 export interface OrganizationState {
   readonly errorMessage: string | null;
   readonly isFetching: boolean;
-  readonly details: {
-    readonly title: string;
-  } | null;
+  readonly details: Organization | null;
 }
 
 export interface Rule {

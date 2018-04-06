@@ -1,8 +1,7 @@
 import {Reducer} from 'redux';
-import * as actionTypes from '../constants/actionTypes';
 import {NotificationsState, State} from './types';
 
-const initialState: NotificationsState = {
+export const initialState: NotificationsState = {
   errorMessage: null,
   isFetching: false,
   notifications: [],
@@ -10,31 +9,31 @@ const initialState: NotificationsState = {
 
 export const notifications: Reducer<NotificationsState> = (state: NotificationsState = initialState, action) => {
   switch (action.type) {
-    case actionTypes.LOAD_NOTIFICATIONS_REQUEST:
+    case 'LOAD_NOTIFICATIONS_REQUEST':
       return {
         ...state,
         errorMessage: null,
         isFetching: true,
       };
-    case actionTypes.LOAD_NOTIFICATIONS_SUCCESS:
+    case 'LOAD_NOTIFICATIONS_SUCCESS':
       return {
         errorMessage: null,
         isFetching: false,
         notifications: action.response.notifications,
       };
-    case actionTypes.LOAD_NOTIFICATIONS_FAILURE:
+    case 'LOAD_NOTIFICATIONS_FAILURE':
       return {
         errorMessage: action.errorMessage,
         isFetching: false,
         notifications: [],
       };
-    case actionTypes.CLEAR_NOTIFICATIONS_REQUEST:
+    case 'CLEAR_NOTIFICATIONS_REQUEST':
       return {
         errorMessage: null,
         isFetching: false,
         notifications: [],
       };
-    case actionTypes.CLEAR_NOTIFICATIONS_FAILURE:
+    case 'CLEAR_NOTIFICATIONS_FAILURE':
       return {
         ...state,
         errorMessage: action.errorMessage,

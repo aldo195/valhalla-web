@@ -1,21 +1,20 @@
-// @flow
 import React from 'react';
 import {Route, Redirect} from 'react-router-dom';
 import * as api from '../api';
-import * as types from '../types';
 import {getAuthDetails} from '../reducers/auth';
 import {bindActionCreators} from 'redux';
 import {loginSuccess} from '../actions/auth';
 import {connect} from 'react-redux';
+import {AuthDetails} from '../reducers/types';
 
-type Props = {
-  component: () => void,
-  render: ({}) => void,
-  roles: Array<string>,
-  redirectPath: string,
-  auth: types.AuthDetails,
-  loginSuccess: string => types.ThunkAction,
-};
+interface Props {
+  component: () => void;
+  render: ({}) => void;
+  roles: ReadonlyArray<string>;
+  redirectPath: string;
+  auth: AuthDetails;
+  loginSuccess: string;
+}
 
 class AuthorizedRoute extends React.Component<Props> {
   componentWillMount() {

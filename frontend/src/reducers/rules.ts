@@ -1,10 +1,9 @@
 import * as _ from 'lodash';
 import {DateTime} from 'luxon';
 import {Reducer} from 'redux';
-import * as actionTypes from '../constants/actionTypes';
-import {RulesState, State} from './types';
+import {Rule, RulesState, State} from './types';
 
-const initialState: RulesState = {
+export const initialState: RulesState = {
   errorMessage: null,
   isFetching: false,
   rules: [],
@@ -12,19 +11,19 @@ const initialState: RulesState = {
 
 export const rules: Reducer<RulesState> = (state: RulesState = initialState, action) => {
   switch (action.type) {
-    case actionTypes.LOAD_RULES_REQUEST:
+    case 'LOAD_RULES_REQUEST':
       return {
         ...state,
         errorMessage: null,
         isFetching: true,
       };
-    case actionTypes.LOAD_RULES_SUCCESS:
+    case 'LOAD_RULES_SUCCESS':
       return {
         errorMessage: null,
         isFetching: false,
-        rules: _.map(action.response.rules, rule => rule.rule_id),
+        rules: _.map(action.response.rules, (rule: Rule) => rule.rule_id),
       };
-    case actionTypes.LOAD_RULES_FAILURE:
+    case 'LOAD_RULES_FAILURE':
       return {
         errorMessage: action.errorMessage,
         isFetching: false,
@@ -52,7 +51,7 @@ export const getRuleStats = (state: State) => {
   let lastWeek = 0;
   let categories = {};
 
-  _.forEach(_.values(rules), r => {
+  _.forEach(_.values(rules), (r: Rule) => {
     // Extract stats for each rules category.
     if (!categories[r.category]) {
       categories[r.category] = {name: r.category};

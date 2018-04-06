@@ -1,4 +1,3 @@
-// @flow
 import React from 'react';
 import '../index.css';
 import {Spin} from 'antd';
@@ -8,14 +7,14 @@ let defaultLoadingComponent = () => {
 };
 
 type ConfigType = {
-  component: () => void,
-  LoadingComponent: () => any,
+  component: () => void;
+  LoadingComponent: () => any;
 };
 
 type Props = {};
 
 type State = {
-  Component: null | (() => null),
+  Component: null | (() => null);
 };
 
 export default function loadDynamicComponent(config: ConfigType) {

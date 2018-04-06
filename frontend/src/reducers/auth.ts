@@ -12,7 +12,7 @@ export interface TokenDetails {
 const token = localStorage.getItem('token');
 const decodedToken: TokenDetails | null = token ? jwtDecode<TokenDetails>(token) : null;
 
-const initialState: AuthState = {
+export const initialState: AuthState = {
   avatar: null,
   email: decodedToken ? decodedToken.email : null,
   errorMessage: null,
