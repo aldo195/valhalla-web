@@ -1,12 +1,13 @@
 import * as _ from 'lodash';
 import {Reducer} from 'redux';
+import * as FromActions from '../actions/rules';
 import {Rule, RuleByIdState, State} from './types';
 
 export const initialState: RuleByIdState = {};
 
-export const ruleById: Reducer<RuleByIdState> = (state: RuleByIdState = initialState, action) => {
+export const ruleById: Reducer<RuleByIdState> = (state = initialState, action) => {
   switch (action.type) {
-    case 'LOAD_RULES_SUCCESS':
+    case FromActions.LOAD_RULES_SUCCESS:
       const nextState = {...state};
       _.forEach(_.values(action.response.rules), (r: Rule) => {
         nextState[r.rule_id] = r;

@@ -1,6 +1,7 @@
 import * as _ from 'lodash';
 import {DateTime} from 'luxon';
 import {Reducer} from 'redux';
+import * as FromActions from '../actions/rules';
 import {Rule, RulesState, State} from './types';
 
 export const initialState: RulesState = {
@@ -9,23 +10,23 @@ export const initialState: RulesState = {
   rules: [],
 };
 
-export const rules: Reducer<RulesState> = (state: RulesState = initialState, action) => {
+export const rules: Reducer<RulesState> = (state = initialState, action: FromActions.LoadRulesActions) => {
   switch (action.type) {
-    case 'LOAD_RULES_REQUEST':
+    case FromActions.LOAD_RULES_REQUEST:
       return {
         ...state,
         errorMessage: null,
         isFetching: true,
       };
-    case 'LOAD_RULES_SUCCESS':
+    case FromActions.LOAD_RULES_SUCCESS:
       return {
         errorMessage: null,
         isFetching: false,
-        rules: _.map(action.response.rules, (rule: Rule) => rule.rule_id),
+        rules: _.map(action.payload.rules, (rule: Rule) => rule.rule_id),
       };
-    case 'LOAD_RULES_FAILURE':
+    case FromActions.LOAD_RULES_FAILURE:
       return {
-        errorMessage: action.errorMessage,
+        errorMessage: action.payload,
         isFetching: false,
         rules: [],
       };
@@ -43,15 +44,15 @@ export const getFullRules = (state: State) => {
 };
 
 export const getRuleStats = (state: State) => {
-  const rules = _.values(state.ruleById);
+  const allRules = _.values(state.ruleById);
   const lastWeekDate = DateTime.utc().minus({days: 7});
-  const total = rules.length || 0;
+  const total = allRules.length || 0;
 
   let passing = 0;
   let lastWeek = 0;
   let categories = {};
 
-  _.forEach(_.values(rules), (r: Rule) => {
+  _.forEach(_.values(allRules), (r: Rule) => {
     // Extract stats for each rules category.
     if (!categories[r.category]) {
       categories[r.category] = {name: r.category};

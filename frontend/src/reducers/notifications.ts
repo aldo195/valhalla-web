@@ -1,4 +1,5 @@
 import {Reducer} from 'redux';
+import * as FromActions from '../actions/notifications';
 import {NotificationsState, State} from './types';
 
 export const initialState: NotificationsState = {
@@ -7,36 +8,39 @@ export const initialState: NotificationsState = {
   notifications: [],
 };
 
-export const notifications: Reducer<NotificationsState> = (state: NotificationsState = initialState, action) => {
+export const notifications: Reducer<NotificationsState> = (
+  state = initialState,
+  action: FromActions.LoadNotificationsActions | FromActions.ClearNotificationsActions,
+) => {
   switch (action.type) {
-    case 'LOAD_NOTIFICATIONS_REQUEST':
+    case FromActions.LOAD_NOTIFICATIONS_REQUEST:
       return {
         ...state,
         errorMessage: null,
         isFetching: true,
       };
-    case 'LOAD_NOTIFICATIONS_SUCCESS':
+    case FromActions.LOAD_NOTIFICATIONS_SUCCESS:
       return {
         errorMessage: null,
         isFetching: false,
-        notifications: action.response.notifications,
+        notifications: action.payload.notifications,
       };
-    case 'LOAD_NOTIFICATIONS_FAILURE':
+    case FromActions.LOAD_NOTIFICATIONS_FAILURE:
       return {
-        errorMessage: action.errorMessage,
+        errorMessage: action.payload,
         isFetching: false,
         notifications: [],
       };
-    case 'CLEAR_NOTIFICATIONS_REQUEST':
+    case FromActions.CLEAR_NOTIFICATIONS_REQUEST:
       return {
         errorMessage: null,
         isFetching: false,
         notifications: [],
       };
-    case 'CLEAR_NOTIFICATIONS_FAILURE':
+    case FromActions.CLEAR_NOTIFICATIONS_FAILURE:
       return {
         ...state,
-        errorMessage: action.errorMessage,
+        errorMessage: action.payload,
         isFetching: false,
       };
     default:

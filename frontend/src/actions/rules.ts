@@ -1,28 +1,25 @@
 import * as _ from 'lodash';
-import {ActionCreator, Dispatch} from 'redux';
+import {Dispatch} from 'redux';
 import * as api from '../api';
-import {State} from '../reducers/types';
-import * as actionTypes from './types';
+import {Rule, State} from '../reducers/types';
+import {createAction, GetState} from './action-helpers';
+import {ActionsUnion} from './types';
 
-export const loadRulesRequest: ActionCreator<actionTypes.LoadRulesRequestAction> = () => ({
-  type: 'LOAD_RULES_REQUEST',
-});
+export const LOAD_RULES_REQUEST = 'LOAD_RULES_REQUEST';
+export const LOAD_RULES_SUCCESS = 'LOAD_RULES_SUCCESS';
+export const LOAD_RULES_FAILURE = 'LOAD_RULES_FAILURE';
 
-export const loadRulesSuccess: ActionCreator<actionTypes.LoadRulesSuccessAction> = (
-  response: actionTypes.LoadRulesSuccessPayload,
-) => ({
-  payload: {
-    response,
-  },
-  type: 'LOAD_RULES_SUCCESS',
-});
+export interface LoadRulesSuccessPayload {
+  rules: ReadonlyArray<Rule>;
+}
 
-export const loadRulesFailure: ActionCreator<actionTypes.LoadRulesFailureAction> = (errorMessage: string) => ({
-  payload: {
-    errorMessage,
-  },
-  type: 'LOAD_RULES_FAILURE',
-});
+export const LoadRulesActions = {
+  loadRulesRequest: () => createAction(LOAD_RULES_REQUEST),
+  loadRulesSuccess: (response: LoadRulesSuccessPayload) => createAction(LOAD_RULES_SUCCESS, response),
+  loadRulesFailure: (errorMessage: string) => createAction(LOAD_RULES_FAILURE, errorMessage),
+};
+
+export type LoadRulesActions = ActionsUnion<typeof LoadRulesActions>;
 
 const shouldLoadRules = (state: State) => {
   const rules = state.rules;
@@ -34,19 +31,16 @@ const shouldLoadRules = (state: State) => {
   return _.isEmpty(rules.rules);
 };
 
-export const loadRulesIfNeeded = (token: string) => async (
-  dispatch: Dispatch<State>,
-  getState: actionTypes.GetState,
-) => {
+export const loadRulesIfNeeded = (token: string) => async (dispatch: Dispatch<State>, getState: GetState) => {
   const state = getState();
   if (shouldLoadRules(state)) {
-    dispatch(loadRulesRequest());
+    dispatch(LoadRulesActions.loadRulesRequest());
 
     try {
       const response = await api.loadRules(token);
-      dispatch(loadRulesSuccess(response));
+      dispatch(LoadRulesActions.loadRulesSuccess(response));
     } catch (error) {
-      dispatch(loadRulesFailure(error.message));
+      dispatch(LoadRulesActions.loadRulesFailure(error.message));
     }
   }
 };

@@ -1,4 +1,5 @@
 import {Reducer} from 'redux';
+import * as FromActions from '../actions/organization';
 import {OrganizationState, State} from './types';
 
 export const initialState: OrganizationState = {
@@ -7,24 +8,27 @@ export const initialState: OrganizationState = {
   isFetching: false,
 };
 
-export const organization: Reducer<OrganizationState> = (state: OrganizationState = initialState, action) => {
+export const organization: Reducer<OrganizationState> = (
+  state = initialState,
+  action: FromActions.GetOrganizationActions,
+) => {
   switch (action.type) {
-    case 'GET_ORGANIZATION_REQUEST':
+    case FromActions.GET_ORGANIZATION_REQUEST:
       return {
         ...state,
         errorMessage: null,
         isFetching: true,
       };
-    case 'GET_ORGANIZATION_SUCCESS':
+    case FromActions.GET_ORGANIZATION_SUCCESS:
       return {
-        details: action.response,
+        details: action.payload,
         errorMessage: null,
         isFetching: false,
       };
-    case 'GET_ORGANIZATION_FAILURE':
+    case FromActions.GET_ORGANIZATION_FAILURE:
       return {
         details: null,
-        errorMessage: action.errorMessage,
+        errorMessage: action.payload,
         isFetching: false,
       };
     default:

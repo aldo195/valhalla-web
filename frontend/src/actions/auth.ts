@@ -1,27 +1,22 @@
 import {History} from 'history';
-import {ActionCreator, Dispatch} from 'redux';
+import {Dispatch} from 'redux';
 import * as api from '../api';
 import * as routes from '../constants/routes';
 import {State} from '../reducers/types';
-import * as actionTypes from './types';
+import {createAction, GetState} from './action-helpers';
+import {ActionsUnion} from './types';
 
-export const loginRequest: ActionCreator<actionTypes.LoginRequestAction> = () => ({
-  type: 'LOGIN_REQUEST',
-});
+export const LOGIN_REQUEST = 'LOGIN_REQUEST';
+export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
+export const LOGIN_FAILURE = 'LOGIN_FAILURE';
 
-export const loginSuccess: ActionCreator<actionTypes.LoginSuccessAction> = (token: string) => ({
-  payload: {
-    token,
-  },
-  type: 'LOGIN_SUCCESS',
-});
+export const LoginActions = {
+  loginRequest: () => createAction(LOGIN_REQUEST),
+  loginSuccess: (token: string) => createAction(LOGIN_SUCCESS, token),
+  loginFailure: (errorMessage: string) => createAction(LOGIN_FAILURE, errorMessage),
+};
 
-export const loginFailure: ActionCreator<actionTypes.LoginFailureAction> = (errorMessage: string) => ({
-  payload: {
-    errorMessage,
-  },
-  type: 'LOGIN_FAILURE',
-});
+export type LoginActions = ActionsUnion<typeof LoginActions>;
 
 const shouldLogin = (state: State) => {
   const auth = state.auth;
@@ -30,51 +25,49 @@ const shouldLogin = (state: State) => {
 
 export const loginIfNeeded = (email: string, password: string, remember: boolean, history: History) => async (
   dispatch: Dispatch<State>,
-  getState: actionTypes.GetState,
+  getState: GetState,
 ) => {
   const state = getState();
   if (shouldLogin(state)) {
-    dispatch(loginRequest());
+    dispatch(LoginActions.loginRequest());
 
     try {
       const response = await api.login(email, password, remember);
       // Handle local storage here and not in the reducer, to keep reducer clean of side-effects.
       localStorage.setItem('token', response.token);
-      dispatch(loginSuccess(response.token));
+      dispatch(LoginActions.loginSuccess(response.token));
       history.push(routes.DEFAULT);
     } catch (error) {
-      dispatch(loginFailure(error.message));
+      dispatch(LoginActions.loginFailure(error.message));
     }
   }
 };
 
-export const logout: ActionCreator<actionTypes.LogoutAction> = () => ({
-  type: 'LOGOUT',
-});
+export const LOGOUT = 'LOGOUT';
+
+export const LogoutAction = {
+  logout: () => createAction(LOGOUT),
+};
+
+export type LogoutAction = ActionsUnion<typeof LogoutAction>;
 
 export const logoutAndRedirect = (history: History) => (dispatch: Dispatch<State>) => {
   localStorage.removeItem('token');
-  dispatch(logout());
+  dispatch(LogoutAction.logout());
   history.push(routes.LOGIN);
 };
 
-export const registerRequest: ActionCreator<actionTypes.RegisterRequestAction> = () => ({
-  type: 'REGISTER_REQUEST',
-});
+export const REGISTER_REQUEST = 'REGISTER_REQUEST';
+export const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
+export const REGISTER_FAILURE = 'REGISTER_FAILURE';
 
-export const registerSuccess: ActionCreator<actionTypes.RegisterSuccessAction> = (token: string) => ({
-  payload: {
-    token,
-  },
-  type: 'REGISTER_SUCCESS',
-});
+export const RegisterActions = {
+  registerRequest: () => createAction(REGISTER_REQUEST),
+  registerSuccess: (token: string) => createAction(REGISTER_SUCCESS, token),
+  registerFailure: (errorMessage: string) => createAction(REGISTER_FAILURE, errorMessage),
+};
 
-export const registerFailure: ActionCreator<actionTypes.RegisterFailureAction> = (errorMessage: string) => ({
-  payload: {
-    errorMessage,
-  },
-  type: 'REGISTER_FAILURE',
-});
+export type RegisterActions = ActionsUnion<typeof RegisterActions>;
 
 const shouldRegister = (state: State) => {
   const auth = state.auth;
@@ -87,19 +80,19 @@ export const registerIfNeeded = (
   organizationId: number,
   password: string,
   history: History,
-) => async (dispatch: Dispatch<State>, getState: actionTypes.GetState) => {
+) => async (dispatch: Dispatch<State>, getState: GetState) => {
   const state = getState();
   if (shouldRegister(state)) {
-    dispatch(registerRequest());
+    dispatch(RegisterActions.registerRequest());
 
     try {
       const response = await api.register(name, email, organizationId, password);
       // Handle local storage here and not in the reducer, to keep reducer clean of side-effects.
       localStorage.setItem('token', response.token);
-      dispatch(registerSuccess(response.token));
+      dispatch(RegisterActions.registerSuccess(response.token));
       history.push(routes.REGISTER_RESULT);
     } catch (error) {
-      dispatch(registerFailure(error.message));
+      dispatch(RegisterActions.registerFailure(error.message));
     }
   }
 };

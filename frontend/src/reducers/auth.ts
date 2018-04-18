@@ -1,6 +1,7 @@
 import jwtDecode from 'jwt-decode';
 import * as _ from 'lodash';
 import {Reducer} from 'redux';
+import * as FromActions from '../actions/auth';
 import {AuthState, State} from './types';
 
 export interface TokenDetails {
@@ -13,7 +14,7 @@ const token = localStorage.getItem('token');
 const decodedToken: TokenDetails | null = token ? jwtDecode<TokenDetails>(token) : null;
 
 export const initialState: AuthState = {
-  avatar: null,
+  avatar: undefined,
   email: decodedToken ? decodedToken.email : null,
   errorMessage: null,
   isAuthenticated: !_.isNil(token),
@@ -23,44 +24,47 @@ export const initialState: AuthState = {
   token,
 };
 
-export const auth: Reducer<AuthState> = (state: AuthState = initialState, action) => {
+export const auth: Reducer<AuthState> = (
+  state = initialState,
+  action: FromActions.LoginActions | FromActions.LogoutAction | FromActions.RegisterActions,
+) => {
   switch (action.type) {
-    case 'REGISTER_REQUEST':
-    case 'LOGIN_REQUEST':
+    case FromActions.REGISTER_REQUEST:
+    case FromActions.LOGIN_REQUEST:
       return {
         ...state,
         errorMessage: null,
         isAuthenticated: false,
         isFetching: true,
       };
-    case 'REGISTER_SUCCESS':
-    case 'LOGIN_SUCCESS':
-      const decodedToken = jwtDecode<TokenDetails>(action.token);
+    case FromActions.REGISTER_SUCCESS:
+    case FromActions.LOGIN_SUCCESS:
+      const newToken = jwtDecode<TokenDetails>(action.payload);
       return {
-        avatar: null,
-        email: decodedToken.email,
+        avatar: undefined,
+        email: newToken.email,
         errorMessage: null,
         isAuthenticated: true,
         isFetching: false,
-        organizationId: decodedToken.organization_id,
-        role: decodedToken.role,
-        token: action.token,
+        organizationId: newToken.organization_id,
+        role: newToken.role,
+        token: action.payload,
       };
-    case 'REGISTER_FAILURE':
-    case 'LOGIN_FAILURE':
+    case FromActions.REGISTER_FAILURE:
+    case FromActions.LOGIN_FAILURE:
       return {
-        avatar: null,
+        avatar: undefined,
         email: null,
-        errorMessage: action.errorMessage,
+        errorMessage: action.payload,
         isAuthenticated: false,
         isFetching: false,
         organizationId: null,
         role: null,
         token: null,
       };
-    case 'LOGOUT':
+    case FromActions.LOGOUT:
       return {
-        avatar: null,
+        avatar: undefined,
         email: null,
         errorMessage: null,
         isAuthenticated: false,
@@ -75,14 +79,14 @@ export const auth: Reducer<AuthState> = (state: AuthState = initialState, action
 };
 
 export const getAuthDetails = (state: State) => {
-  const {auth} = state;
+  const {auth: authState} = state;
   return {
-    avatar: auth.avatar,
-    email: auth.email,
-    isAuthenticated: auth.isAuthenticated,
-    organizationId: auth.organizationId,
-    role: auth.role,
-    token: auth.token,
+    avatar: authState.avatar,
+    email: authState.email,
+    isAuthenticated: authState.isAuthenticated,
+    organizationId: authState.organizationId,
+    role: authState.role,
+    token: authState.token,
   };
 };
 

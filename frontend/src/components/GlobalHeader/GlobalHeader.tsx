@@ -9,7 +9,6 @@ import {bindActionCreators, Dispatch} from 'redux';
 import {ThunkAction} from 'redux-thunk';
 import {logoutAndRedirect} from '../../actions/auth';
 import {clearNotificationsIfNeeded, loadNotificationsIfNeeded} from '../../actions/notifications';
-import * as actionTypes from '../../actions/types';
 import {getAuthDetails} from '../../reducers/auth';
 import {getNotifications} from '../../reducers/notifications';
 import {State} from '../../reducers/types';
@@ -28,9 +27,9 @@ interface OwnProps {
 }
 
 interface DispatchProps {
-  loadNotificationsIfNeeded: (token: string | null) => ThunkAction<actionTypes.LoadNotificationsActions, State, void>;
-  clearNotificationsIfNeeded: (token: string | null) => ThunkAction<actionTypes.ClearNotificationsActions, State, void>;
-  logoutAndRedirect: (history: History) => ThunkAction<actionTypes.LogoutAction, State, void>;
+  loadNotificationsIfNeeded: (token: string | null) => ThunkAction<void, State, void>;
+  clearNotificationsIfNeeded: (token: string | null) => ThunkAction<void, State, void>;
+  logoutAndRedirect: (history: History) => ThunkAction<void, State, void>;
 }
 
 interface StateProps {

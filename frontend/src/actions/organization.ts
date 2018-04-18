@@ -1,28 +1,21 @@
 import * as _ from 'lodash';
-import {ActionCreator, Dispatch} from 'redux';
+import {Dispatch} from 'redux';
 import * as api from '../api';
 import {Organization, State} from '../reducers/types';
-import * as actionTypes from './types';
+import {createAction, GetState} from './action-helpers';
+import {ActionsUnion} from './types';
 
-export const getOrganizationRequest: ActionCreator<actionTypes.GetOrganizationRequestAction> = () => ({
-  type: 'GET_ORGANIZATION_REQUEST',
-});
+export const GET_ORGANIZATION_REQUEST = 'GET_ORGANIZATION_REQUEST';
+export const GET_ORGANIZATION_SUCCESS = 'GET_ORGANIZATION_SUCCESS';
+export const GET_ORGANIZATION_FAILURE = 'GET_ORGANIZATION_FAILURE';
 
-export const getOrganizationSuccess: ActionCreator<actionTypes.GetOrganizationSuccessAction> = (
-  response: Organization,
-) => ({
-  payload: {
-    response,
-  },
-  type: 'GET_ORGANIZATION_SUCCESS',
-});
+export const GetOrganizationActions = {
+  getOrganizationRequest: () => createAction(GET_ORGANIZATION_REQUEST),
+  getOrganizationSuccess: (response: Organization) => createAction(GET_ORGANIZATION_SUCCESS, response),
+  getOrganizationFailure: (errorMessage: string) => createAction(GET_ORGANIZATION_FAILURE, errorMessage),
+};
 
-export const getOrganizationFailure: ActionCreator<actionTypes.GetOrganizationFailureAction> = errorMessage => ({
-  payload: {
-    errorMessage,
-  },
-  type: 'GET_ORGANIZATION_FAILURE',
-});
+export type GetOrganizationActions = ActionsUnion<typeof GetOrganizationActions>;
 
 const shouldGetOrganization = (state: State) => {
   const organization = state.organization;
@@ -36,17 +29,17 @@ const shouldGetOrganization = (state: State) => {
 
 export const getOrganizationIfNeeded = (organizationId: number, token: string) => async (
   dispatch: Dispatch<State>,
-  getState: actionTypes.GetState,
+  getState: GetState,
 ) => {
   const state = getState();
   if (shouldGetOrganization(state)) {
-    dispatch(getOrganizationRequest());
+    dispatch(GetOrganizationActions.getOrganizationRequest());
 
     try {
       const response = await api.getOrganization(organizationId, token);
-      dispatch(getOrganizationSuccess(response));
+      dispatch(GetOrganizationActions.getOrganizationSuccess(response));
     } catch (error) {
-      dispatch(getOrganizationFailure(error.message));
+      dispatch(GetOrganizationActions.getOrganizationFailure(error.message));
     }
   }
 };
