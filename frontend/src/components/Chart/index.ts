@@ -1,4 +1,4 @@
-import {track, setTheme} from 'bizcharts';
+import {setTheme, track} from 'bizcharts';
 import Pie from './Pie';
 
 track(false);

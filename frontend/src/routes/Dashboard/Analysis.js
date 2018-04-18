@@ -4,7 +4,7 @@ import './Analysis.css';
 import '../../index.css';
 import * as exceptionTypes from '../../constants/exceptionTypes';
 import {Col, Row, Card, Tabs, Spin, Alert} from 'antd';
-import {DetailsTab} from '../../components/Dashboard';
+import {DetailsTab} from '../../components/Dashboard/index';
 import {connect} from 'react-redux';
 import {getAuthDetails} from '../../reducers/auth';
 import {bindActionCreators} from 'redux';
@@ -16,21 +16,21 @@ import Exception from '../../components/Exception/Exception';
 import * as types from '../../types';
 
 type Props = {
-  auth: types.AuthDetails,
-  organization: types.Organization,
-  ruleStats: types.RuleStats,
-  getOrganizationIfNeeded: (number, string) => types.ThunkAction,
-  loadRulesIfNeeded: string => types.ThunkAction,
+  auth: types.AuthDetails;
+  organization: types.Organization;
+  ruleStats: types.RuleStats;
+  getOrganizationIfNeeded: (number, string) => types.ThunkAction;
+  loadRulesIfNeeded: (string) => types.ThunkAction;
 };
 
 type State = {
-  currentTabKey: string,
+  currentTabKey: string;
 };
 
 type InfoProps = {
-  title: string,
-  value: string,
-  bordered?: boolean,
+  title: string;
+  value: string;
+  bordered?: boolean;
 };
 
 class Analysis extends React.PureComponent<Props, State> {

@@ -4,7 +4,7 @@ export interface AuthDetails {
   readonly email: string | null;
   readonly role: string | null;
   readonly organizationId: number | null;
-  readonly avatar: string | null;
+  readonly avatar: string | undefined;
 }
 
 export interface AuthState extends AuthDetails {

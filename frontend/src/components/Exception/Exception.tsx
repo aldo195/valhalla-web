@@ -1,43 +1,42 @@
-// @flow
-import React from 'react';
-import './Exception.css';
-import * as routes from '../../constants/routes';
-import * as exceptionTypes from '../../constants/exceptionTypes';
-import classNames from 'classnames';
-import unauthorizedAccessError from '../../assets/unauthorized_access_error.svg';
-import notFoundError from '../../assets/not_found_error.svg';
-import internalServerError from '../../assets/internal_server_error.svg';
 import {Button} from 'antd';
+import classNames from 'classnames';
+import * as React from 'react';
 import {Link} from 'react-router-dom';
+import internalServerError from '../../assets/internal_server_error.svg';
+import notFoundError from '../../assets/not_found_error.svg';
+import unauthorizedAccessError from '../../assets/unauthorized_access_error.svg';
+import * as exceptionTypes from '../../constants/exceptionTypes';
+import * as routes from '../../constants/routes';
+import './Exception.css';
+
+interface ExceptionProps {
+  className?: string;
+  type: number;
+  title?: string;
+  desc?: string;
+  img?: string;
+  actions?: ReadonlyArray<React.ReactNode>;
+}
 
 const config = {
   [exceptionTypes.UNAUTHORIZED_ACCESS_ERROR]: {
+    desc: 'Unauthorized Access',
     img: unauthorizedAccessError,
     title: '403',
-    desc: 'Unauthorized Access',
   },
   [exceptionTypes.NOT_FOUND_ERROR]: {
+    desc: 'Page Not Found',
     img: notFoundError,
     title: '404',
-    desc: 'Page Not Found',
   },
   [exceptionTypes.INTERNAL_SERVER_ERROR]: {
+    desc: 'Internal Server Error',
     img: internalServerError,
     title: '500',
-    desc: 'Internal Server Error',
   },
 };
 
-type Props = {
-  className?: string,
-  type: number,
-  title?: string,
-  desc?: string,
-  img?: string,
-  actions?: Array<any>,
-};
-
-const Exception = (props: Props) => {
+const Exception = (props: ExceptionProps) => {
   const {className, type, title, desc, img, actions} = props;
 
   const pageType: number = type in config ? type : exceptionTypes.NOT_FOUND_ERROR;

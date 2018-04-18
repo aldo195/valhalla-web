@@ -1,16 +1,15 @@
-// @flow
 import React from 'react';
 import './NumberInfo.css';
 
-type Props = {
-  title: string,
-  subTitle?: string,
-  passing: number,
-  failing: number,
-  pending: number,
-};
+interface NumberInfoProps {
+  title: string;
+  subTitle?: string;
+  passing: number;
+  failing: number;
+  pending: number;
+}
 
-const NumberInfo = (props: Props) => {
+const NumberInfo = (props: NumberInfoProps) => {
   const {title, subTitle, passing, failing, pending} = props;
 
   return (

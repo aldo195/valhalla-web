@@ -1,21 +1,20 @@
-// @flow
-import React from 'react';
-import './DetailsTab.css';
 import {Col, Row} from 'antd';
-import NumberInfo from './NumberInfo';
+import React from 'react';
 import {Pie} from '../Chart';
+import './DetailsTab.css';
+import NumberInfo from './NumberInfo';
 
-type Props = {
+interface DetailsTabProps {
   data: {
-    name: string,
-    passing?: number,
-    failing?: number,
-    pending?: number,
-  },
-  isSelected: boolean,
-};
+    name: string;
+    passing?: number;
+    failing?: number;
+    pending?: number;
+  };
+  isSelected: boolean;
+}
 
-const DetailsTab = (props: Props) => {
+const DetailsTab = (props: DetailsTabProps) => {
   const {data, isSelected} = props;
 
   const passing = data.passing || 0;
@@ -30,10 +29,9 @@ const DetailsTab = (props: Props) => {
       <Col span={12} style={{paddingTop: 36}}>
         <Pie
           animate={false}
-          color={!isSelected && '#BDE4FF'}
+          color={isSelected ? '#F0F2F5' : '#BDE4FF'}
           inner={0.55}
           tooltip={false}
-          margin={[0, 0, 0, 0]}
           percent={passing / (passing + failing + pending + 0.01) * 100 + 0.01}
           height={64}
         />

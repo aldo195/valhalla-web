@@ -3,10 +3,10 @@ import React from 'react';
 import './UserLayout.css';
 import DocumentTitle from 'react-document-title';
 import {Icon} from 'antd';
-import {GlobalFooter} from '../components/GlobalFooter';
+import {GlobalFooter} from '../components/GlobalFooter/index';
 import logo from '../assets/valhalla-logo-small.png';
 import {Link, Redirect, Route, Switch, withRouter} from 'react-router-dom';
-import type {RouterHistory} from 'react-router-dom';
+import History from 'history';
 import * as routes from '../constants/routes';
 import {getRoutes} from '../utils/routing';
 import {getAuthStatus} from '../reducers/auth';
@@ -38,12 +38,12 @@ const copyright = (
 );
 
 type Props = {
-  auth: types.AuthStatus,
-  routerData: types.RouterData,
-  history: RouterHistory,
+  auth: types.AuthStatus;
+  routerData: types.RouterData;
+  history: History;
   match: {
-    path: string,
-  },
+    path: string;
+  };
 };
 
 type State = {};

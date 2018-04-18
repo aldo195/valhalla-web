@@ -1,56 +1,56 @@
-// @flow
-import './Pie.css';
-import React from 'react';
-import {Chart, Tooltip, Geom, Coord} from 'bizcharts';
 import {DataView} from '@antv/data-set';
 import {Divider} from 'antd';
+import {Chart, Coord, Geom, Tooltip} from 'bizcharts';
 import classNames from 'classnames';
+import {Bind, Debounce} from 'lodash-decorators';
+import * as React from 'react';
 import ReactFitText from 'react-fittext';
-import * as _ from 'lodash';
+import './Pie.css';
 
-type LegendItem = {
-  checked: boolean,
-  color: string,
-  percent: number,
-  x: string,
-  y: string,
-};
+interface LegendItem {
+  checked: boolean;
+  color: string;
+  percent: number;
+  x: string;
+  y: string;
+}
 
-type Props = {
-  valueFormat?: string => string,
-  subTitle: string,
-  total: number,
-  hasLegend: boolean,
-  className: string,
-  style: string,
-  height: number,
-  forceFit: boolean,
-  percent: number,
-  color: string,
-  inner: number,
-  animate: boolean,
-  colors: Array<string>,
-  lineWidth: number,
-  selected: boolean,
-  tooltip: boolean,
-  data: Array<{
-    x: string,
-    y: number,
-  }>,
-};
+interface PieProps {
+  valueFormat?: (value: string) => string;
+  subTitle?: string;
+  total?: number;
+  hasLegend?: boolean;
+  className?: string;
+  style?: React.CSSProperties;
+  height: number;
+  forceFit?: boolean;
+  percent?: number;
+  color?: string;
+  inner: number;
+  animate?: boolean;
+  colors?: string[];
+  lineWidth?: number;
+  selected?: boolean;
+  tooltip?: boolean;
+  data?: ReadonlyArray<{
+    x: string;
+    y: number;
+  }>;
+}
 
-type State = {
-  legendData: Array<LegendItem>,
-  legendBlock: boolean,
-};
+interface PieState {
+  legendData: LegendItem[];
+  legendBlock: boolean;
+}
 
-export default class PieComponent extends React.Component<Props, State> {
-  state = {
-    legendData: [],
+export default class PieComponent extends React.Component<PieProps, PieState> {
+  state: PieState = {
     legendBlock: false,
+    legendData: [],
   };
 
-  chart: any;
+  chart: G2.Chart;
+  root: HTMLElement | null;
 
   componentDidMount() {
     this.getLegendData();
@@ -60,18 +60,19 @@ export default class PieComponent extends React.Component<Props, State> {
 
   componentWillUnmount() {
     window.removeEventListener('resize', this.resize);
-    this.resize.cancel();
   }
 
-  getG2Instance = (chart: any) => {
+  getG2Instance = (chart: G2.Chart) => {
     this.chart = chart;
   };
 
   // For custom legend view.
   getLegendData = () => {
-    if (!this.chart) return;
+    if (!this.chart) {
+      return;
+    }
     const geom = this.chart.getAllGeoms()[0];
-    const items = geom.get('dataArray') || [];
+    const items: ReadonlyArray<LegendItem> = geom.get('dataArray') || [];
 
     const legendData = items.map(item => {
       /* eslint no-underscore-dangle:0 */
@@ -87,18 +88,30 @@ export default class PieComponent extends React.Component<Props, State> {
   };
 
   // For window resize auto responsive legend.
-  resize = _.debounce(() => {
+  @Bind()
+  @Debounce(300)
+  resize() {
     const {hasLegend} = this.props;
-    if (!hasLegend) {
+    if (!hasLegend || !this.root) {
       window.removeEventListener('resize', this.resize);
       return;
     }
-    if (this.state.legendBlock) {
+    if (this.root.parentElement && this.root.parentElement.clientWidth <= 380) {
+      if (!this.state.legendBlock) {
+        this.setState({
+          legendBlock: true,
+        });
+      }
+    } else if (this.state.legendBlock) {
       this.setState({
         legendBlock: false,
       });
     }
-  }, 300);
+  }
+
+  handleRoot = (n: HTMLElement | null) => {
+    this.root = n;
+  };
 
   handleLegendClick = (item: LegendItem, i: number) => {
     const newItem = item;
@@ -110,7 +123,7 @@ export default class PieComponent extends React.Component<Props, State> {
     const filteredLegendData = legendData.filter(l => l.checked).map(l => l.x);
 
     if (this.chart) {
-      this.chart.filter('x', val => filteredLegendData.indexOf(val) > -1);
+      this.chart.filter('x', (val: string) => filteredLegendData.indexOf(val) > -1);
     }
 
     this.setState({
@@ -142,33 +155,22 @@ export default class PieComponent extends React.Component<Props, State> {
       'legend-block': legendBlock,
     });
 
-    const defaultColors = colors;
+    const defaultColors = colors || ['#F0F2F5'];
     let data = this.props.data || [];
     let selected = this.props.selected || true;
     let tooltip = this.props.tooltip || true;
-    let formatColor;
 
-    const scale = {
-      x: {
-        type: 'cat',
-        range: [0, 1],
-      },
-      y: {
-        min: 0,
-      },
+    const formatColor = (d?: any) => {
+      if (d === 'primary') {
+        return color || 'rgba(24, 144, 255, 0.85)';
+      } else {
+        return '#F0F2F5';
+      }
     };
 
     if (percent) {
       selected = false;
       tooltip = false;
-      formatColor = value => {
-        if (value === 'primary') {
-          return color || 'rgba(24, 144, 255, 0.85)';
-        } else {
-          return '#F0F2F5';
-        }
-      };
-
       data = [
         {
           x: 'primary',
@@ -181,30 +183,34 @@ export default class PieComponent extends React.Component<Props, State> {
       ];
     }
 
-    const tooltipFormat = [
+    const tooltipFormat: [string, (x: string, y: number) => {name: string; value: string}] = [
       'x*percent',
-      (x, p) => ({
+      (x: string, y: number) => ({
         name: x,
-        value: `${(p * 100).toFixed(2)}%`,
+        value: `${(y * 100).toFixed(2)}%`,
       }),
     ];
 
-    const padding = [12, 0, 12, 0];
+    const padding = {
+      top: 12,
+      right: 0,
+      bottom: 12,
+      left: 0,
+    };
 
     const dv = new DataView();
     dv.source(data).transform({
-      type: 'percent',
-      field: 'y',
-      dimension: 'x',
       as: 'percent',
+      dimension: 'x',
+      field: 'y',
+      type: 'percent',
     });
 
     return (
-      <div className={pieClassName} style={style}>
+      <div ref={this.handleRoot} className={pieClassName} style={style}>
         <ReactFitText maxFontSize={25}>
           <div className={'chart'}>
             <Chart
-              scale={scale}
               height={height}
               forceFit={forceFit}
               data={dv}
@@ -219,16 +225,16 @@ export default class PieComponent extends React.Component<Props, State> {
                 tooltip={tooltip && tooltipFormat}
                 type="intervalStack"
                 position="percent"
-                color={['x', percent ? formatColor : defaultColors]}
-                selected={selected}
+                color={percent ? ['x', formatColor] : ['x', defaultColors]}
+                select={selected}
               />
             </Chart>
 
             {(subTitle || total) && (
               <div className={'total'}>
                 {subTitle && <h4 className="pie-sub-title">{subTitle}</h4>}
-                {/* eslint-disable-next-line */}
-                {total && <div className="pie-stat" dangerouslySetInnerHTML={{__html: total}} />}
+                {/* tslint:disable-next-line */}
+                {total && <div className="pie-stat" dangerouslySetInnerHTML={{__html: total.toString()}} />}
               </div>
             )}
           </div>

@@ -4,8 +4,8 @@ import * as types from '../types';
 import {Layout, Icon} from 'antd';
 import DocumentTitle from 'react-document-title';
 import {Route, Redirect, Switch} from 'react-router-dom';
-import {GlobalHeader} from '../components/GlobalHeader';
-import {GlobalFooter} from '../components/GlobalFooter';
+import {GlobalHeader} from '../components/GlobalHeader/index';
+import {GlobalFooter} from '../components/GlobalFooter/index';
 import {DrawerSiderMenu} from '../components/SiderMenu';
 import * as routes from '../constants/routes';
 import {getRoutes} from '../utils/routing';
@@ -41,19 +41,19 @@ enquireScreen(result => {
 
 type Props = {
   location: {
-    pathname: string,
-  },
+    pathname: string;
+  };
   match: {
-    path: string,
-    url: string,
-    isExact: boolean,
-  },
-  routerData: types.RouterData,
+    path: string;
+    url: string;
+    isExact: boolean;
+  };
+  routerData: types.RouterData;
 };
 
 type State = {
-  isMobile: boolean,
-  menuCollapsed: boolean,
+  isMobile: boolean;
+  menuCollapsed: boolean;
 };
 
 export default class BasicLayout extends React.PureComponent<Props, State> {

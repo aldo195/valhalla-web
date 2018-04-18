@@ -1,20 +1,19 @@
-// @flow
+import classNames from 'classnames';
 import React from 'react';
 import './GlobalFooter.css';
-import classNames from 'classnames';
 
-type Props = {
-  className: string,
-  links: Array<{
-    key: string,
-    href: string,
-    title: string,
-    blankTarget: boolean,
-  }>,
-  copyright: string,
-};
+interface GlobalFooterProps {
+  className: string;
+  links: ReadonlyArray<{
+    key: string;
+    href: string;
+    title: string;
+    blankTarget: boolean;
+  }>;
+  copyright: string;
+}
 
-const GlobalFooter = (props: Props) => {
+const GlobalFooter = (props: GlobalFooterProps) => {
   const {className, links, copyright} = props;
 
   const clsString = classNames('global-footer', className);

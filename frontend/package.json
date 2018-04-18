@@ -12,6 +12,7 @@
     "history": "^4.7.2",
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.5",
+    "lodash-decorators": "^5.0.0",
     "luxon": "^1.0.0",
     "path-to-regexp": "2.2.0",
     "rc-drawer-menu": "^0.5.7",
@@ -38,7 +39,7 @@
     "tslint-check": "tslint-config-prettier-check ./tslint.json"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx,css,json}": [
+    "*.{js,jsx,ts,tsx,css}": [
       "prettier --write --no-bracket-spacing --single-quote --trailing-comma=all --print-width=120",
       "git add"
     ]
@@ -63,7 +64,6 @@
     "@types/react-router": "^4.0.23",
     "@types/react-router-dom": "^4.2.5",
     "@types/redux-devtools-extension": "^2.13.2",
-    "@types/redux-thunk": "^2.1.0",
     "@types/stylus": "^0.48.29",
     "@types/typescript": "^2.0.0",
     "awesome-typescript-loader": "^4.0.1",
