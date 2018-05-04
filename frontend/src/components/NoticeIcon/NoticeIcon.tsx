@@ -1,31 +1,29 @@
-// @flow
-import React from 'react';
-import {Popover, Icon, Badge, Spin, Avatar, List} from 'antd';
+import {Avatar, Badge, Icon, List, Popover, Spin} from 'antd';
 import classNames from 'classnames';
-import './NoticeIcon.css';
+import React from 'react';
 import noNotifications from '../../assets/no_notifications.svg';
+import './NoticeIcon.css';
 
 type NotificationsList = Array<{
-  title: string,
-  description?: string,
-  datetime: string,
-  extra?: string,
-  key?: string,
-  avatar?: string,
-  read: boolean,
+  title: string;
+  description?: string;
+  datetime: string;
+  extra?: string;
+  key?: string;
+  avatar?: string;
+  read: boolean;
 }>;
 
-type ListProps = {
-  data: NotificationsList,
-  title: string,
-  emptyText: string,
-  clearText: string,
-  onClick: string => void,
-  onClear: () => void,
-};
+interface ListProps {
+  data: NotificationsList;
+  title: string;
+  emptyText: string;
+  clearText: string;
+  onClear: () => void;
+}
 
 const NoticeList = (props: ListProps) => {
-  const {data, onClick, onClear, title, emptyText, clearText} = props;
+  const {data, onClear, title, emptyText, clearText} = props;
 
   if (data.length === 0) {
     return (
@@ -37,13 +35,13 @@ const NoticeList = (props: ListProps) => {
   }
   return (
     <div>
-      <List className={'notice-list'}>
+      <List className={'notice-list'} dataSource={null} renderItem={null}>
         {data.map((item, i) => {
           const itemCls = classNames('item', {
             read: item.read,
           });
           return (
-            <List.Item className={itemCls} key={item.key || i} onClick={() => onClick(item.title)}>
+            <List.Item className={itemCls} key={item.key || i}>
               <List.Item.Meta
                 className={'meta'}
                 avatar={item.avatar ? <Avatar className={'avatar'} src={item.avatar} /> : null}
@@ -72,34 +70,26 @@ const NoticeList = (props: ListProps) => {
   );
 };
 
-type Props = {
-  loading: boolean,
-  list: NotificationsList,
-  title: string,
-  emptyText: string,
-  clearText: string,
-  className: string,
-  count: number,
-  popupVisible: boolean,
-  popupAlign: {
-    offset?: Array<number>,
-  },
-  onPopupVisibleChange: boolean => void,
-  onClear: () => void,
-};
+interface Props {
+  loading: boolean;
+  list: NotificationsList;
+  title: string;
+  emptyText: string;
+  clearText: string;
+  className: string;
+  count: number;
+  popupVisible: boolean;
+  onPopupVisibleChange: (isVisible: boolean) => void;
+  onClear: () => void;
+}
 
 export default class NoticeIcon extends React.PureComponent<Props> {
-  onItemClick = (item: string) => {
-    console.log(item); // eslint-disable-line
-  };
-
   getNotificationBox() {
     const {loading} = this.props;
     return (
       <Spin spinning={loading} delay={0}>
         <NoticeList
           data={this.props.list}
-          onClick={this.onItemClick}
           onClear={() => this.props.onClear()}
           title={this.props.title}
           emptyText={this.props.emptyText}
@@ -109,7 +99,7 @@ export default class NoticeIcon extends React.PureComponent<Props> {
     );
   }
   render() {
-    const {className, count, popupAlign, onPopupVisibleChange} = this.props;
+    const {className, count, onPopupVisibleChange} = this.props;
     const noticeButtonClass = classNames(className, 'notice-button');
     const notificationBox = this.getNotificationBox();
     const trigger = (
@@ -122,7 +112,9 @@ export default class NoticeIcon extends React.PureComponent<Props> {
     if (!notificationBox) {
       return trigger;
     }
-    const popoverProps = {};
+    const popoverProps = {
+      visible: false,
+    };
     if ('popupVisible' in this.props) {
       popoverProps.visible = this.props.popupVisible;
     }
@@ -130,10 +122,9 @@ export default class NoticeIcon extends React.PureComponent<Props> {
       <Popover
         placement="bottomRight"
         content={notificationBox}
-        popupClassName={'notice-popover'}
+        overlayClassName={'notice-popover'}
         trigger="click"
-        arrowPointAtCenter
-        popupAlign={popupAlign}
+        arrowPointAtCenter={true}
         onVisibleChange={onPopupVisibleChange}
         {...popoverProps}
       >

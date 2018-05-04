@@ -1,5 +1,5 @@
 import {Avatar, Divider, Dropdown, Icon, Layout, Menu, Spin, Tag, Tooltip} from 'antd';
-import History from 'history';
+import {History} from 'history';
 import {Debounce} from 'lodash-decorators';
 import moment from 'moment';
 import React from 'react';
@@ -13,8 +13,8 @@ import {getAuthDetails} from '../../reducers/auth';
 import {getNotifications} from '../../reducers/notifications';
 import {State} from '../../reducers/types';
 import * as stateTypes from '../../reducers/types';
-import {HeaderSearch} from '../HeaderSearch';
-import {NoticeIcon} from '../NoticeIcon';
+import {HeaderSearch} from '../HeaderSearch/index';
+import {NoticeIcon} from '../NoticeIcon/index';
 import './GlobalHeader.css';
 
 const {Header} = Layout;
@@ -206,4 +206,4 @@ const mapDispatchToProps = (dispatch: Dispatch<State>) => {
 const ConnectedGlobalHeader = withRouter(
   connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)(GlobalHeader),
 );
-export default ConnectedGlobalHeader;
+export {ConnectedGlobalHeader as GlobalHeader};

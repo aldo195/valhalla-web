@@ -1,14 +1,15 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import registerServiceWorker from './registerServiceWorker';
-import './index.css';
-import {Provider} from 'react-redux';
-import {store} from './store/index';
 import {LocaleProvider} from 'antd';
 import enUS from 'antd/lib/locale-provider/en_US';
-import {ValhallaApp} from './App';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import {Provider} from 'react-redux';
+import './index.css';
+import registerServiceWorker from './registerServiceWorker';
+import {store} from './store';
 
-let render = () =>
+import {ValhallaApp} from 'App.tsx';
+
+const render = () =>
   ReactDOM.render(
     <Provider store={store}>
       <LocaleProvider locale={enUS}>
@@ -24,8 +25,9 @@ registerServiceWorker();
 
 if (process.env.NODE_ENV !== 'production') {
   // If webpack's HMR detects a change in the App, we reload it
-  if (module.hot) {
-    module.hot.accept('./App', () => {
+  const moduleAsAny = module as any;
+  if (moduleAsAny.hot) {
+    moduleAsAny.hot.accept('./App', () => {
       render();
     });
   }

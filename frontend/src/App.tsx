@@ -1,12 +1,12 @@
 import React from 'react';
-import history from './history';
-import * as routes from './constants/routes';
-import * as roles from './constants/roles';
-import {Router, Route, Switch} from 'react-router-dom';
-import {AuthorizedRoute} from './components/AuthorizedRoute';
+import {Route, Router, Switch} from 'react-router-dom';
 import {getRouterData} from './common/router';
+import {AuthorizedRoute} from './components/AuthorizedRoute';
+import * as roles from './constants/roles';
+import * as routes from './constants/routes';
+import history from './store/history';
 
-let ValhallaApp = () => {
+const ValhallaApp = () => {
   const routerData = getRouterData();
   const UserLayout = routerData[routes.USER].component;
   const BasicLayout = routerData[routes.DEFAULT].component;
@@ -17,7 +17,7 @@ let ValhallaApp = () => {
         <Route path={routes.USER} component={UserLayout} />} />
         <AuthorizedRoute
           path={routes.DEFAULT}
-          render={props => <BasicLayout {...props} />}
+          render={(props: any) => <BasicLayout {...props} />}
           roles={[roles.USER, roles.ADMIN]}
           redirectPath={routes.LOGIN}
         />

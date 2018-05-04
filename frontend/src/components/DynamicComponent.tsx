@@ -1,20 +1,20 @@
+import {Spin} from 'antd';
 import React from 'react';
 import '../index.css';
-import {Spin} from 'antd';
 
-let defaultLoadingComponent = () => {
+const defaultLoadingComponent = () => {
   return <Spin size="large" className={'global-spin'} />;
 };
 
 type ConfigType = {
-  component: () => void;
-  LoadingComponent: () => any;
+  component: () => React.ComponentType<any>;
+  LoadingComponent: React.ComponentType<any>;
 };
 
 type Props = {};
 
 type State = {
-  Component: null | (() => null);
+  Component: React.ComponentType<any> | null;
 };
 
 export default function loadDynamicComponent(config: ConfigType) {
@@ -45,7 +45,9 @@ export default function loadDynamicComponent(config: ConfigType) {
 
     render() {
       const {Component} = this.state;
-      if (Component) return <Component {...this.props} />;
+      if (Component) {
+        return <Component {...this.props} />;
+      }
 
       return <LoadingComponent {...this.props} />;
     }

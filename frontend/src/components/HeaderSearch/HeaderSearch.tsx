@@ -1,20 +1,19 @@
-// @flow
-import React from 'react';
-import {Input, Icon, AutoComplete} from 'antd';
+import {AutoComplete, Icon, Input} from 'antd';
 import classNames from 'classnames';
+import React from 'react';
 import './HeaderSearch.css';
 
-type Props = {
-  className: string,
-  placeholder: string,
-  onPressEnter: string => void,
-  onChange: () => void,
-};
+interface Props {
+  className: string;
+  placeholder: string;
+  onPressEnter: (value: string) => void;
+  onChange: () => void;
+}
 
-type State = {
-  searchMode: boolean,
-  value: string,
-};
+interface State {
+  searchMode: boolean;
+  value: string;
+}
 
 export default class HeaderSearch extends React.PureComponent<Props, State> {
   state = {
@@ -22,8 +21,8 @@ export default class HeaderSearch extends React.PureComponent<Props, State> {
     value: '',
   };
 
-  input: ?Input;
-  timeout: ?TimeoutID;
+  input: Input | null;
+  timeout: NodeJS.Timer;
 
   componentWillUnmount() {
     if (this.timeout) {
@@ -31,7 +30,7 @@ export default class HeaderSearch extends React.PureComponent<Props, State> {
     }
   }
 
-  onKeyDown = (e: SyntheticKeyboardEvent<Input>) => {
+  onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       this.timeout = setTimeout(() => {
         // Fix duplicate onPressEnter.
@@ -71,6 +70,7 @@ export default class HeaderSearch extends React.PureComponent<Props, State> {
       <span className={classNames('header-search', className)} onClick={this.enterSearchMode}>
         <Icon type="search" key="Icon" />
         <AutoComplete
+          dataSource={[]}
           key="AutoComplete"
           {...restProps}
           className={inputClass}
