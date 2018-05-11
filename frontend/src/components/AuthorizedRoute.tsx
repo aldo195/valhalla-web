@@ -76,4 +76,4 @@ const mapDispatchToProps = (dispatch: Dispatch<State>) => {
 const ConnectedAuthorizedRoute = connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)(
   AuthorizedRoute,
 );
-export {ConnectedAuthorizedRoute as AuthorizedRoute};
+export default ConnectedAuthorizedRoute;

@@ -4,13 +4,13 @@ import DocumentTitle from 'react-document-title';
 import {Redirect, Route, Switch} from 'react-router-dom';
 import logo from '../assets/valhalla-logo-small.png';
 import {getMenuData} from '../common/menu';
-import {AuthorizedRoute} from '../components/AuthorizedRoute';
+import AuthorizedRoute from '../components/AuthorizedRoute';
 import {GlobalFooter} from '../components/GlobalFooter';
 import {GlobalHeader} from '../components/GlobalHeader';
 import {DrawerSiderMenu} from '../components/SiderMenu';
 import * as routes from '../constants/routes';
 import * as stateTypes from '../reducers/types';
-import {NotFoundError} from '../routes/Exception/index';
+import {NotFoundError} from '../routes/Exception';
 import {enquireScreen, unenquireScreen} from '../utils/media';
 import {getRoutes} from '../utils/routing';
 

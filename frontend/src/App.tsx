@@ -1,7 +1,7 @@
 import React from 'react';
 import {Route, Router, Switch} from 'react-router-dom';
 import {getRouterData} from './common/router';
-import {AuthorizedRoute} from './components/AuthorizedRoute';
+import AuthorizedRoute from './components/AuthorizedRoute';
 import * as roles from './constants/roles';
 import * as routes from './constants/routes';
 import history from './store/history';

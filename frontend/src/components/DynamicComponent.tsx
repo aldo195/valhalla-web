@@ -14,7 +14,7 @@ type ConfigType = {
 type Props = {};
 
 type State = {
-  Component: React.ComponentType<any>;
+  Component: React.ComponentType<any> | null;
 };
 
 export default function loadDynamicComponent(config: ConfigType) {
@@ -22,6 +22,10 @@ export default function loadDynamicComponent(config: ConfigType) {
   const LoadingComponent = config.LoadingComponent || defaultLoadingComponent;
 
   return class DynamicComponent extends React.PureComponent<Props, State> {
+    state = {
+      Component: null,
+    };
+
     mounted: boolean;
 
     componentDidMount() {
@@ -42,7 +46,8 @@ export default function loadDynamicComponent(config: ConfigType) {
     render() {
       const {Component} = this.state;
       if (Component) {
-        return <Component {...this.props} />;
+        const ActualComponent = Component as React.ComponentType<any>;
+        return <ActualComponent {...this.props} />;
       }
 
       return <LoadingComponent {...this.props} />;
