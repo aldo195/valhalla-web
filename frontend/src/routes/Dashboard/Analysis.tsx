@@ -1,46 +1,33 @@
-import {Alert, Card, Row, Spin, Tabs} from 'antd';
+import {Card, Row, Spin} from 'antd';
 import React from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators, Dispatch} from 'redux';
 import {getOrganizationIfNeeded} from '../../actions/organization';
-import {loadRulesIfNeeded} from '../../actions/rules';
-import {DetailsTab} from '../../components/Dashboard';
+import {OrganizationDetails} from '../../components/Dashboard';
 import Exception from '../../components/Exception/Exception';
 import * as exceptionTypes from '../../constants/exceptionTypes';
 import '../../index.css';
 import {getAuthDetails} from '../../reducers/auth';
 import {getOrganization} from '../../reducers/organization';
-import {getRuleStats} from '../../reducers/rules';
 import * as stateTypes from '../../reducers/types';
 import './Analysis.css';
 
 interface StateProps {
   auth: stateTypes.AuthDetails;
   organization: stateTypes.OrganizationState;
-  ruleStats: stateTypes.RuleStats;
 }
 
 interface DispatchProps {
   getOrganizationIfNeeded: typeof getOrganizationIfNeeded;
-  loadRulesIfNeeded: typeof loadRulesIfNeeded;
-}
-
-interface State {
-  currentTabKey: string;
 }
 
 type AnalysisProps = StateProps & DispatchProps;
 
-class Analysis extends React.PureComponent<AnalysisProps, State> {
-  state = {
-    currentTabKey: '',
-  };
-
+class Analysis extends React.PureComponent<AnalysisProps> {
   fetchData() {
     const {auth} = this.props;
     if (auth.organizationId && auth.token) {
       this.props.getOrganizationIfNeeded(auth.organizationId, auth.token);
-      this.props.loadRulesIfNeeded(auth.token);
     }
   }
 
@@ -48,20 +35,8 @@ class Analysis extends React.PureComponent<AnalysisProps, State> {
     this.fetchData();
   }
 
-  handleTabChange = (key: string) => {
-    this.setState({
-      currentTabKey: key,
-    });
-  };
-
   render() {
     const {organization} = this.props;
-    const {ruleStats} = this.props;
-
-    let activeKey = this.state.currentTabKey;
-    if (!activeKey && ruleStats.categories[0]) {
-      activeKey = ruleStats.categories[0].name;
-    }
 
     // Make sure organization is loaded first.
     if (organization.errorMessage) {
@@ -83,24 +58,12 @@ class Analysis extends React.PureComponent<AnalysisProps, State> {
         ) : (
           <Card title={`${organizationTitle} Security Policy`} className={'card'} bordered={true}>
             <div>
-              {ruleStats.errorMessage && <Alert type={'error'} message={ruleStats.errorMessage} />}
-              {ruleStats.isFetching ? (
-                <Spin size="small" className={'global-spin'} />
-              ) : (
-                <div>
-                  <Row>
-                    <h1>Hello!</h1>
-                  </Row>
-                  <Tabs activeKey={activeKey} onChange={this.handleTabChange}>
-                    {ruleStats.categories.map(category => (
-                      <Tabs.TabPane
-                        tab={<DetailsTab data={category} isSelected={activeKey === category.name} />}
-                        key={category.name}
-                      />
-                    ))}
-                  </Tabs>
-                </div>
-              )}
+              <Row>
+                <h1>Hello!</h1>
+              </Row>
+              <Row>
+                <OrganizationDetails data={{x: 30, y: 70}} />
+              </Row>
             </div>
           </Card>
         )}
@@ -113,7 +76,6 @@ const mapStateToProps = (state: stateTypes.State) => {
   return {
     auth: getAuthDetails(state),
     organization: getOrganization(state),
-    ruleStats: getRuleStats(state),
   };
 };
 
@@ -121,7 +83,6 @@ const mapDispatchToProps = (dispatch: Dispatch<stateTypes.State>) => {
   return bindActionCreators(
     {
       getOrganizationIfNeeded,
-      loadRulesIfNeeded,
     },
     dispatch,
   );

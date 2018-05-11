@@ -8,8 +8,9 @@ const configureStore = (initialState: State) => {
   const store = createStore<State>(rootReducer, initialState, composeWithDevTools(applyMiddleware(thunk)));
 
   // We can hook to webpack's API to replace the root reducer of the store, which will propagate back all the actions.
-  if (module.hot) {
-    module.hot.accept('../reducers/rootReducer', () => store.replaceReducer(rootReducer));
+  const moduleAsAny = module as any;
+  if (moduleAsAny.hot) {
+    moduleAsAny.hot.accept('../reducers/rootReducer', () => store.replaceReducer(rootReducer));
   }
 
   return store;

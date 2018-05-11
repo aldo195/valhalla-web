@@ -22,7 +22,7 @@ export default class HeaderSearch extends React.PureComponent<Props, State> {
   };
 
   input: Input | null;
-  timeout: NodeJS.Timer;
+  timeout: number;
 
   componentWillUnmount() {
     if (this.timeout) {
@@ -32,7 +32,7 @@ export default class HeaderSearch extends React.PureComponent<Props, State> {
 
   onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      this.timeout = setTimeout(() => {
+      this.timeout = window.setTimeout(() => {
         // Fix duplicate onPressEnter.
         this.props.onPressEnter(this.state.value);
       }, 0);

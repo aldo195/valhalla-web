@@ -3,11 +3,10 @@ import enUS from 'antd/lib/locale-provider/en_US';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
+import {ValhallaApp} from './App';
 import './index.css';
 import registerServiceWorker from './registerServiceWorker';
 import {store} from './store';
-
-import {ValhallaApp} from 'App.tsx';
 
 const render = () =>
   ReactDOM.render(

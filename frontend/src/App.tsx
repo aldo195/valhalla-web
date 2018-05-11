@@ -1,9 +1,9 @@
 import React from 'react';
 import {Route, Router, Switch} from 'react-router-dom';
-import {getRouterData} from 'router.ts';
+import {getRouterData} from './common/router';
 import {AuthorizedRoute} from './components/AuthorizedRoute';
-import * as roles from 'roles.ts';
-import * as routes from 'routes.ts';
+import * as roles from './constants/roles';
+import * as routes from './constants/routes';
 import history from './store/history';
 
 const ValhallaApp = () => {

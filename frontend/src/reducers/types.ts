@@ -43,41 +43,10 @@ export interface OrganizationState {
   readonly details: Organization | null;
 }
 
-export interface Rule {
-  readonly category: string;
-  readonly creation_time: string;
-  readonly csf: string;
-  readonly description: string;
-  readonly first_test_time: string;
-  readonly last_test_time: string;
-  readonly organization_id: number;
-  readonly owner_id: number;
-  readonly reason: string;
-  readonly rule_id: number;
-  readonly rule_status_id: number;
-  readonly status: string;
-  readonly system: string;
-  readonly test_logic: string;
-  readonly tester_id: number;
-  readonly title: string;
-}
-
-export interface RuleByIdState {
-  readonly [key: number]: Rule;
-}
-
-export interface RulesState {
-  readonly errorMessage: string | null;
-  readonly isFetching: boolean;
-  readonly rules: ReadonlyArray<number>;
-}
-
 export interface State {
   readonly auth: AuthState;
   readonly notifications: NotificationsState;
   readonly organization: OrganizationState;
-  readonly ruleById: RuleByIdState;
-  readonly rules: RulesState;
 }
 
 export interface RouterData {

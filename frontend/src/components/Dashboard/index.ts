@@ -1,4 +1,3 @@
-import DetailsTab from './DetailsTab';
-import NumberInfo from './NumberInfo';
+import OrganizationDetails from './OrganizationDetails';
 
-export {DetailsTab, NumberInfo};
+export {OrganizationDetails};

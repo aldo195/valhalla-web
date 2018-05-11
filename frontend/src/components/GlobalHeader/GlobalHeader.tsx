@@ -2,7 +2,7 @@ import {Avatar, Divider, Dropdown, Icon, Layout, Menu, Spin, Tag, Tooltip} from 
 import {History} from 'history';
 import {Debounce} from 'lodash-decorators';
 import moment from 'moment';
-import React from 'react';
+import * as React from 'react';
 import {connect} from 'react-redux';
 import {RouteComponentProps} from 'react-router';
 import {Link, withRouter} from 'react-router-dom';
@@ -14,7 +14,7 @@ import {getAuthDetails} from '../../reducers/auth';
 import {getNotifications} from '../../reducers/notifications';
 import {State} from '../../reducers/types';
 import * as stateTypes from '../../reducers/types';
-import {HeaderSearch} from '../HeaderSearch/index';
+import {HeaderSearch} from '../HeaderSearch';
 import {NoticeIcon, NotificationDetails} from '../NoticeIcon';
 import './GlobalHeader.css';
 

@@ -1,17 +1,20 @@
-import {setTheme, track} from 'bizcharts';
+import {G2} from 'bizcharts';
 import Pie from './Pie';
 
-track(false);
+G2.track(false);
 
-const config = {
-  defaultColor: '#1089ff',
-  shape: {
-    interval: {
-      fillOpacity: 1,
+const config = G2.Util.deepMix(
+  {
+    defaultColor: '#1089ff',
+    shape: {
+      interval: {
+        fillOpacity: 1,
+      },
     },
   },
-};
+  G2.Global,
+);
 
-setTheme(config);
+G2.Global.setTheme(config);
 
 export {Pie};
