@@ -3,14 +3,14 @@ import React from 'react';
 import './GlobalFooter.css';
 
 interface GlobalFooterProps {
-  className: string;
-  links: ReadonlyArray<{
+  className?: string;
+  links?: ReadonlyArray<{
     key: string;
     href: string;
     title: string;
-    blankTarget: boolean;
+    blankTarget?: boolean;
   }>;
-  copyright: string;
+  copyright: string | React.ReactNode;
 }
 
 const GlobalFooter = (props: GlobalFooterProps) => {

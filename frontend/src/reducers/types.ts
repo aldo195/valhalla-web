@@ -1,3 +1,6 @@
+import * as React from 'react';
+import {RouteComponentProps} from 'react-router';
+
 export interface AuthDetails {
   readonly isAuthenticated: boolean;
   readonly token: string | null;
@@ -22,7 +25,6 @@ export interface Notification {
   readonly datetime: string;
   readonly id: number;
   readonly status: string;
-  readonly extra: string;
 }
 
 export interface NotificationsState {
@@ -82,6 +84,7 @@ export interface RouterData {
   readonly [key: string]: {
     readonly name: string;
     readonly roles: ReadonlyArray<string>;
+    component?: React.ComponentType<RouteComponentProps<any>> | React.ComponentType<any>;
   };
 }
 
@@ -92,8 +95,8 @@ export interface MenuItem {
   readonly icon?: string;
   readonly hideInMenu?: boolean;
   readonly key?: string;
-  readonly roles: ReadonlyArray<string>;
-  readonly children: ReadonlyArray<MenuItem>;
+  readonly roles?: string[];
+  readonly children?: ReadonlyArray<MenuItem>;
 }
 
 export type MenuData = ReadonlyArray<MenuItem>;

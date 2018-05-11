@@ -1,54 +1,54 @@
-// @flow
+import {Alert, Card, Row, Spin, Tabs} from 'antd';
 import React from 'react';
-import './Analysis.css';
-import '../../index.css';
-import * as exceptionTypes from '../../constants/exceptionTypes';
-import {Col, Row, Card, Tabs, Spin, Alert} from 'antd';
-import {DetailsTab} from '../../components/Dashboard/index';
 import {connect} from 'react-redux';
-import {getAuthDetails} from '../../reducers/auth';
-import {bindActionCreators} from 'redux';
-import {loadRulesIfNeeded} from '../../actions/rules';
+import {bindActionCreators, Dispatch} from 'redux';
 import {getOrganizationIfNeeded} from '../../actions/organization';
+import {loadRulesIfNeeded} from '../../actions/rules';
+import {DetailsTab} from '../../components/Dashboard';
+import Exception from '../../components/Exception/Exception';
+import * as exceptionTypes from '../../constants/exceptionTypes';
+import '../../index.css';
+import {getAuthDetails} from '../../reducers/auth';
 import {getOrganization} from '../../reducers/organization';
 import {getRuleStats} from '../../reducers/rules';
-import Exception from '../../components/Exception/Exception';
-import * as types from '../../types';
+import * as stateTypes from '../../reducers/types';
+import './Analysis.css';
 
-type Props = {
-  auth: types.AuthDetails;
-  organization: types.Organization;
-  ruleStats: types.RuleStats;
-  getOrganizationIfNeeded: (number, string) => types.ThunkAction;
-  loadRulesIfNeeded: (string) => types.ThunkAction;
-};
+interface StateProps {
+  auth: stateTypes.AuthDetails;
+  organization: stateTypes.OrganizationState;
+  ruleStats: stateTypes.RuleStats;
+}
 
-type State = {
+interface DispatchProps {
+  getOrganizationIfNeeded: typeof getOrganizationIfNeeded;
+  loadRulesIfNeeded: typeof loadRulesIfNeeded;
+}
+
+interface State {
   currentTabKey: string;
-};
+}
 
-type InfoProps = {
-  title: string;
-  value: string;
-  bordered?: boolean;
-};
+type AnalysisProps = StateProps & DispatchProps;
 
-class Analysis extends React.PureComponent<Props, State> {
+class Analysis extends React.PureComponent<AnalysisProps, State> {
   state = {
     currentTabKey: '',
   };
 
   fetchData() {
     const {auth} = this.props;
-    this.props.getOrganizationIfNeeded(auth.organizationId, auth.token);
-    this.props.loadRulesIfNeeded(auth.token);
+    if (auth.organizationId && auth.token) {
+      this.props.getOrganizationIfNeeded(auth.organizationId, auth.token);
+      this.props.loadRulesIfNeeded(auth.token);
+    }
   }
 
   componentDidMount() {
     this.fetchData();
   }
 
-  handleTabChange = key => {
+  handleTabChange = (key: string) => {
     this.setState({
       currentTabKey: key,
     });
@@ -63,19 +63,6 @@ class Analysis extends React.PureComponent<Props, State> {
       activeKey = ruleStats.categories[0].name;
     }
 
-    const validationPercentage = `${Math.floor(ruleStats.validation * 100)}%`;
-
-    const Info = (props: InfoProps) => {
-      const {title, value, bordered} = props;
-      return (
-        <div className={'header-info'}>
-          <span>{title}</span>
-          <p>{value}</p>
-          {bordered && <em />}
-        </div>
-      );
-    };
-
     // Make sure organization is loaded first.
     if (organization.errorMessage) {
       return (
@@ -87,12 +74,14 @@ class Analysis extends React.PureComponent<Props, State> {
       );
     }
 
+    const organizationTitle = (organization.details && organization.details.title) || '???';
+
     return (
       <div>
         {organization.isFetching ? (
           <Spin size="large" className={'global-spin'} />
         ) : (
-          <Card title={`${organization.details.title} Security Policy`} className={'card'} bordered={true}>
+          <Card title={`${organizationTitle} Security Policy`} className={'card'} bordered={true}>
             <div>
               {ruleStats.errorMessage && <Alert type={'error'} message={ruleStats.errorMessage} />}
               {ruleStats.isFetching ? (
@@ -100,15 +89,7 @@ class Analysis extends React.PureComponent<Props, State> {
               ) : (
                 <div>
                   <Row>
-                    <Col sm={8} xs={24}>
-                      <Info title={'Validation Rate'} value={validationPercentage} bordered />
-                    </Col>
-                    <Col sm={8} xs={24}>
-                      <Info title={'Rules Added This Week'} value={String(ruleStats.lastWeek)} bordered />
-                    </Col>
-                    <Col sm={8} xs={24}>
-                      <Info title={'Total Rules'} value={String(ruleStats.total)} />
-                    </Col>
+                    <h1>Hello!</h1>
                   </Row>
                   <Tabs activeKey={activeKey} onChange={this.handleTabChange}>
                     {ruleStats.categories.map(category => (
@@ -128,7 +109,7 @@ class Analysis extends React.PureComponent<Props, State> {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state: stateTypes.State) => {
   return {
     auth: getAuthDetails(state),
     organization: getOrganization(state),
@@ -136,7 +117,7 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch: Dispatch<stateTypes.State>) => {
   return bindActionCreators(
     {
       getOrganizationIfNeeded,
@@ -146,5 +127,5 @@ const mapDispatchToProps = dispatch => {
   );
 };
 
-Analysis = connect(mapStateToProps, mapDispatchToProps)(Analysis);
-export default Analysis;
+const ConnectedAnalysis = connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)(Analysis);
+export default ConnectedAnalysis;

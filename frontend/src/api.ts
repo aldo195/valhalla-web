@@ -1,12 +1,14 @@
-import axios from 'axios';
+import axios, {AxiosError, AxiosResponse} from 'axios';
 import {logoutAndRedirect} from './actions/auth';
-import history from './history';
 import {store} from './store';
+import history from './store/history';
 
 const BACKEND_URL = '/api/v1';
 
 // Use our own custom error class.
 class ApiError extends Error {
+  status: number;
+
   constructor(message: string, status: number) {
     super(message);
     this.status = status;
@@ -19,11 +21,11 @@ const tokenConfig = (token: string) => ({
   },
 });
 
-const handleResponse = response => {
+const handleResponse = (response: AxiosResponse) => {
   return response.data;
 };
 
-const handleError = error => {
+const handleError = (error: AxiosError) => {
   if (error.response) {
     const status = error.response.status;
 

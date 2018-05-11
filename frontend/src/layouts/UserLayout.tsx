@@ -1,17 +1,16 @@
-// @flow
-import React from 'react';
-import './UserLayout.css';
-import DocumentTitle from 'react-document-title';
 import {Icon} from 'antd';
-import {GlobalFooter} from '../components/GlobalFooter/index';
-import logo from '../assets/valhalla-logo-small.png';
-import {Link, Redirect, Route, Switch, withRouter} from 'react-router-dom';
-import History from 'history';
-import * as routes from '../constants/routes';
-import {getRoutes} from '../utils/routing';
-import {getAuthStatus} from '../reducers/auth';
+import React from 'react';
+import DocumentTitle from 'react-document-title';
 import {connect} from 'react-redux';
-import * as types from '../types';
+import {RouteComponentProps} from 'react-router';
+import {Link, Redirect, Route, Switch, withRouter} from 'react-router-dom';
+import logo from '../assets/valhalla-logo-small.png';
+import {GlobalFooter} from '../components/GlobalFooter/index';
+import * as routes from '../constants/routes';
+import {getAuthStatus} from '../reducers/auth';
+import * as stateTypes from '../reducers/types';
+import {getRoutes} from '../utils/routing';
+import './UserLayout.css';
 
 const links = [
   {
@@ -37,18 +36,17 @@ const copyright = (
   </div>
 );
 
-type Props = {
-  auth: types.AuthStatus;
-  routerData: types.RouterData;
-  history: History;
-  match: {
-    path: string;
-  };
-};
+interface OwnProps {
+  routerData: stateTypes.RouterData;
+}
 
-type State = {};
+interface StateProps {
+  auth: stateTypes.AuthStatus;
+}
 
-class UserLayout extends React.PureComponent<Props, State> {
+interface UserLayoutProps extends RouteComponentProps<{}>, OwnProps, StateProps {}
+
+class UserLayout extends React.PureComponent<UserLayoutProps> {
   getPageTitle() {
     const {routerData, history} = this.props;
     const {pathname} = history.location;
@@ -85,7 +83,7 @@ class UserLayout extends React.PureComponent<Props, State> {
               {getRoutes(match.path, routerData).map(item => (
                 <Route key={item.key} path={item.path} component={item.component} exact={item.exact} />
               ))}
-              <Redirect exact from={routes.USER} to={routes.LOGIN} />
+              <Redirect exact={true} from={routes.USER} to={routes.LOGIN} />
             </Switch>
           </div>
           <GlobalFooter links={links} copyright={copyright} />
@@ -95,11 +93,11 @@ class UserLayout extends React.PureComponent<Props, State> {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state: stateTypes.State) => {
   return {
     auth: getAuthStatus(state),
   };
 };
 
-UserLayout = withRouter(connect(mapStateToProps, {})(UserLayout));
-export default UserLayout;
+const ConnectedUserLayout = withRouter(connect<StateProps>(mapStateToProps, {})(UserLayout));
+export default ConnectedUserLayout;

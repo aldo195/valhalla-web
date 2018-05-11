@@ -4,6 +4,7 @@ import {Debounce} from 'lodash-decorators';
 import moment from 'moment';
 import React from 'react';
 import {connect} from 'react-redux';
+import {RouteComponentProps} from 'react-router';
 import {Link, withRouter} from 'react-router-dom';
 import {bindActionCreators, Dispatch} from 'redux';
 import {ThunkAction} from 'redux-thunk';
@@ -14,7 +15,7 @@ import {getNotifications} from '../../reducers/notifications';
 import {State} from '../../reducers/types';
 import * as stateTypes from '../../reducers/types';
 import {HeaderSearch} from '../HeaderSearch/index';
-import {NoticeIcon} from '../NoticeIcon/index';
+import {NoticeIcon, NotificationDetails} from '../NoticeIcon';
 import './GlobalHeader.css';
 
 const {Header} = Layout;
@@ -37,11 +38,7 @@ interface StateProps {
   notifications: stateTypes.NotificationsState;
 }
 
-interface RouterProps {
-  history: History;
-}
-
-type GlobalHeaderProps = OwnProps & DispatchProps & StateProps & RouterProps;
+interface GlobalHeaderProps extends RouteComponentProps<{}>, OwnProps, DispatchProps, StateProps {}
 
 class GlobalHeader extends React.PureComponent<GlobalHeaderProps> {
   componentWillMount() {
@@ -50,27 +47,28 @@ class GlobalHeader extends React.PureComponent<GlobalHeaderProps> {
 
   getNotificationsData() {
     const {notifications} = this.props;
-    if (notifications.errorMessage) {
-      return [notifications.errorMessage];
-    } else if (notifications.notifications.length === 0) {
+    if (notifications.notifications.length === 0) {
       return [];
     }
 
     return notifications.notifications.map(notice => {
-      const newNotice = {...notice};
+      const newNotice: NotificationDetails = {
+        datetime: notice.datetime,
+        key: notice.id.toString(),
+        title: notice.status,
+        read: false,
+      };
       if (newNotice.datetime) {
         newNotice.datetime = moment(notice.datetime).fromNow();
       }
-      // Transform ID to item key.
-      newNotice.key = newNotice.id;
 
-      if (newNotice.extra && newNotice.status) {
+      if (newNotice.extra && newNotice.title) {
         const color = {
           todo: '',
           processing: 'blue',
           urgent: 'red',
           doing: 'gold',
-        }[newNotice.status];
+        }[newNotice.title];
         newNotice.extra = (
           <Tag color={color} style={{marginRight: 0}}>
             {newNotice.extra}
@@ -104,7 +102,7 @@ class GlobalHeader extends React.PureComponent<GlobalHeaderProps> {
     }
   };
 
-  handleMenuClick = ({key}) => {
+  handleMenuClick = ({key}: {key: string}) => {
     if (key === 'logout') {
       this.props.logoutAndRedirect(this.props.history);
     }
@@ -130,7 +128,7 @@ class GlobalHeader extends React.PureComponent<GlobalHeaderProps> {
     return (
       <Header className={'header'}>
         {isMobile && [
-          <Link to="/" className={'header-logo'}>
+          <Link to={'/'} className={'header-logo'} key={'logo'}>
             <img src={logo} alt="logo" width="32" />
           </Link>,
           <Divider type="vertical" key="line" />,
@@ -140,9 +138,6 @@ class GlobalHeader extends React.PureComponent<GlobalHeaderProps> {
           <HeaderSearch
             className={'action search'}
             placeholder="Search..."
-            onSearch={value => {
-              console.log('input', value); // eslint-disable-line
-            }}
             onPressEnter={value => {
               console.log('enter', value); // eslint-disable-line
             }}
@@ -163,7 +158,7 @@ class GlobalHeader extends React.PureComponent<GlobalHeaderProps> {
             onClear={this.handleNoticeClear}
             onPopupVisibleChange={this.handleNoticeVisibleChange}
             loading={notifications.isFetching}
-            popupAlign={{offset: [20, -16]}}
+            popupVisible={false}
             list={notificationsData}
             title={'Notifications'}
             emptyText={'No notifications'}
@@ -206,4 +201,4 @@ const mapDispatchToProps = (dispatch: Dispatch<State>) => {
 const ConnectedGlobalHeader = withRouter(
   connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)(GlobalHeader),
 );
-export {ConnectedGlobalHeader as GlobalHeader};
+export default ConnectedGlobalHeader;

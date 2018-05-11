@@ -8,13 +8,13 @@ const defaultLoadingComponent = () => {
 
 type ConfigType = {
   component: () => React.ComponentType<any>;
-  LoadingComponent: React.ComponentType<any>;
+  LoadingComponent?: React.ComponentType<any>;
 };
 
 type Props = {};
 
 type State = {
-  Component: React.ComponentType<any> | null;
+  Component: React.ComponentType<any>;
 };
 
 export default function loadDynamicComponent(config: ConfigType) {
@@ -22,10 +22,6 @@ export default function loadDynamicComponent(config: ConfigType) {
   const LoadingComponent = config.LoadingComponent || defaultLoadingComponent;
 
   return class DynamicComponent extends React.PureComponent<Props, State> {
-    state = {
-      Component: null,
-    };
-
     mounted: boolean;
 
     componentDidMount() {

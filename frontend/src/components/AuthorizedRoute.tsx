@@ -10,7 +10,7 @@ import {AuthDetails, State} from '../reducers/types';
 
 interface OwnProps extends RouteProps {
   redirectPath: string;
-  render: ((props: RouteComponentProps<any>) => React.ReactNode);
+  render?: ((props: RouteComponentProps<any>) => React.ReactNode);
   roles: ReadonlyArray<string>;
 }
 
@@ -47,7 +47,12 @@ class AuthorizedRoute extends React.Component<AuthorizedRouteProps> {
   render() {
     const {auth, component: Component, render, roles, redirectPath, ...rest} = this.props;
     if (auth.isAuthenticated && auth.role && roles.indexOf(auth.role) !== -1) {
-      return <Route {...rest} render={props => (Component ? <Component {...props} /> : render(props))} />;
+      if (Component) {
+        return <Route {...rest} render={props => <Component {...props} />} />;
+      }
+      if (render) {
+        return <Route {...rest} render={props => render(props)} />;
+      }
     }
     return <Route {...rest} render={() => <Redirect to={{pathname: redirectPath}} />} />;
   }

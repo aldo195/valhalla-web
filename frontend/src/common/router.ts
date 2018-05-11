@@ -1,22 +1,23 @@
-import {createElement} from 'react';
 import pathToRegexp from 'path-to-regexp';
-import {getMenuData} from './menu';
-import * as routes from '../constants/routes';
+import * as React from 'react';
 import loadDynamicComponent from '../components/DynamicComponent';
+import * as routes from '../constants/routes';
+import * as stateTypes from '../reducers/types';
+import {getMenuData} from './menu';
 
-let routerDataCache;
+let routerDataCache: stateTypes.RouterData;
 
-const dynamicWrapper = component => {
+const dynamicWrapper = (component: () => any) => {
   return loadDynamicComponent({
     // Add routerData prop.
     component: () => {
       if (!routerDataCache) {
         routerDataCache = getRouterData();
       }
-      return component().then(raw => {
+      return component().then((raw: any) => {
         const Component = raw.default;
-        return props =>
-          createElement(Component, {
+        return (props: any) =>
+          React.createElement(Component, {
             ...props,
             routerData: routerDataCache,
           });
@@ -25,7 +26,7 @@ const dynamicWrapper = component => {
   });
 };
 
-function getFlatMenuData(menus) {
+function getFlatMenuData(menus: stateTypes.MenuData) {
   let keys = {};
   menus.forEach(item => {
     if (item.children) {
@@ -60,7 +61,7 @@ export const getRouterData = () => {
     },
   };
 
-  // Get name from ./menu.js or just set it in the router data.
+  // Get name from ./menu.ts or just set it in the router data.
   const menuData = getFlatMenuData(getMenuData());
 
   // Route configuration data.
@@ -72,7 +73,7 @@ export const getRouterData = () => {
     // eg. router /user/:id === /user/chen
     const pathRegexp = pathToRegexp(path);
     const menuKey = Object.keys(menuData).find(key => pathRegexp.test(`/${key}`));
-    let menuItem = {};
+    let menuItem = null;
     // If menuKey is not empty.
     if (menuKey) {
       menuItem = menuData[menuKey];

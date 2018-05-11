@@ -1,16 +1,17 @@
-import React from 'react';
-import classNames from 'classnames';
 import {Icon} from 'antd';
+import classNames from 'classnames';
+import React from 'react';
 import './Result.css';
 
-type Props = {
-  className: string,
-  type: string,
-  title: string,
-  description: string,
-  extra: string,
-  actions: Array<div>,
-};
+interface Props {
+  className: string;
+  type: string;
+  title: string | React.ReactNode;
+  description: string;
+  extra?: React.ReactNode;
+  actions?: React.ReactNode;
+  style?: React.CSSProperties;
+}
 
 const Result = (props: Props) => {
   const {className, type, title, description, extra, actions} = props;

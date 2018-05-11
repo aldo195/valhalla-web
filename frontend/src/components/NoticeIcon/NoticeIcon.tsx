@@ -4,15 +4,17 @@ import React from 'react';
 import noNotifications from '../../assets/no_notifications.svg';
 import './NoticeIcon.css';
 
-type NotificationsList = Array<{
+export interface NotificationDetails {
   title: string;
   description?: string;
   datetime: string;
-  extra?: string;
+  extra?: React.ReactNode;
   key?: string;
   avatar?: string;
   read: boolean;
-}>;
+}
+
+type NotificationsList = NotificationDetails[];
 
 interface ListProps {
   data: NotificationsList;
@@ -83,7 +85,7 @@ interface Props {
   onClear: () => void;
 }
 
-export default class NoticeIcon extends React.PureComponent<Props> {
+export class NoticeIcon extends React.PureComponent<Props> {
   getNotificationBox() {
     const {loading} = this.props;
     return (

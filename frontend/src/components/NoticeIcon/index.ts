@@ -1,3 +1,3 @@
-import NoticeIcon from './NoticeIcon';
+import {NoticeIcon, NotificationDetails} from './NoticeIcon';
 
-export {NoticeIcon};
+export {NoticeIcon, NotificationDetails};

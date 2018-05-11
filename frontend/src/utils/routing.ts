@@ -1,4 +1,6 @@
-function getRelation(str1, str2) {
+import {RouterData} from '../reducers/types';
+
+function getRelation(str1: string, str2: string) {
   if (str1 === str2) {
     console.warn('Two paths are equal!');
   }
@@ -12,7 +14,7 @@ function getRelation(str1, str2) {
   return 3;
 }
 
-function getRenderArr(routes) {
+function getRenderArr(routes: string[]) {
   let renderArr = [];
   renderArr.push(routes[0]);
   for (let i = 1; i < routes.length; i += 1) {
@@ -26,7 +28,7 @@ function getRenderArr(routes) {
   return renderArr;
 }
 
-export function getRoutes(path, routerData) {
+export function getRoutes(path: string, routerData: RouterData) {
   let routes = Object.keys(routerData).filter(routePath => routePath.indexOf(path) === 0 && routePath !== path);
   // Replace path to '' eg. path='user' /user/name => name.
   routes = routes.map(item => item.replace(path, ''));
@@ -45,9 +47,9 @@ export function getRoutes(path, routerData) {
   return renderRoutes;
 }
 
-/* eslint no-useless-escape:0 */
+// tslint:disable
 const URL_REG = /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/g;
 
-export function isUrl(path) {
+export function isUrl(path: string) {
   return URL_REG.test(path);
 }

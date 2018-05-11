@@ -1,7 +1,8 @@
-import {isUrl} from '../utils/routing';
 import * as roles from '../constants/roles';
+import * as stateTypes from '../reducers/types';
+import {isUrl} from '../utils/routing';
 
-const menuData = [
+const menuData: stateTypes.MenuData = [
   {
     name: 'Security Policy',
     icon: 'table',
@@ -30,7 +31,7 @@ const menuData = [
   },
 ];
 
-function formatter(data, parentPath = '', parentRoles) {
+function formatter(data: stateTypes.MenuData, parentPath: string = '', parentRoles: string[] = []) {
   return data.map(item => {
     // Generate roles and absolute paths recursively.
     let {path} = item;
@@ -41,11 +42,8 @@ function formatter(data, parentPath = '', parentRoles) {
       ...item,
       path,
       roles: item.roles || parentRoles,
-      children: [],
     };
-    if (item.children) {
-      result.children = formatter(item.children, `${parentPath}${item.path}/`, item.roles);
-    }
+    result.children = item.children ? formatter(item.children, `${parentPath}${item.path}/`, item.roles) : [];
     return result;
   });
 }

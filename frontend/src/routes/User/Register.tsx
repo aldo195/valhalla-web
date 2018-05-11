@@ -1,33 +1,49 @@
-// @flow
-import React from 'react';
-import './Register.css';
-import '../../index.css';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
 import {Alert, Button, Form, Icon, Input} from 'antd';
-import {registerIfNeeded} from '../../actions/auth';
-import {getAuthStatus} from '../../reducers/auth';
-import {OrganizationSelect} from '../../components/User';
+import React from 'react';
+import {connect} from 'react-redux';
+import {RouteComponentProps} from 'react-router';
 import {Link, withRouter} from 'react-router-dom';
-import type {RouterHistory} from 'react-router-dom';
+import {bindActionCreators, Dispatch} from 'redux';
+import {registerIfNeeded} from '../../actions/auth';
+import {OrganizationSelect} from '../../components/User';
 import * as routes from '../../constants/routes';
-import * as types from '../../types';
+import '../../index.css';
+import {getAuthStatus} from '../../reducers/auth';
+import * as stateTypes from '../../reducers/types';
+import './Register.css';
 
-type Props = {
-  errorMessage: string,
-  isFetching: boolean,
-  history: RouterHistory,
-  form: Object,
-  registerIfNeeded: (string, string, number, string, RouterHistory) => types.ThunkAction,
-};
+interface OwnProps {
+  errorMessage: string;
+  isFetching: boolean;
+  form: any;
+}
 
-type State = {
-  errorMessage: string,
-  passwordCopyDirty: boolean,
-};
+interface StateProps {
+  auth: stateTypes.AuthStatus;
+}
 
-class RegisterForm extends React.Component<Props, State> {
-  constructor(props) {
+interface DispatchProps {
+  registerIfNeeded: typeof registerIfNeeded;
+}
+
+interface State {
+  errorMessage: string;
+  passwordCopyDirty: boolean;
+}
+
+interface RegisterFormProps extends RouteComponentProps<{}>, OwnProps, StateProps, DispatchProps {}
+
+interface FormProps {
+  name: string;
+  email: string;
+  organization: {
+    organizationId: number;
+  };
+  password: string;
+}
+
+class RegisterForm extends React.Component<RegisterFormProps, State> {
+  constructor(props: RegisterFormProps) {
     super(props);
     this.state = {
       errorMessage: props.errorMessage,
@@ -35,9 +51,9 @@ class RegisterForm extends React.Component<Props, State> {
     };
   }
 
-  register = e => {
+  register = (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    this.props.form.validateFields((err, values) => {
+    this.props.form.validateFields((err: string, values: FormProps) => {
       if (!err) {
         this.props.registerIfNeeded(
           values.name,
@@ -54,7 +70,7 @@ class RegisterForm extends React.Component<Props, State> {
     });
   };
 
-  validatePassword = (rule, value, callback) => {
+  validatePassword = (rule: any, value: string, callback: (message?: string) => void) => {
     const form = this.props.form;
     // Make sure password copy matches the new password.
     if (value && this.state.passwordCopyDirty) {
@@ -68,7 +84,7 @@ class RegisterForm extends React.Component<Props, State> {
     }
   };
 
-  handlePasswordCopyBlur = e => {
+  handlePasswordCopyBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     const value = e.target.value;
     // We need to check password copy only after it has been changed for the first time.
     this.setState({
@@ -76,7 +92,7 @@ class RegisterForm extends React.Component<Props, State> {
     });
   };
 
-  validatePasswordCopy = (rule, value, callback) => {
+  validatePasswordCopy = (rule: any, value: string, callback: (message?: string) => void) => {
     const form = this.props.form;
     if (!value || value === form.getFieldValue('password')) {
       callback();
@@ -91,7 +107,7 @@ class RegisterForm extends React.Component<Props, State> {
     return (
       <div className={'main'}>
         <Form onSubmit={this.register} className={'register'}>
-          <Form.Item hasFeedback>
+          <Form.Item hasFeedback={true}>
             {getFieldDecorator('name', {
               rules: [
                 {
@@ -101,7 +117,7 @@ class RegisterForm extends React.Component<Props, State> {
               ],
             })(<Input prefix={<Icon className={'prefix-icon'} type={'user'} />} placeholder={'Name'} />)}
           </Form.Item>
-          <Form.Item hasFeedback>
+          <Form.Item hasFeedback={true}>
             {getFieldDecorator('email', {
               rules: [
                 {
@@ -115,7 +131,7 @@ class RegisterForm extends React.Component<Props, State> {
               ],
             })(<Input prefix={<Icon className={'prefix-icon'} type={'mail'} />} placeholder={'Email'} />)}
           </Form.Item>
-          <Form.Item hasFeedback>
+          <Form.Item hasFeedback={true}>
             {getFieldDecorator('password', {
               rules: [
                 {
@@ -134,7 +150,7 @@ class RegisterForm extends React.Component<Props, State> {
               />,
             )}
           </Form.Item>
-          <Form.Item hasFeedback>
+          <Form.Item hasFeedback={true}>
             {getFieldDecorator('passwordCopy', {
               rules: [
                 {
@@ -164,13 +180,13 @@ class RegisterForm extends React.Component<Props, State> {
               ],
             })(<OrganizationSelect />)}
           </Form.Item>
-          {this.props.errorMessage && <Alert type={'error'} message={this.props.errorMessage} showIcon />}
+          {this.props.errorMessage && <Alert type={'error'} message={this.props.errorMessage} showIcon={true} />}
           <Form.Item style={{marginBottom: '12px'}}>
             <Button type={'primary'} htmlType={'submit'} className={'form-button'} loading={this.props.isFetching}>
               Register
             </Button>
           </Form.Item>
-          <Button type={'default'} className={'form-button'}>
+          <Button type={'primary'} className={'form-button'}>
             <Link to={routes.LOGIN}>Back to Login Page</Link>
           </Button>
         </Form>
@@ -179,13 +195,13 @@ class RegisterForm extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state: stateTypes.State) => {
   return {
-    ...getAuthStatus(state),
+    auth: getAuthStatus(state),
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch: Dispatch<stateTypes.State>) => {
   return bindActionCreators(
     {
       registerIfNeeded,
@@ -194,5 +210,7 @@ const mapDispatchToProps = dispatch => {
   );
 };
 
-const Register = withRouter(connect(mapStateToProps, mapDispatchToProps)(Form.create()(RegisterForm)));
-export default Register;
+const ConnectedRegister = withRouter(
+  connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)(Form.create()(RegisterForm)),
+);
+export default ConnectedRegister;

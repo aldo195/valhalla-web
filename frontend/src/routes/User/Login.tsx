@@ -1,39 +1,52 @@
-// @flow
+import {Alert, Button, Checkbox, Form, Icon, Input} from 'antd';
 import React from 'react';
-import './Login.css';
-import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
+import {RouteComponentProps} from 'react-router';
+import {Link, withRouter} from 'react-router-dom';
+import {bindActionCreators, Dispatch} from 'redux';
 import {loginIfNeeded} from '../../actions/auth';
-import {Button, Form, Icon, Input, Checkbox, Alert} from 'antd';
 import * as routes from '../../constants/routes';
 import {getAuthStatus} from '../../reducers/auth';
-import {Link, withRouter} from 'react-router-dom';
-import type {RouterHistory} from 'react-router-dom';
-import * as types from '../../types';
+import * as stateTypes from '../../reducers/types';
+import './Login.css';
 
-type Props = {
-  errorMessage: string,
-  isFetching: boolean,
-  history: RouterHistory,
-  form: Object,
-  loginIfNeeded: (string, string, boolean, RouterHistory) => types.ThunkAction,
-};
+interface OwnProps {
+  errorMessage: string;
+  isFetching: boolean;
+  form: any;
+}
 
-type State = {
-  errorMessage: string,
-};
+interface DispatchProps {
+  loginIfNeeded: typeof loginIfNeeded;
+}
 
-class LoginForm extends React.Component<Props, State> {
-  constructor(props) {
+interface StateProps {
+  auth: stateTypes.AuthStatus;
+}
+
+interface State {
+  errorMessage: string;
+}
+
+interface LoginFormProps extends RouteComponentProps<{}>, OwnProps, DispatchProps, StateProps {}
+
+interface FormProps {
+  email: string;
+  password: string;
+  remember: boolean;
+}
+
+class LoginForm extends React.Component<LoginFormProps, State> {
+  constructor(props: LoginFormProps) {
     super(props);
     this.state = {
       errorMessage: props.errorMessage,
     };
   }
 
-  login = e => {
+  login = (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    this.props.form.validateFields((err, values) => {
+    this.props.form.validateFields((err: string, values: FormProps) => {
       if (!err) {
         this.props.loginIfNeeded(values.email, values.password, values.remember, this.props.history);
       } else {
@@ -44,7 +57,7 @@ class LoginForm extends React.Component<Props, State> {
     });
   };
 
-  validatePassword = (rule, value, callback) => {
+  validatePassword = (rule: any, value: string, callback: (message?: string) => void) => {
     if (!value || value.length >= 8) {
       callback();
     } else {
@@ -90,7 +103,7 @@ class LoginForm extends React.Component<Props, State> {
               />,
             )}
           </Form.Item>
-          {this.props.errorMessage && <Alert type={'error'} message={this.props.errorMessage} showIcon />}
+          {this.props.errorMessage && <Alert type={'error'} message={this.props.errorMessage} showIcon={true} />}
           <Form.Item style={{marginBottom: 0}}>
             {getFieldDecorator('remember', {
               valuePropName: 'checked',
@@ -105,7 +118,7 @@ class LoginForm extends React.Component<Props, State> {
               Log in
             </Button>
           </Form.Item>
-          <Button type={'default'} className={'form-button'}>
+          <Button type={'primary'} className={'form-button'}>
             <Link to={routes.REGISTER}>Sign Up</Link>
           </Button>
         </Form>
@@ -114,11 +127,13 @@ class LoginForm extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = state => {
-  return getAuthStatus(state);
+const mapStateToProps = (state: stateTypes.State) => {
+  return {
+    auth: getAuthStatus(state),
+  };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch: Dispatch<stateTypes.State>) => {
   return bindActionCreators(
     {
       loginIfNeeded,
@@ -127,5 +142,7 @@ const mapDispatchToProps = dispatch => {
   );
 };
 
-const Login = withRouter(connect(mapStateToProps, mapDispatchToProps)(Form.create()(LoginForm)));
-export default Login;
+const ConnectedLogin = withRouter(
+  connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)(Form.create()(LoginForm)),
+);
+export default ConnectedLogin;

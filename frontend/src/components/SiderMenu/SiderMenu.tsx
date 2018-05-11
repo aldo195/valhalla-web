@@ -1,20 +1,20 @@
-// @flow
-import React from 'react';
-import './SiderMenu.css';
-import * as types from '../../types';
-import {Layout, Menu, Icon} from 'antd';
+import {Icon, Layout, Menu} from 'antd';
+import {History} from 'history';
+import * as _ from 'lodash';
 import pathToRegexp from 'path-to-regexp';
+import React from 'react';
 import {Link} from 'react-router-dom';
-import type {RouterHistory} from 'react-router-dom';
+import * as stateTypes from '../../reducers/types';
+import './SiderMenu.css';
 
 const {Sider} = Layout;
 const {SubMenu} = Menu;
 
-// Allow menu.js config icon as string or ReactNode
+// Allow menu.ts config icon as string or ReactNode
 //   icon: 'setting',
 //   icon: 'http://demo.com/icon.png',
 //   icon: <Icon type="setting" />,
-const getIcon = icon => {
+const getIcon = (icon: string | React.ReactNode) => {
   if (typeof icon === 'string' && icon.indexOf('http') === 0) {
     return <img src={icon} alt="icon" className={'icon'} />;
   }
@@ -24,28 +24,34 @@ const getIcon = icon => {
   return icon;
 };
 
-type Props = {
-  isMobile: boolean,
-  logo: string,
-  menuData: types.MenuData,
-  collapsed: boolean,
-  onCollapse: boolean => void,
-  history: RouterHistory,
-  auth: types.AuthDetails,
-};
+interface OwnProps {
+  isMobile: boolean;
+  logo: string;
+  menuData: stateTypes.MenuData;
+  collapsed: boolean;
+  onCollapse: (isCollapsed: boolean) => void;
+  history: History;
+  auth: stateTypes.AuthDetails;
+}
+
+interface StateProps {
+  auth: stateTypes.AuthDetails;
+}
+
+type SiderMenuProps = OwnProps & StateProps;
 
 type State = {
-  openKeys: Array<string>,
+  openKeys: string[];
 };
 
-class SiderMenu extends React.PureComponent<Props, State> {
-  constructor(props: Props) {
+class SiderMenu extends React.PureComponent<SiderMenuProps, State> {
+  constructor(props: SiderMenuProps) {
     super(props);
     this.state = {
       openKeys: this.getDefaultCollapsedSubMenus(props.history.location.pathname),
     };
   }
-  componentWillReceiveProps(nextProps: Props) {
+  componentWillReceiveProps(nextProps: SiderMenuProps) {
     const nextPathname = nextProps.history.location.pathname;
     if (nextPathname !== this.props.history.location.pathname) {
       this.setState({
@@ -88,9 +94,9 @@ class SiderMenu extends React.PureComponent<Props, State> {
    * [{path:string},{path:string}] => {path,path2}
    * @param  menus
    */
-  getFlatMenuKeys(menus: types.MenuData) {
-    let keys = [];
-    menus &&
+  getFlatMenuKeys(menus: stateTypes.MenuData) {
+    let keys: string[] = [];
+    if (menus) {
       menus.forEach(item => {
         if (item.children) {
           keys.push(item.path);
@@ -99,6 +105,7 @@ class SiderMenu extends React.PureComponent<Props, State> {
           keys.push(item.path);
         }
       });
+    }
     return keys;
   }
   /**
@@ -114,7 +121,7 @@ class SiderMenu extends React.PureComponent<Props, State> {
   /**
    * Judge whether it is http link.return a or Link
    */
-  getMenuItemPath = (item: types.MenuItem) => {
+  getMenuItemPath = (item: stateTypes.MenuItem) => {
     const itemPath = this.conversionPath(item.path);
     const icon = getIcon(item.icon);
     const {target, name} = item;
@@ -148,8 +155,8 @@ class SiderMenu extends React.PureComponent<Props, State> {
   /**
    * get SubMenu or Item
    */
-  getSubMenuOrItem = (item: types.MenuItem) => {
-    if (item.children && item.children.some(child => child.name)) {
+  getSubMenuOrItem = (item: stateTypes.MenuItem): React.ReactNode => {
+    if (item.children && item.children.some(child => !_.isNil(child.name))) {
       return (
         <SubMenu
           title={
@@ -172,7 +179,7 @@ class SiderMenu extends React.PureComponent<Props, State> {
     }
   };
 
-  getNavMenuItems = (menusData: types.MenuData) => {
+  getNavMenuItems = (menusData: stateTypes.MenuData) => {
     if (!menusData) {
       return [];
     }
@@ -193,17 +200,17 @@ class SiderMenu extends React.PureComponent<Props, State> {
     }
   };
 
-  checkPermissionItem = (roles: Array<string>, ItemDom: any) => {
-    if (this.props.auth.isAuthenticated) {
+  checkPermissionItem = (roles: ReadonlyArray<string> | undefined, ItemDom: any) => {
+    if (roles && this.props.auth.isAuthenticated && this.props.auth.role) {
       return roles.indexOf(this.props.auth.role) !== -1 ? ItemDom : null;
     }
     return ItemDom;
   };
 
-  handleOpenChange = (openKeys: Array<string>) => {
+  handleOpenChange = (openKeys: string[]) => {
     const lastOpenKey = openKeys[openKeys.length - 1];
     const isMainMenu = this.props.menuData.some(
-      item => lastOpenKey && (item.key === lastOpenKey || item.path === lastOpenKey),
+      item => !_.isNil(lastOpenKey) && (item.key === lastOpenKey || item.path === lastOpenKey),
     );
     this.setState({
       openKeys: isMainMenu ? [lastOpenKey] : [...openKeys],
@@ -227,7 +234,7 @@ class SiderMenu extends React.PureComponent<Props, State> {
     return (
       <Sider
         trigger={null}
-        collapsible
+        collapsible={true}
         collapsed={collapsed}
         breakpoint="lg"
         onCollapse={onCollapse}

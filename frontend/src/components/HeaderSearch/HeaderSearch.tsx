@@ -7,7 +7,7 @@ interface Props {
   className: string;
   placeholder: string;
   onPressEnter: (value: string) => void;
-  onChange: () => void;
+  onChange?: () => void;
 }
 
 interface State {

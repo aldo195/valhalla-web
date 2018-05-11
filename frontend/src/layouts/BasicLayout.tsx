@@ -1,25 +1,27 @@
-// @flow
+import {Icon, Layout} from 'antd';
 import React from 'react';
-import * as types from '../types';
-import {Layout, Icon} from 'antd';
 import DocumentTitle from 'react-document-title';
-import {Route, Redirect, Switch} from 'react-router-dom';
-import {GlobalHeader} from '../components/GlobalHeader/index';
-import {GlobalFooter} from '../components/GlobalFooter/index';
+import {Redirect, Route, Switch} from 'react-router-dom';
+import logo from '../assets/valhalla-logo-small.png';
+import {getMenuData} from '../common/menu';
+import {AuthorizedRoute} from '../components/AuthorizedRoute';
+import {GlobalFooter} from '../components/GlobalFooter';
+import {GlobalHeader} from '../components/GlobalHeader';
 import {DrawerSiderMenu} from '../components/SiderMenu';
 import * as routes from '../constants/routes';
+import * as stateTypes from '../reducers/types';
+import {NotFoundError} from '../routes/Exception/index';
+import {enquireScreen, unenquireScreen} from '../utils/media';
 import {getRoutes} from '../utils/routing';
-import {getMenuData} from '../common/menu';
-import logo from '../assets/valhalla-logo-small.png';
-import {enquireScreen} from '../utils/media';
-import {AuthorizedRoute} from '../components/AuthorizedRoute';
-import {NotFoundError} from '../routes/Exception';
 
 const {Content} = Layout;
 
 // Set default redirect to first child, for every parent in the menu.
-const redirectData = [];
-const getRedirect = item => {
+const redirectData: Array<{
+  from: string;
+  to: string;
+}> = [];
+const getRedirect = (item: stateTypes.MenuItem) => {
   if (item && item.children) {
     if (item.children[0] && item.children[0].path) {
       redirectData.push({
@@ -34,10 +36,10 @@ const getRedirect = item => {
 };
 getMenuData().forEach(getRedirect);
 
-let isMobile;
+let isMobile: boolean;
 enquireScreen(result => {
   isMobile = result;
-}, 'only screen and (max-width: 767.99px)');
+});
 
 type Props = {
   location: {
@@ -48,7 +50,7 @@ type Props = {
     url: string;
     isExact: boolean;
   };
-  routerData: types.RouterData;
+  routerData: stateTypes.RouterData;
 };
 
 type State = {
@@ -62,12 +64,18 @@ export default class BasicLayout extends React.PureComponent<Props, State> {
     menuCollapsed: false,
   };
 
+  enquireHandler: any;
+
   componentDidMount() {
-    enquireScreen(mobile => {
+    this.enquireHandler = enquireScreen((mobile: boolean) => {
       this.setState({
         isMobile: mobile,
       });
     });
+  }
+
+  componentWillUnmount() {
+    unenquireScreen(this.enquireHandler);
   }
 
   getPageTitle() {
@@ -106,7 +114,7 @@ export default class BasicLayout extends React.PureComponent<Props, State> {
           />
           <Content style={{margin: '24px 24px 0', height: '100%'}}>
             <Switch>
-              {redirectData.map(item => <Redirect key={item.from} exact from={item.from} to={item.to} />)}
+              {redirectData.map(item => <Redirect key={item.from} exact={true} from={item.from} to={item.to} />)}
               {getRoutes(match.path, routerData).map(item => (
                 <AuthorizedRoute
                   key={item.key}
@@ -117,7 +125,7 @@ export default class BasicLayout extends React.PureComponent<Props, State> {
                   redirectPath={routes.NOT_FOUND_ERROR}
                 />
               ))}
-              <Redirect exact from="/" to={routes.ANALYSIS} />
+              <Redirect exact={true} from="/" to={routes.ANALYSIS} />
               <Route render={NotFoundError} />
             </Switch>
           </Content>

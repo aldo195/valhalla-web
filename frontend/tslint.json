@@ -13,6 +13,7 @@
     "newline-before-return": false,
     "no-any": false,
     "no-console": false,
+    "no-empty": false,
     "no-empty-interface": false,
     "no-inferrable-types": [true, "ignore-params", "ignore-properties"],
     "no-invalid-this": [true, "check-function-in-method"],

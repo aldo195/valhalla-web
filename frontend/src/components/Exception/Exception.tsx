@@ -12,6 +12,7 @@ import './Exception.css';
 interface ExceptionProps {
   className?: string;
   type: number;
+  style?: React.CSSProperties;
   title?: string;
   desc?: string;
   img?: string;
