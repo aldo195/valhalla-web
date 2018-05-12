@@ -1,7 +1,7 @@
 import {Avatar, Divider, Dropdown, Icon, Layout, Menu, Spin, Tag, Tooltip} from 'antd';
 import {History} from 'history';
 import {Debounce} from 'lodash-decorators';
-import moment from 'moment';
+import * as moment from 'moment';
 import * as React from 'react';
 import {connect} from 'react-redux';
 import {RouteComponentProps} from 'react-router';

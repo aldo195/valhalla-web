@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import {Route, Router, Switch} from 'react-router-dom';
 import {getRouterData} from './common/router';
 import AuthorizedRoute from './components/AuthorizedRoute';

@@ -1,5 +1,5 @@
 import {Col, Row} from 'antd';
-import React from 'react';
+import * as React from 'react';
 import {Pie} from '../Chart';
 import './OrganizationDetails.css';
 

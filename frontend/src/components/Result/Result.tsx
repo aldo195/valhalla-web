@@ -1,6 +1,6 @@
 import {Icon} from 'antd';
 import classNames from 'classnames';
-import React from 'react';
+import * as React from 'react';
 import './Result.css';
 
 interface Props {

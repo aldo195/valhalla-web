@@ -1,7 +1,7 @@
 import {LocaleProvider} from 'antd';
 import enUS from 'antd/lib/locale-provider/en_US';
-import React from 'react';
-import ReactDOM from 'react-dom';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
 import {ValhallaApp} from './App';
 import './index.css';

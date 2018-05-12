@@ -1,6 +1,6 @@
 import {Alert, Select, Spin} from 'antd';
 import * as _ from 'lodash';
-import React from 'react';
+import * as React from 'react';
 import {connect} from 'react-redux';
 import * as api from '../../api';
 import '../../index.css';

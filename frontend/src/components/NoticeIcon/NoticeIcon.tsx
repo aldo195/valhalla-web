@@ -1,6 +1,6 @@
 import {Avatar, Badge, Icon, List, Popover, Spin} from 'antd';
 import classNames from 'classnames';
-import React from 'react';
+import * as React from 'react';
 import noNotifications from '../../assets/no_notifications.svg';
 import './NoticeIcon.css';
 

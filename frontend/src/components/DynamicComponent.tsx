@@ -1,5 +1,5 @@
 import {Spin} from 'antd';
-import React from 'react';
+import * as React from 'react';
 import '../index.css';
 
 const defaultLoadingComponent = () => {

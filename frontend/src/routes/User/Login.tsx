@@ -1,5 +1,5 @@
 import {Alert, Button, Checkbox, Form, Icon, Input} from 'antd';
-import React from 'react';
+import * as React from 'react';
 import {connect} from 'react-redux';
 import {RouteComponentProps} from 'react-router';
 import {Link, withRouter} from 'react-router-dom';

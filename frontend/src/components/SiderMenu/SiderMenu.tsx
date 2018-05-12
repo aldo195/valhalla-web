@@ -2,7 +2,7 @@ import {Icon, Layout, Menu} from 'antd';
 import {History} from 'history';
 import * as _ from 'lodash';
 import pathToRegexp from 'path-to-regexp';
-import React from 'react';
+import * as React from 'react';
 import {Link} from 'react-router-dom';
 import * as stateTypes from '../../reducers/types';
 import './SiderMenu.css';

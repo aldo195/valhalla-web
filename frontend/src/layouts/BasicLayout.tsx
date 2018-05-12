@@ -1,5 +1,5 @@
 import {Icon, Layout} from 'antd';
-import React from 'react';
+import * as React from 'react';
 import DocumentTitle from 'react-document-title';
 import {Redirect, Route, Switch} from 'react-router-dom';
 import logo from '../assets/valhalla-logo-small.png';

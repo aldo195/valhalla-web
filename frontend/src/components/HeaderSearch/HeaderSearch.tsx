@@ -1,6 +1,6 @@
 import {AutoComplete, Icon, Input} from 'antd';
 import classNames from 'classnames';
-import React from 'react';
+import * as React from 'react';
 import './HeaderSearch.css';
 
 interface Props {
