@@ -70,9 +70,9 @@ export const register = (name: string, email: string, organizationId: number, pa
     .then(handleResponse)
     .catch(handleError);
 
-export const loadOrganizations = (token: string) =>
+export const loadOrganizations = () =>
   axios
-    .get(`${BACKEND_URL}/organization`, tokenConfig(token))
+    .get(`${BACKEND_URL}/organization`)
     .then(handleResponse)
     .catch(handleError);
 

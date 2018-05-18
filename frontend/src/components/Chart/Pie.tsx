@@ -215,7 +215,7 @@ export default class PieComponent extends React.Component<PieProps, PieState> {
               forceFit={forceFit}
               data={dv}
               padding={padding}
-              animate={animate}
+              animate={true}
               onGetG2Instance={this.getG2Instance}
             >
               {tooltip && <Tooltip showTitle={false} />}
@@ -244,16 +244,16 @@ export default class PieComponent extends React.Component<PieProps, PieState> {
           <ul className={'legend'}>
             {legendData.map((item, i) => (
               <li key={item.x} onClick={() => this.handleLegendClick(item, i)}>
-                <span className={'dot'} style={{backgroundColor: !item.checked ? '#aaa' : item.color}} />
-                <span className={'legend-title'}>{item.x}</span>
-                <Divider type="vertical" />
-                <span className={'percent'}>{`${(isNaN(item.percent) ? 0 : item.percent * 100).toFixed(2)}%`}</span>
                 <span
-                  className={'value'}
-                  dangerouslySetInnerHTML={{
-                    __html: valueFormat ? valueFormat(item.y) : item.y,
+                  className={'dot'}
+                  style={{
+                    backgroundColor: !item.checked ? '#aaa' : item.color,
                   }}
                 />
+                <span className={'legendTitle'}>{item.x}</span>
+                <Divider type="vertical" />
+                <span className={'percent'}>{`${(isNaN(item.percent) ? 0 : item.percent * 100).toFixed(2)}%`}</span>
+                <span className={'value'}>{valueFormat ? valueFormat(item.y) : item.y}</span>
               </li>
             ))}
           </ul>

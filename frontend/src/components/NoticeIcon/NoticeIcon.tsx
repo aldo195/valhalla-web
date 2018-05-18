@@ -37,7 +37,7 @@ const NoticeList = (props: ListProps) => {
   }
   return (
     <div>
-      <List className={'notice-list'} dataSource={null} renderItem={null}>
+      <List className={'notice-list'} dataSource={[]} renderItem={null}>
         {data.map((item, i) => {
           const itemCls = classNames('item', {
             read: item.read,
@@ -80,7 +80,7 @@ interface Props {
   clearText: string;
   className: string;
   count: number;
-  popupVisible: boolean;
+  popupVisible?: boolean;
   onPopupVisibleChange: (isVisible: boolean) => void;
   onClear: () => void;
 }
@@ -114,12 +114,6 @@ export class NoticeIcon extends React.PureComponent<Props> {
     if (!notificationBox) {
       return trigger;
     }
-    const popoverProps = {
-      visible: false,
-    };
-    if ('popupVisible' in this.props) {
-      popoverProps.visible = this.props.popupVisible;
-    }
     return (
       <Popover
         placement="bottomRight"
@@ -128,7 +122,6 @@ export class NoticeIcon extends React.PureComponent<Props> {
         trigger="click"
         arrowPointAtCenter={true}
         onVisibleChange={onPopupVisibleChange}
-        {...popoverProps}
       >
         {trigger}
       </Popover>

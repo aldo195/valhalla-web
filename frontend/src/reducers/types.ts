@@ -22,9 +22,10 @@ export interface AuthStatus {
 }
 
 export interface Notification {
-  readonly datetime: string;
   readonly id: number;
-  readonly status: string;
+  readonly title: string;
+  readonly description?: string;
+  readonly timestamp: string;
 }
 
 export interface NotificationsState {

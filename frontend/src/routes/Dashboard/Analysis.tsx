@@ -62,7 +62,8 @@ class Analysis extends React.PureComponent<AnalysisProps> {
                 <h1>Hello!</h1>
               </Row>
               <Row>
-                <OrganizationDetails data={{x: 30, y: 70}} />
+                <span>This is a pie chart:</span>
+                <OrganizationDetails data={{percent: 30}} />
               </Row>
             </div>
           </Card>

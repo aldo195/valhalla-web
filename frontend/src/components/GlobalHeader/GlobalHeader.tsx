@@ -53,13 +53,14 @@ class GlobalHeader extends React.PureComponent<GlobalHeaderProps> {
 
     return notifications.notifications.map(notice => {
       const newNotice: NotificationDetails = {
-        datetime: notice.datetime,
+        datetime: notice.timestamp,
         key: notice.id.toString(),
-        title: notice.status,
+        title: notice.title,
+        description: notice.description,
         read: false,
       };
       if (newNotice.datetime) {
-        newNotice.datetime = moment(notice.datetime).fromNow();
+        newNotice.datetime = moment(notice.timestamp).fromNow();
       }
 
       if (newNotice.extra && newNotice.title) {
@@ -158,7 +159,6 @@ class GlobalHeader extends React.PureComponent<GlobalHeaderProps> {
             onClear={this.handleNoticeClear}
             onPopupVisibleChange={this.handleNoticeVisibleChange}
             loading={notifications.isFetching}
-            popupVisible={false}
             list={notificationsData}
             title={'Notifications'}
             emptyText={'No notifications'}

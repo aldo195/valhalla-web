@@ -50,24 +50,22 @@ class OrganizationSelect extends React.Component<OrganizationSelectProps, State>
   }
 
   async fetchData() {
-    if (this.props.auth.token) {
-      try {
-        const response = await api.loadOrganizations(this.props.auth.token);
-        if (this.mounted) {
-          this.setState({
-            organizationsList: response.organizations,
-            isFetching: false,
-            errorMessage: '',
-          });
-        }
-      } catch (error) {
-        if (this.mounted) {
-          this.setState({
-            organizationsList: [],
-            isFetching: false,
-            errorMessage: error.message,
-          });
-        }
+    try {
+      const response = await api.loadOrganizations();
+      if (this.mounted) {
+        this.setState({
+          organizationsList: response.organizations,
+          isFetching: false,
+          errorMessage: '',
+        });
+      }
+    } catch (error) {
+      if (this.mounted) {
+        this.setState({
+          organizationsList: [],
+          isFetching: false,
+          errorMessage: error.message,
+        });
       }
     }
   }
