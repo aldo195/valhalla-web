@@ -1,3 +1,5 @@
+import datetime as dt
+
 from flask import Blueprint, jsonify
 import logbook
 
@@ -13,7 +15,12 @@ notification_api = Blueprint('notification', __name__)
 @requires_auth([UserRole.USER, UserRole.ADMIN])
 def get_notifications(current_user):
     logger.info(f'Fetching notifications for user: {current_user.email}...')
-    return jsonify(notifications=[{'title': 'Test', 'description': 'Test notification'}])
+    return jsonify(notifications=[{
+        'id': 1,
+        'title': 'Test',
+        'description': 'Test notification',
+        'timestamp': dt.datetime.now().isoformat()
+    }])
 
 
 @notification_api.route('', methods=['DELETE'])

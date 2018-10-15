@@ -2,6 +2,8 @@
 
 - Write a proper `README.md` file.
 
+- Change project from Valhalla to Michelin and Move from BitBucket to GitHub.
+
 - Add `Dockerfile` and `docker-compose.yml`.
 
 - Add DB implementation for notifications (currently just a stub).
